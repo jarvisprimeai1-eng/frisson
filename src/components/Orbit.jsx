@@ -2,19 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 const LAYERS = [
-  { id:1, name:"Бессознательное", sub:"центр · самый глубокий", hex:"#8B1A3A", col:0x8B1A3A, lc:0x6B0F2A, radius:22, speed:0.18, bright:0.72, sz:0.38, lineAmt:0.6, desc:"Здесь хранится всё, что накопилось до того, как ты начала осознавать — детские программы, родительские предписания, старая боль и нерастраченная любовь. Бессознательное не различает «тогда» и «сейчас» — воспроизводит старые сценарии, пока они не будут осознаны и переписаны. Именно здесь начинается настоящее исцеление." },
-  { id:2, name:"Самость / Подлинность", sub:"уровень 2", hex:"#C44B88", col:0xC44B88, lc:0x9B3A6B, radius:26, speed:0.28, bright:0.65, sz:0.36, lineAmt:0.45, desc:"То, кем ты являешься до всех масок и ролей. Та часть, которую нельзя надеть или сыграть — она просто есть. Когда ты в контакте с подлинностью, исчезает усталость от притворства, приходят «свои» люди. Подлинная женщина не конкурирует — она просто есть." },
-  { id:3, name:"Сознательное", sub:"уровень 3", hex:"#9B4DAB", col:0x9B4DAB, lc:0x7A3B8A, radius:20, speed:0.45, bright:0.68, sz:0.30, lineAmt:0.95, desc:"Взрослая часть, которая умеет выбирать осознанно и нести ответственность. Именно она переписывает старые установки, принимает решение залатать дыры, выбирает доверие вместо тревоги. Это мост между старой реальностью и новой." },
-  { id:4, name:"Чувства", sub:"уровень 4", hex:"#7B4090", col:0x7B4090, lc:0x5C3070, radius:24, speed:0.22, bright:0.60, sz:0.40, lineAmt:0.75, desc:"Язык души, который говорит медленно и глубоко. Обида, любовь, тоска, нежность — они живут в теле. Непрожитые чувства превращаются в тревогу и ревность. Прожитые — освобождают и открывают место для нового." },
-  { id:5, name:"Эмоции", sub:"уровень 5", hex:"#5B3080", col:0x5B3080, lc:0x3D2060, radius:18, speed:0.55, bright:0.55, sz:0.35, lineAmt:0.55, desc:"Быстрая, подвижная энергия в ответ на ситуацию. Тревога, радость, злость, восторг — они хотят движения и выхода. Подавленные эмоции блокируют сексуальную энергию и творчество. Разрешить себе эмоции — значит открыть поток жизненной силы." },
-  { id:6, name:"Поведение", sub:"внешний слой", hex:"#C8960A", col:0xC8960A, lc:0xA07808, radius:30, speed:0.15, bright:0.50, sz:0.42, lineAmt:0.3, desc:"То, что видит мир. Оно всегда вторично — рождается из всех предыдущих уровней. Когда бессознательное исцелено, а сознательное выбрало новое, поведение меняется органично, без насилия над собой." },
+  { id:1, name:"Бессознательное", sub:"центр · самый глубокий", hex:"#8B1A3A", col:0x8B1A3A, lc:0x6B0F2A, radius:22, speed:0.18, bright:0.82, sz:0.42, lineAmt:0.6, desc:"Здесь хранится всё, что накопилось до того, как ты начала осознавать — детские программы, родительские предписания, старая боль и нерастраченная любовь." },
+  { id:2, name:"Самость / Подлинность", sub:"уровень 2", hex:"#C44B88", col:0xC44B88, lc:0x9B3A6B, radius:26, speed:0.28, bright:0.75, sz:0.40, lineAmt:0.45, desc:"То, кем ты являешься до всех масок и ролей. Когда ты в контакте с подлинностью, исчезает усталость от притворства, приходят «свои» люди." },
+  { id:3, name:"Сознательное", sub:"уровень 3", hex:"#2A9D8F", col:0x2A9D8F, lc:0x1A7A6E, radius:20, speed:0.45, bright:0.78, sz:0.34, lineAmt:0.95, desc:"Взрослая часть, которая умеет выбирать осознанно. Именно она переписывает старые установки и выбирает доверие вместо тревоги." },
+  { id:4, name:"Чувства", sub:"уровень 4", hex:"#264653", col:0x3A7CA5, lc:0x2B5F7E, radius:24, speed:0.22, bright:0.70, sz:0.44, lineAmt:0.75, desc:"Язык души, который говорит медленно и глубоко. Непрожитые чувства превращаются в тревогу. Прожитые — освобождают и открывают место для нового." },
+  { id:5, name:"Эмоции", sub:"уровень 5", hex:"#E76F51", col:0xE76F51, lc:0xBB5A40, radius:18, speed:0.55, bright:0.72, sz:0.38, lineAmt:0.55, desc:"Быстрая энергия в ответ на ситуацию. Подавленные эмоции блокируют творчество. Разрешить себе эмоции — значит открыть поток жизненной силы." },
+  { id:6, name:"Поведение", sub:"внешний слой", hex:"#C8960A", col:0xC8960A, lc:0xA07808, radius:30, speed:0.15, bright:0.60, sz:0.46, lineAmt:0.3, desc:"То, что видит мир. Когда бессознательное исцелено, а сознательное выбрало новое, поведение меняется органично, без насилия над собой." },
 ];
 
 export default function Orbit({ setScreen }) {
   const canvasRef = useRef(null);
   const stateRef = useRef(null);
   const [activeId, setActiveId] = useState(1);
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const audioRef = useRef({ ctx: null, gain: null, oscs: [], analyser: null, freq: new Uint8Array(64), bass: 0, mid: 0 });
 
@@ -108,7 +108,7 @@ export default function Orbit({ setScreen }) {
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(PA, 3));
-    const mat = new THREE.PointsMaterial({ color: new THREE.Color(LAYERS[0].col), size: 0.38, transparent: true, opacity: 0.72, sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const mat = new THREE.PointsMaterial({ color: new THREE.Color(LAYERS[0].col), size: 0.42, transparent: true, opacity: 0.82, sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false });
     const points = new THREE.Points(geo, mat); scene.add(points);
 
     const MAX_L = 8000, LPA = new Float32Array(MAX_L * 6);
@@ -126,7 +126,7 @@ export default function Orbit({ setScreen }) {
     const electrons = new THREE.Points(elGeo, elMat); scene.add(electrons);
 
     const state = {
-      curIdx: 0, tR: 22, cR: 22, tS: 0.18, cS: 0.18, tB: 0.72, cB: 0.72, tSz: 0.38, cSz: 0.38,
+      curIdx: 0, tR: 22, cR: 22, tS: 0.18, cS: 0.18, tB: 0.82, cB: 0.82, tSz: 0.42, cSz: 0.42,
       lAmt: 0.6, tLAmt: 0.6, sX: 0, sY: 0, sZ: 0, transE: 0, cZ: 0, cZV: 0,
     };
     stateRef.current = state;
@@ -242,11 +242,11 @@ export default function Orbit({ setScreen }) {
       <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />
 
       {/* Sidebar */}
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: "80px 0", background: "linear-gradient(90deg, rgba(6,2,8,.7), transparent)" }}>
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: "80px 0", background: "linear-gradient(90deg, rgba(6,2,8,.7), transparent)" }}>
         {LAYERS.map((l) => (
           <div key={l.id} onClick={() => openLayer(l.id)} style={{ width: 36, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer", opacity: activeId === l.id ? 1 : 0.38, transition: "opacity .3s", padding: "4px 0" }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: l.hex, boxShadow: `0 0 6px ${l.hex}88`, display: "block", transform: activeId === l.id ? "scale(1.5)" : "scale(1)", transition: "transform .3s" }} />
-            <span style={{ fontSize: 7, letterSpacing: 1, color: "rgba(210,185,162,.6)", ...ss }}>{l.id}</span>
+            <span style={{ width: activeId === l.id ? 10 : 7, height: activeId === l.id ? 10 : 7, borderRadius: "50%", background: l.hex, boxShadow: activeId === l.id ? `0 0 12px ${l.hex}` : `0 0 4px ${l.hex}66`, display: "block", transition: "all .3s" }} />
+            <span style={{ fontSize: 7, letterSpacing: 1, color: activeId === l.id ? "rgba(240,220,200,.85)" : "rgba(210,185,162,.5)", ...ss }}>{l.id}</span>
           </div>
         ))}
       </div>
@@ -263,22 +263,23 @@ export default function Orbit({ setScreen }) {
         <button onClick={toggleSound} style={{ pointerEvents: "all", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, background: soundOn ? "rgba(140,30,60,.36)" : "rgba(100,20,50,.2)", border: `1px solid ${soundOn ? "rgba(200,130,90,.5)" : "rgba(190,130,90,.25)"}`, borderRadius: 16, padding: "5px 11px", fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: soundOn ? "rgba(240,210,178,.92)" : "rgba(210,175,145,.6)", transition: "all .3s", whiteSpace: "nowrap", ...ss }}>{soundOn ? "■ Стоп" : "♫ 528 Hz"}</button>
       </div>
 
-      {/* Active label */}
-      <div style={{ position: "absolute", top: 62, left: "50%", transform: "translateX(-50%)", fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: "rgba(220,195,172,.45)", pointerEvents: "none", zIndex: 20, whiteSpace: "nowrap", ...ss }}>{layer.name}</div>
+      {/* Active label + name */}
+      <div style={{ position: "absolute", top: 62, left: "50%", transform: "translateX(-50%)", textAlign: "center", pointerEvents: "none", zIndex: 20 }}>
+        <div style={{ fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: layer.hex, whiteSpace: "nowrap", ...ss }}>{layer.name}</div>
+        <div style={{ fontSize: 8, letterSpacing: 2, color: "rgba(220,195,172,.3)", marginTop: 3, ...ss }}>{layer.sub}</div>
+      </div>
 
-      {/* Bottom panel */}
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transform: panelOpen ? "translateY(0)" : "translateY(100%)", transition: "transform .4s cubic-bezier(.32,.72,0,1)", maxHeight: "42%" }}>
-        <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.96) 14%, rgba(6,2,8,.99) 100%)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(150,80,60,.15)", overflowY: "auto", maxHeight: "42vh", padding: "0 16px 24px 52px", position: "relative" }}>
-          <button onClick={() => setPanelOpen(false)} style={{ position: "absolute", top: 8, right: 14, background: "none", border: "none", cursor: "pointer", color: "rgba(190,130,90,.38)", fontSize: 18, lineHeight: 1, zIndex: 3, ...ss }}>×</button>
-          <div onClick={() => setPanelOpen(false)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 7px", cursor: "pointer", position: "sticky", top: 0, background: "linear-gradient(180deg, rgba(6,2,8,.95) 70%, transparent)", zIndex: 2 }}>
-            <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: "rgba(190,130,90,.28)" }} />
+      {/* Tap orb area to toggle panel */}
+      <div onClick={() => setPanelOpen(!panelOpen)} style={{ position: "absolute", top: 80, left: 44, right: 0, bottom: 0, zIndex: 10 }} />
+
+      {/* Bottom panel — compact */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transform: panelOpen ? "translateY(0)" : "translateY(100%)", transition: "transform .4s cubic-bezier(.32,.72,0,1)" }}>
+        <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.94) 18%, rgba(6,2,8,.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${layer.hex}22`, padding: "0 16px 20px 52px", position: "relative" }}>
+          <div onClick={() => setPanelOpen(false)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 8px", cursor: "pointer" }}>
+            <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: `${layer.hex}55` }} />
           </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 8 }}>
-            <span style={{ fontSize: 8, letterSpacing: 3, textTransform: "uppercase", color: "rgba(190,130,90,.55)", whiteSpace: "nowrap", flexShrink: 0, ...ss }}>Уровень {layer.id} — {layer.sub}</span>
-          </div>
-          <div style={{ fontSize: 16, fontStyle: "italic", fontWeight: "normal", color: "#f0e0cf", lineHeight: 1.25, marginBottom: 8, ...ss }}>{layer.name}</div>
-          <div style={{ width: 26, height: 1, marginBottom: 10, background: "linear-gradient(90deg, rgba(190,130,90,.45), transparent)" }} />
-          <div style={{ fontSize: 11.5, lineHeight: 1.82, color: "rgba(200,175,158,.82)", wordWrap: "break-word", ...ss }}>{layer.desc}</div>
+          <div style={{ fontSize: 15, fontStyle: "italic", fontWeight: "normal", color: layer.hex, lineHeight: 1.25, marginBottom: 6, ...ss }}>{layer.name}</div>
+          <div style={{ fontSize: 11, lineHeight: 1.75, color: "rgba(200,175,158,.75)", wordWrap: "break-word", ...ss }}>{layer.desc}</div>
         </div>
       </div>
     </div>
