@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PERSONAL_CONTENT } from "../data/content";
 import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
+import { VERSION } from "../App";
 
 export default function Onboarding({ onDone }) {
   const [step, setStep] = useState(0);
@@ -57,7 +58,8 @@ export default function Onboarding({ onDone }) {
           <div style={{ textAlign: "center", width: "100%", animation: "fadeUp 1s ease both" }}>
             <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".35em", textTransform: "uppercase", color: "rgba(180,150,165,.5)", marginBottom: 28 }}>✦ пространство состояния ✦</div>
             <div style={{ fontFamily: FONT_SERIF, fontSize: 80, fontWeight: 300, lineHeight: 0.9, color: "#fff", textShadow: "0 0 60px rgba(160,20,180,.7)", marginBottom: 18 }}>Frisson</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 17, color: "rgba(220,205,215,.62)", letterSpacing: ".04em", marginBottom: 40 }}>пространство, где вы раскрываете<br/>свой женский внутренний капитал</div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 17, color: "rgba(220,205,215,.62)", letterSpacing: ".04em", marginBottom: 12 }}>пространство, где вы раскрываете<br/>свой женский внутренний капитал</div>
+            <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(180,150,165,.35)", marginBottom: 28 }}>v{VERSION}</div>
           </div>
         )}
 
