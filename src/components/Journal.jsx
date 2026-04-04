@@ -87,17 +87,30 @@ export default function Journal({ theme }) {
     </div>
   );
 
-  const TextInput = ({ val, set, ph, onSave }) => (
-    <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 8 }}>
-      <textarea value={val} onChange={(e) => set(e.target.value)} placeholder={ph} style={{ width: "100%", minHeight: 72, background: "transparent", border: "none", outline: "none", resize: "none", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 15, color: "rgba(242,232,226,.85)", lineHeight: 1.65 }} />
-      <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
-        <div onClick={onSave} style={{ padding: "7px 18px", borderRadius: 20, background: val.trim() ? T.dim : "rgba(255,255,255,.04)", border: `1px solid ${val.trim() ? T.accent : "rgba(255,255,255,.08)"}`, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: val.trim() ? "rgba(242,232,226,.82)" : "rgba(242,232,226,.25)", cursor: val.trim() ? "pointer" : "default", transition: "all .2s" }}>Сохранить →</div>
+  const TextInput = ({ val, set, ph, onSave }) => {
+    const handleChange = (e) => {
+      set(e.target.value);
+      e.target.style.height = "auto";
+      e.target.style.height = Math.max(100, e.target.scrollHeight) + "px";
+    };
+    return (
+      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 8 }}>
+        <textarea
+          value={val}
+          onChange={handleChange}
+          placeholder={ph}
+          rows={3}
+          style={{ width: "100%", minHeight: 100, background: "transparent", border: "none", outline: "none", resize: "vertical", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(242,232,226,.85)", lineHeight: 1.7, WebkitAppearance: "none", display: "block" }}
+        />
+        <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
+          <div onClick={onSave} style={{ padding: "7px 18px", borderRadius: 20, background: val.trim() ? T.dim : "rgba(255,255,255,.04)", border: `1px solid ${val.trim() ? T.accent : "rgba(255,255,255,.08)"}`, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: val.trim() ? "rgba(242,232,226,.82)" : "rgba(242,232,226,.25)", cursor: val.trim() ? "pointer" : "default", transition: "all .2s" }}>Сохранить →</div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 20, position: "relative", transition: "background .6s" }}>
+    <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: "background .6s" }}>
       {crystals.map((cr) => (
         <div key={cr.id} style={{ position: "fixed", bottom: 120, left: `${cr.x}%`, zIndex: 999, pointerEvents: "none", animation: "floatUp 1.1s ease forwards", fontFamily: FONT_SERIF, fontSize: 22, color: T.accent, textShadow: `0 0 12px rgba(${T.ar},.8)` }}>+1 ⟡</div>
       ))}
