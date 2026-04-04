@@ -4,6 +4,7 @@ import { SECTIONS, RECOMMENDATIONS, MOOD_MESSAGES } from "../data/content";
 import { getMoon, useGreeting, FONT_SERIF, FONT_SANS } from "../utils/helpers";
 import Orb from "./Orb";
 import Lock from "./Lock";
+import { VERSION } from "../App";
 
 export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibSec }) {
   const T = THEMES[theme] || THEMES.full;
@@ -31,6 +32,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
         <div style={{ fontSize: 42, margin: "4px 0", lineHeight: 1 }}>{moon.e}</div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 26, fontWeight: 300, lineHeight: 1.25, color: T.text, marginBottom: 6 }}>{gr},<br/><span style={{ color: T.accent }}>Anastasiya</span></div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: `rgba(${T.ar},.7)`, lineHeight: 1.5, transition: "color .6s" }}>{msg}</div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(242,232,226,.15)", marginTop: 10 }}>Frisson v{VERSION}</div>
       </div>
 
       <div className="fu2" style={{ margin: "16px 24px", position: "relative", zIndex: 1 }}>
