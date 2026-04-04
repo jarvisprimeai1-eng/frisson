@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { THEMES } from "./data/themes";
 import GlobalStyles from "./components/GlobalStyles";
 import Onboarding from "./components/Onboarding";
@@ -12,7 +12,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "1.5.2";
+export const VERSION = "1.5.3";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -28,6 +28,9 @@ export default function App() {
   ]);
   const [pLog] = useState([0, 1, 0, 2, 1, 0, 0]);
   const [libSec, setLibSec] = useState("all");
+
+  const scrollRef = useRef(null);
+  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [screen]);
 
   const T = THEMES[theme] || THEMES.full;
   const showNav = screen !== "sub" && screen !== "situations" && screen !== "orbit";
@@ -50,7 +53,7 @@ export default function App() {
       <GlobalStyles />
       <div style={{ width: "100%", height: "100dvh", background: "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden" }}>
         <div style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: "0 0 80px rgba(92,14,28,.2)", position: "relative" }}>
-          <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>{screens[screen]}</div>
+          <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>{screens[screen]}</div>
           {showNav && <Nav active={screen} setScreen={setScreen} theme={theme} />}
           <div style={{ position: "absolute", bottom: showNav ? 22 : 4, right: 6, fontSize: 8, color: "rgba(255,255,255,.12)", fontFamily: "sans-serif", pointerEvents: "none", zIndex: 50 }}>v{VERSION}</div>
         </div>
