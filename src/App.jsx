@@ -12,11 +12,11 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "1.3.4";
+export const VERSION = "1.3.5";
 
 export default function App() {
-  const [onb, setOnb] = useState(false);
-  const [tour, setTour] = useState(false);
+  const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
+  const [tour, setTour] = useState(() => localStorage.getItem("frisson_tour") === "1");
   const [screen, setScreen] = useState("home");
   const [theme, setTheme] = useState("full");
   const [eScore, setEScore] = useState(null);
@@ -32,8 +32,8 @@ export default function App() {
   const T = THEMES[theme] || THEMES.full;
   const showNav = screen !== "sub" && screen !== "situations" && screen !== "orbit";
 
-  if (!onb) return (<><GlobalStyles /><Onboarding onDone={() => setOnb(true)} /></>);
-  if (!tour) return (<><GlobalStyles /><AppTour onDone={() => setTour(true)} theme={theme} /></>);
+  if (!onb) return (<><GlobalStyles /><Onboarding onDone={() => { localStorage.setItem("frisson_onb", "1"); setOnb(true); }} /></>);
+  if (!tour) return (<><GlobalStyles /><AppTour onDone={() => { localStorage.setItem("frisson_tour", "1"); setTour(true); }} theme={theme} /></>);
 
   const screens = {
     home: <Home setScreen={setScreen} theme={theme} setTheme={setTheme} eScore={eScore} pLog={pLog} setLibSec={setLibSec} />,
