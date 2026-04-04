@@ -1,0 +1,283 @@
+import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+
+const LAYERS = [
+  { id:1, name:"Бессознательное", sub:"центр · самый глубокий", hex:"#8B1A3A", col:0x8B1A3A, lc:0x6B0F2A, radius:22, speed:0.18, bright:0.72, sz:0.38, lineAmt:0.6, desc:"Здесь хранится всё, что накопилось до того, как ты начала осознавать — детские программы, родительские предписания, старая боль и нерастраченная любовь. Бессознательное не различает «тогда» и «сейчас» — воспроизводит старые сценарии, пока они не будут осознаны и переписаны. Именно здесь начинается настоящее исцеление." },
+  { id:2, name:"Самость / Подлинность", sub:"уровень 2", hex:"#C44B88", col:0xC44B88, lc:0x9B3A6B, radius:26, speed:0.28, bright:0.65, sz:0.36, lineAmt:0.45, desc:"То, кем ты являешься до всех масок и ролей. Та часть, которую нельзя надеть или сыграть — она просто есть. Когда ты в контакте с подлинностью, исчезает усталость от притворства, приходят «свои» люди. Подлинная женщина не конкурирует — она просто есть." },
+  { id:3, name:"Сознательное", sub:"уровень 3", hex:"#9B4DAB", col:0x9B4DAB, lc:0x7A3B8A, radius:20, speed:0.45, bright:0.68, sz:0.30, lineAmt:0.95, desc:"Взрослая часть, которая умеет выбирать осознанно и нести ответственность. Именно она переписывает старые установки, принимает решение залатать дыры, выбирает доверие вместо тревоги. Это мост между старой реальностью и новой." },
+  { id:4, name:"Чувства", sub:"уровень 4", hex:"#7B4090", col:0x7B4090, lc:0x5C3070, radius:24, speed:0.22, bright:0.60, sz:0.40, lineAmt:0.75, desc:"Язык души, который говорит медленно и глубоко. Обида, любовь, тоска, нежность — они живут в теле. Непрожитые чувства превращаются в тревогу и ревность. Прожитые — освобождают и открывают место для нового." },
+  { id:5, name:"Эмоции", sub:"уровень 5", hex:"#5B3080", col:0x5B3080, lc:0x3D2060, radius:18, speed:0.55, bright:0.55, sz:0.35, lineAmt:0.55, desc:"Быстрая, подвижная энергия в ответ на ситуацию. Тревога, радость, злость, восторг — они хотят движения и выхода. Подавленные эмоции блокируют сексуальную энергию и творчество. Разрешить себе эмоции — значит открыть поток жизненной силы." },
+  { id:6, name:"Поведение", sub:"внешний слой", hex:"#C8960A", col:0xC8960A, lc:0xA07808, radius:30, speed:0.15, bright:0.50, sz:0.42, lineAmt:0.3, desc:"То, что видит мир. Оно всегда вторично — рождается из всех предыдущих уровней. Когда бессознательное исцелено, а сознательное выбрало новое, поведение меняется органично, без насилия над собой." },
+];
+
+export default function Orbit() {
+  const canvasRef = useRef(null);
+  const stateRef = useRef(null);
+  const [activeId, setActiveId] = useState(1);
+  const [panelOpen, setPanelOpen] = useState(true);
+  const [soundOn, setSoundOn] = useState(false);
+  const audioRef = useRef({ ctx: null, gain: null, oscs: [], analyser: null, freq: new Uint8Array(64), bass: 0, mid: 0 });
+
+  const layer = LAYERS[activeId - 1];
+
+  function openLayer(id) {
+    setActiveId(id);
+    setPanelOpen(true);
+    const l = LAYERS[id - 1];
+    const s = stateRef.current;
+    if (s) {
+      s.tR = l.radius; s.tS = l.speed; s.tB = l.bright; s.tSz = l.sz; s.tLAmt = l.lineAmt;
+      s.transE = 1.0; s.curIdx = id - 1;
+    }
+  }
+
+  function buildSound() {
+    const a = audioRef.current;
+    a.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    a.gain = a.ctx.createGain();
+    a.gain.gain.setValueAtTime(0, a.ctx.currentTime);
+    a.gain.gain.linearRampToValueAtTime(0.13, a.ctx.currentTime + 2.5);
+    a.analyser = a.ctx.createAnalyser(); a.analyser.fftSize = 128;
+    a.gain.connect(a.analyser); a.gain.connect(a.ctx.destination);
+    a.freq = new Uint8Array(a.analyser.frequencyBinCount);
+
+    const sub = a.ctx.createOscillator(), sg = a.ctx.createGain();
+    sub.type = "sine"; sub.frequency.value = 132; sg.gain.value = 0.55;
+    sub.connect(sg); sg.connect(a.gain); sub.start();
+
+    const merger = a.ctx.createChannelMerger(2); merger.connect(a.gain);
+    const oL = a.ctx.createOscillator(), gL = a.ctx.createGain();
+    oL.type = "sine"; oL.frequency.value = 528; gL.gain.value = 0.45;
+    oL.connect(gL); gL.connect(merger, 0, 0); oL.start();
+    const oR = a.ctx.createOscillator(), gR = a.ctx.createGain();
+    oR.type = "sine"; oR.frequency.value = 536; gR.gain.value = 0.45;
+    oR.connect(gR); gR.connect(merger, 0, 1); oR.start();
+
+    const ov = a.ctx.createOscillator(), og = a.ctx.createGain();
+    ov.type = "sine"; ov.frequency.value = 1056; og.gain.value = 0.06;
+    ov.connect(og); og.connect(a.gain); ov.start();
+
+    const lfo = a.ctx.createOscillator(), lg = a.ctx.createGain();
+    lfo.type = "sine"; lfo.frequency.value = 0.05; lg.gain.value = 0.06;
+    lfo.connect(lg); lg.connect(a.gain.gain); lfo.start();
+
+    const hb = a.ctx.createOscillator(), hg = a.ctx.createGain();
+    hb.type = "sine"; hb.frequency.value = 0.18; hg.gain.value = 0.03;
+    hb.connect(hg); hg.connect(og.gain); hb.start();
+
+    a.oscs = [sub, oL, oR, ov, lfo, hb];
+  }
+
+  function stopSound() {
+    const a = audioRef.current;
+    if (!a.ctx) return;
+    a.gain.gain.linearRampToValueAtTime(0, a.ctx.currentTime + 1.2);
+    setTimeout(() => {
+      a.oscs.forEach((o) => { try { o.stop(); } catch (e) {} });
+      a.ctx.close(); a.ctx = null; a.analyser = null; a.oscs = []; a.bass = 0; a.mid = 0;
+    }, 1400);
+  }
+
+  function toggleSound() {
+    if (!soundOn) { buildSound(); } else { stopSound(); }
+    setSoundOn(!soundOn);
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const N = 2400;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setClearColor(0x060208, 1);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 1000);
+    camera.position.z = 85;
+
+    const PA = new Float32Array(N * 3), VA = new Float32Array(N * 3), PH = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+      const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+      const r = Math.pow(Math.random(), 0.4) * 26;
+      PA[i * 3] = r * Math.sin(ph) * Math.cos(th);
+      PA[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th);
+      PA[i * 3 + 2] = r * Math.cos(ph);
+      PH[i] = Math.random() * 1000;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(PA, 3));
+    const mat = new THREE.PointsMaterial({ color: new THREE.Color(LAYERS[0].col), size: 0.38, transparent: true, opacity: 0.72, sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const points = new THREE.Points(geo, mat); scene.add(points);
+
+    const MAX_L = 8000, LPA = new Float32Array(MAX_L * 6);
+    const lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute("position", new THREE.BufferAttribute(LPA, 3));
+    lineGeo.setDrawRange(0, 0);
+    const lineMat = new THREE.LineBasicMaterial({ color: new THREE.Color(LAYERS[0].lc), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
+    const lines = new THREE.LineSegments(lineGeo, lineMat); scene.add(lines);
+
+    const MAX_E = 200, EPA = new Float32Array(MAX_E * 3);
+    const elGeo = new THREE.BufferGeometry();
+    elGeo.setAttribute("position", new THREE.BufferAttribute(EPA, 3));
+    elGeo.setDrawRange(0, 0);
+    const elMat = new THREE.PointsMaterial({ color: 0xffddcc, size: 1.1, transparent: true, opacity: 1, sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const electrons = new THREE.Points(elGeo, elMat); scene.add(electrons);
+
+    const state = {
+      curIdx: 0, tR: 22, cR: 22, tS: 0.18, cS: 0.18, tB: 0.72, cB: 0.72, tSz: 0.38, cSz: 0.38,
+      lAmt: 0.6, tLAmt: 0.6, sX: 0, sY: 0, sZ: 0, transE: 0, cZ: 0, cZV: 0,
+    };
+    stateRef.current = state;
+    const aEl = [], conns = [];
+    let lastSp = 0;
+
+    const clock = new THREE.Clock();
+    let animId;
+
+    function loop() {
+      animId = requestAnimationFrame(loop);
+      const t = clock.getElapsedTime(), K = 0.018, l = LAYERS[state.curIdx];
+      const au = audioRef.current;
+
+      if (au.analyser) {
+        au.analyser.getByteFrequencyData(au.freq);
+        let bs = 0, ms = 0;
+        for (let i = 0; i < 8; i++) bs += au.freq[i];
+        for (let i = 8; i < 24; i++) ms += au.freq[i];
+        au.bass = bs / (8 * 255); au.mid = ms / (16 * 255);
+      }
+      const bass = au.bass, mid = au.mid;
+
+      state.cR += (state.tR - state.cR) * K; state.cS += (state.tS - state.cS) * K;
+      state.cB += (state.tB - state.cB) * K; state.cSz += (state.tSz - state.cSz) * K;
+      state.lAmt += (state.tLAmt - state.lAmt) * K;
+      state.transE *= 0.982;
+      if (state.transE > 0.05) { state.sX += state.transE * 0.013 * Math.sin(t * 1.8); state.sY += state.transE * 0.016; state.sZ += state.transE * 0.009 * Math.cos(t * 1.4); }
+
+      const zF = l.id === 3 ? 0.28 : l.id === 5 ? 0.5 : 0.1, zA = l.id === 3 ? 14 : l.id === 5 ? 12 : 7;
+      state.cZV += (Math.sin(t * zF) * zA - state.cZ) * 0.007; state.cZV *= 0.94; state.cZ += state.cZV;
+
+      [points, lines, electrons].forEach((o) => { o.rotation.x = state.sX; o.rotation.y = state.sY; o.rotation.z = state.sZ; o.position.z = state.cZ; });
+
+      const p = geo.getAttribute("position"), a = p.array;
+      for (let i = 0; i < N; i++) {
+        const i3 = i * 3, x = a[i3], y = a[i3 + 1], z = a[i3 + 2], px = PH[i];
+        VA[i3] += Math.sin(t * 0.05 + px) * 0.001 * state.cS; VA[i3 + 1] += Math.cos(t * 0.06 + px * 1.3) * 0.001 * state.cS; VA[i3 + 2] += Math.sin(t * 0.055 + px * 0.7) * 0.001 * state.cS;
+        VA[i3] += Math.sin(t * 0.02 + px * 2.1 + y * 0.1) * 0.0008 * state.cS; VA[i3 + 1] += Math.cos(t * 0.025 + px * 1.7 + z * 0.1) * 0.0008 * state.cS; VA[i3 + 2] += Math.sin(t * 0.022 + px * 0.9 + x * 0.1) * 0.0008 * state.cS;
+        const d = Math.sqrt(x * x + y * y + z * z) || 0.01;
+        const pull = Math.max(0, d - (state.cR + bass * 6)) * 0.002 + 0.0003;
+        VA[i3] -= (x / d) * pull; VA[i3 + 1] -= (y / d) * pull; VA[i3 + 2] -= (z / d) * pull;
+        if (mid > 0.04) { const rp = Math.sin(t * 3.3 + px) * 0.0008 * mid; VA[i3] += (x / d) * rp; VA[i3 + 1] += (y / d) * rp; VA[i3 + 2] += (z / d) * rp; }
+        if (l.id === 4) { const hb = Math.sin(t * 1.2 + px * 0.1) * 0.0015; VA[i3] += (x / d) * hb; VA[i3 + 1] += (y / d) * hb; VA[i3 + 2] += (z / d) * hb; }
+        if (l.id === 5) { VA[i3] += (Math.random() - 0.5) * 0.004; VA[i3 + 1] += (Math.random() - 0.5) * 0.004; VA[i3 + 2] += (Math.random() - 0.5) * 0.004; }
+        if (l.id === 3) { const nx = -y / d, ny = x / d; VA[i3] += nx * 0.003 * state.cS; VA[i3 + 1] += ny * 0.003 * state.cS; }
+        VA[i3] *= 0.992; VA[i3 + 1] *= 0.992; VA[i3 + 2] *= 0.992;
+        a[i3] += VA[i3]; a[i3 + 1] += VA[i3 + 1]; a[i3 + 2] += VA[i3 + 2];
+      }
+      p.needsUpdate = true;
+
+      if (state.lAmt > 0.01) {
+        const lp = lineGeo.getAttribute("position"), la = lp.array; let lc = 0;
+        const md2 = 9 + l.id * 0.5, mdsq = md2 * md2, step = Math.max(1, Math.floor(N / 600));
+        conns.length = 0;
+        for (let i = 0; i < N && lc < MAX_L; i += step) {
+          const i3 = i * 3, x1 = a[i3], y1 = a[i3 + 1], z1 = a[i3 + 2];
+          for (let j = i + step; j < N && lc < MAX_L; j += step) {
+            const j3 = j * 3, dx = a[j3] - x1, dy = a[j3 + 1] - y1, dz = a[j3 + 2] - z1;
+            if (dx * dx + dy * dy + dz * dz < mdsq) {
+              const idx = lc * 6; la[idx] = x1; la[idx + 1] = y1; la[idx + 2] = z1; la[idx + 3] = a[j3]; la[idx + 4] = a[j3 + 1]; la[idx + 5] = a[j3 + 2];
+              if (lc < 500) conns.push({ x1, y1, z1, x2: a[j3], y2: a[j3 + 1], z2: a[j3 + 2] });
+              lc++;
+            }
+          }
+        }
+        lineGeo.setDrawRange(0, lc * 2); lp.needsUpdate = true; lineMat.opacity = state.lAmt * 0.13 + mid * 0.05;
+      } else { lineGeo.setDrawRange(0, 0); }
+
+      if (l.id === 3 && conns.length > 0 && aEl.length < 4 && (t - lastSp) > 0.9) {
+        const c = conns[Math.floor(Math.random() * conns.length)];
+        aEl.push({ sx: c.x1, sy: c.y1, sz: c.z1, ex: c.x2, ey: c.y2, ez: c.z2, t: 0, sp: 0.003 + Math.random() * 0.003 });
+        lastSp = t;
+      }
+      const ep = elGeo.getAttribute("position"), ea = ep.array; let alive = 0;
+      for (let e = aEl.length - 1; e >= 0; e--) {
+        const el = aEl[e]; el.t += el.sp;
+        if (el.t >= 1) { aEl.splice(e, 1); continue; }
+        ea[alive * 3] = el.sx + (el.ex - el.sx) * el.t; ea[alive * 3 + 1] = el.sy + (el.ey - el.sy) * el.t; ea[alive * 3 + 2] = el.sz + (el.ez - el.sz) * el.t; alive++;
+      }
+      elGeo.setDrawRange(0, alive); ep.needsUpdate = true;
+
+      mat.color.lerp(new THREE.Color(l.col), 0.018); lineMat.color.lerp(new THREE.Color(l.lc), 0.018);
+      mat.opacity = state.cB + bass * 0.08; mat.size = state.cSz + bass * 0.05;
+
+      camera.position.x = Math.sin(t * 0.018) * 6;
+      camera.position.y = Math.cos(t * 0.024) * 4;
+      camera.lookAt(0, 0, state.cZ * 0.15);
+      renderer.render(scene, camera);
+    }
+    loop();
+
+    const onResize = () => {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose(); geo.dispose(); mat.dispose(); lineGeo.dispose(); lineMat.dispose(); elGeo.dispose(); elMat.dispose();
+      stopSound();
+    };
+  }, []);
+
+  const ss = { fontFamily: "Georgia, serif" };
+
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", background: "#060208", overflow: "hidden" }}>
+      <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />
+
+      {/* Sidebar */}
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: "80px 0", background: "linear-gradient(90deg, rgba(6,2,8,.7), transparent)" }}>
+        {LAYERS.map((l) => (
+          <div key={l.id} onClick={() => openLayer(l.id)} style={{ width: 36, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer", opacity: activeId === l.id ? 1 : 0.38, transition: "opacity .3s", padding: "4px 0" }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: l.hex, boxShadow: `0 0 6px ${l.hex}88`, display: "block", transform: activeId === l.id ? "scale(1.5)" : "scale(1)", transition: "transform .3s" }} />
+            <span style={{ fontSize: 7, letterSpacing: 1, color: "rgba(210,185,162,.6)", ...ss }}>{l.id}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Top bar */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 0 52px", background: "linear-gradient(180deg, rgba(6,2,8,.86), transparent)", zIndex: 30, pointerEvents: "none" }}>
+        <div>
+          <div style={{ fontSize: 8, letterSpacing: 5, textTransform: "uppercase", color: "rgba(190,130,90,.42)", ...ss }}>Frisson</div>
+          <div style={{ fontSize: 14, fontStyle: "italic", color: "rgba(228,202,182,.38)", marginTop: 2, ...ss }}>Орбита Психики</div>
+        </div>
+        <button onClick={toggleSound} style={{ pointerEvents: "all", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, background: soundOn ? "rgba(140,30,60,.36)" : "rgba(100,20,50,.2)", border: `1px solid ${soundOn ? "rgba(200,130,90,.5)" : "rgba(190,130,90,.25)"}`, borderRadius: 16, padding: "5px 11px", fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: soundOn ? "rgba(240,210,178,.92)" : "rgba(210,175,145,.6)", transition: "all .3s", whiteSpace: "nowrap", ...ss }}>{soundOn ? "■ Стоп" : "♫ 528 Hz"}</button>
+      </div>
+
+      {/* Active label */}
+      <div style={{ position: "absolute", top: 62, left: "50%", transform: "translateX(-50%)", fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: "rgba(220,195,172,.45)", pointerEvents: "none", zIndex: 20, whiteSpace: "nowrap", ...ss }}>{layer.name}</div>
+
+      {/* Bottom panel */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transform: panelOpen ? "translateY(0)" : "translateY(100%)", transition: "transform .4s cubic-bezier(.32,.72,0,1)", maxHeight: "42%" }}>
+        <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.96) 14%, rgba(6,2,8,.99) 100%)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(150,80,60,.15)", overflowY: "auto", maxHeight: "42vh", padding: "0 16px 24px 52px", position: "relative" }}>
+          <button onClick={() => setPanelOpen(false)} style={{ position: "absolute", top: 8, right: 14, background: "none", border: "none", cursor: "pointer", color: "rgba(190,130,90,.38)", fontSize: 18, lineHeight: 1, zIndex: 3, ...ss }}>×</button>
+          <div onClick={() => setPanelOpen(false)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 7px", cursor: "pointer", position: "sticky", top: 0, background: "linear-gradient(180deg, rgba(6,2,8,.95) 70%, transparent)", zIndex: 2 }}>
+            <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: "rgba(190,130,90,.28)" }} />
+          </div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 8 }}>
+            <span style={{ fontSize: 8, letterSpacing: 3, textTransform: "uppercase", color: "rgba(190,130,90,.55)", whiteSpace: "nowrap", flexShrink: 0, ...ss }}>Уровень {layer.id} — {layer.sub}</span>
+          </div>
+          <div style={{ fontSize: 16, fontStyle: "italic", fontWeight: "normal", color: "#f0e0cf", lineHeight: 1.25, marginBottom: 8, ...ss }}>{layer.name}</div>
+          <div style={{ width: 26, height: 1, marginBottom: 10, background: "linear-gradient(90deg, rgba(190,130,90,.45), transparent)" }} />
+          <div style={{ fontSize: 11.5, lineHeight: 1.82, color: "rgba(200,175,158,.82)", wordWrap: "break-word", ...ss }}>{layer.desc}</div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -9,6 +9,7 @@ import Journal from "./components/Journal";
 import Situations from "./components/Situations";
 import Profile from "./components/Profile";
 import SubPage from "./components/SubPage";
+import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
   const [libSec, setLibSec] = useState("all");
 
   const T = THEMES[theme] || THEMES.full;
-  const showNav = screen !== "sub" && screen !== "situations";
+  const showNav = screen !== "sub" && screen !== "situations" && screen !== "orbit";
 
   if (!onb) return (<><GlobalStyles /><Onboarding onDone={() => setOnb(true)} /></>);
   if (!tour) return (<><GlobalStyles /><AppTour onDone={() => setTour(true)} theme={theme} /></>);
@@ -35,6 +36,7 @@ export default function App() {
   const screens = {
     home: <Home setScreen={setScreen} theme={theme} setTheme={setTheme} eScore={eScore} pLog={pLog} setLibSec={setLibSec} />,
     library: <Library setScreen={setScreen} theme={theme} initSec={libSec} />,
+    orbit: <Orbit />,
     journal: <Journal theme={theme} />,
     situations: <Situations setScreen={setScreen} theme={theme} />,
     profile: <Profile setScreen={setScreen} theme={theme} eScore={eScore} setEScore={setEScore} eHist={eHist} setEHist={setEHist} pLog={pLog} />,
