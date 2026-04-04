@@ -10,7 +10,7 @@ const LAYERS = [
   { id:6, name:"Поведение", sub:"внешний слой", hex:"#C8960A", col:0xC8960A, lc:0xA07808, radius:30, speed:0.15, bright:0.50, sz:0.42, lineAmt:0.3, desc:"То, что видит мир. Оно всегда вторично — рождается из всех предыдущих уровней. Когда бессознательное исцелено, а сознательное выбрало новое, поведение меняется органично, без насилия над собой." },
 ];
 
-export default function Orbit() {
+export default function Orbit({ setScreen }) {
   const canvasRef = useRef(null);
   const stateRef = useRef(null);
   const [activeId, setActiveId] = useState(1);
@@ -253,9 +253,12 @@ export default function Orbit() {
 
       {/* Top bar */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 0 52px", background: "linear-gradient(180deg, rgba(6,2,8,.86), transparent)", zIndex: 30, pointerEvents: "none" }}>
-        <div>
-          <div style={{ fontSize: 8, letterSpacing: 5, textTransform: "uppercase", color: "rgba(190,130,90,.42)", ...ss }}>Frisson</div>
-          <div style={{ fontSize: 14, fontStyle: "italic", color: "rgba(228,202,182,.38)", marginTop: 2, ...ss }}>Орбита Психики</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div onClick={() => setScreen("home")} style={{ pointerEvents: "all", cursor: "pointer", fontSize: 15, color: "rgba(210,175,145,.5)", padding: "4px 8px" }}>←</div>
+          <div>
+            <div style={{ fontSize: 8, letterSpacing: 5, textTransform: "uppercase", color: "rgba(190,130,90,.42)", ...ss }}>Frisson</div>
+            <div style={{ fontSize: 14, fontStyle: "italic", color: "rgba(228,202,182,.38)", marginTop: 2, ...ss }}>Орбита Психики</div>
+          </div>
         </div>
         <button onClick={toggleSound} style={{ pointerEvents: "all", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, background: soundOn ? "rgba(140,30,60,.36)" : "rgba(100,20,50,.2)", border: `1px solid ${soundOn ? "rgba(200,130,90,.5)" : "rgba(190,130,90,.25)"}`, borderRadius: 16, padding: "5px 11px", fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: soundOn ? "rgba(240,210,178,.92)" : "rgba(210,175,145,.6)", transition: "all .3s", whiteSpace: "nowrap", ...ss }}>{soundOn ? "■ Стоп" : "♫ 528 Hz"}</button>
       </div>
