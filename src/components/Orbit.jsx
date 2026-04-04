@@ -12,7 +12,9 @@ const LAYERS = [
 
 export default function Orbit({ setScreen }) {
   const canvasRef = useRef(null);
+  const touchRef = useRef(null);
   const stateRef = useRef(null);
+  const camRef = useRef(null);
   const [activeId, setActiveId] = useState(1);
   const [panelOpen, setPanelOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
@@ -128,36 +130,13 @@ export default function Orbit({ setScreen }) {
     const state = {
       curIdx: 0, tR: 22, cR: 22, tS: 0.18, cS: 0.18, tB: 0.82, cB: 0.82, tSz: 0.42, cSz: 0.42,
       lAmt: 0.6, tLAmt: 0.6, sX: 0, sY: 0, sZ: 0, transE: 0, cZ: 0, cZV: 0,
-      // touch drag
       dragging: false, lastPX: 0, lastPY: 0, dragVX: 0, dragVY: 0,
+      pinching: false, lastPinchDist: 0, camZ: 85,
     };
     stateRef.current = state;
+    camRef.current = camera;
     const aEl = [], conns = [];
     let lastSp = 0;
-
-    // Touch/mouse drag handlers
-    const onDown = (e) => {
-      const pt = e.touches ? e.touches[0] : e;
-      state.dragging = true; state.lastPX = pt.clientX; state.lastPY = pt.clientY;
-      state.dragVX = 0; state.dragVY = 0;
-    };
-    const onMove = (e) => {
-      if (!state.dragging) return;
-      const pt = e.touches ? e.touches[0] : e;
-      const dx = pt.clientX - state.lastPX, dy = pt.clientY - state.lastPY;
-      state.dragVX = dx * 0.004; state.dragVY = dy * 0.004;
-      state.sY += dx * 0.004; state.sX += dy * 0.004;
-      state.lastPX = pt.clientX; state.lastPY = pt.clientY;
-    };
-    const onUp = () => { state.dragging = false; };
-
-    canvas.addEventListener("mousedown", onDown);
-    canvas.addEventListener("mousemove", onMove);
-    canvas.addEventListener("mouseup", onUp);
-    canvas.addEventListener("mouseleave", onUp);
-    canvas.addEventListener("touchstart", onDown, { passive: true });
-    canvas.addEventListener("touchmove", onMove, { passive: true });
-    canvas.addEventListener("touchend", onUp);
 
     const clock = new THREE.Clock();
     let animId;
@@ -263,15 +242,82 @@ export default function Orbit({ setScreen }) {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", onResize);
-      canvas.removeEventListener("mousedown", onDown);
-      canvas.removeEventListener("mousemove", onMove);
-      canvas.removeEventListener("mouseup", onUp);
-      canvas.removeEventListener("mouseleave", onUp);
-      canvas.removeEventListener("touchstart", onDown);
-      canvas.removeEventListener("touchmove", onMove);
-      canvas.removeEventListener("touchend", onUp);
       renderer.dispose(); geo.dispose(); mat.dispose(); lineGeo.dispose(); lineMat.dispose(); elGeo.dispose(); elMat.dispose();
       stopSound();
+    };
+  }, []);
+
+  // Touch/mouse/wheel interaction — separate effect so it doesn't re-bindO on state changes
+  useEffect(() => {
+    const el = touchRef.current;
+    if (!el) return;
+
+    const pinchDist = (e) => {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    const onDown = (e) => {
+      const s = stateRef.current; if (!s) return;
+      if (e.touches && e.touches.length === 2) {
+        s.pinching = true; s.dragging = false;
+        s.lastPinchDist = pinchDist(e);
+        return;
+      }
+      const pt = e.touches ? e.touches[0] : e;
+      s.dragging = true; s.lastPX = pt.clientX; s.lastPY = pt.clientY;
+      s.dragVX = 0; s.dragVY = 0;
+    };
+
+    const onMove = (e) => {
+      const s = stateRef.current; if (!s) return;
+      if (s.pinching && e.touches && e.touches.length === 2) {
+        const d = pinchDist(e);
+        const delta = (s.lastPinchDist - d) * 0.15;
+        s.camZ = Math.max(40, Math.min(160, s.camZ + delta));
+        if (camRef.current) camRef.current.position.z = s.camZ;
+        s.lastPinchDist = d;
+        return;
+      }
+      if (!s.dragging) return;
+      const pt = e.touches ? e.touches[0] : e;
+      const dx = pt.clientX - s.lastPX, dy = pt.clientY - s.lastPY;
+      s.dragVX = dx * 0.005; s.dragVY = dy * 0.005;
+      s.sY += dx * 0.005; s.sX += dy * 0.005;
+      s.lastPX = pt.clientX; s.lastPY = pt.clientY;
+    };
+
+    const onUp = () => {
+      const s = stateRef.current; if (!s) return;
+      s.dragging = false; s.pinching = false;
+    };
+
+    const onWheel = (e) => {
+      const s = stateRef.current; if (!s) return;
+      e.preventDefault();
+      s.camZ = Math.max(40, Math.min(160, s.camZ + e.deltaY * 0.05));
+      if (camRef.current) camRef.current.position.z = s.camZ;
+    };
+
+    el.addEventListener("mousedown", onDown);
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseup", onUp);
+    el.addEventListener("mouseleave", onUp);
+    el.addEventListener("touchstart", onDown, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: true });
+    el.addEventListener("touchend", onUp);
+    el.addEventListener("wheel", onWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener("mousedown", onDown);
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseup", onUp);
+      el.removeEventListener("mouseleave", onUp);
+      el.removeEventListener("touchstart", onDown);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onUp);
+      el.removeEventListener("wheel", onWheel);
     };
   }, []);
 
@@ -280,6 +326,9 @@ export default function Orbit({ setScreen }) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", background: "#060208", overflow: "hidden" }}>
       <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />
+
+      {/* Touch interaction layer — above canvas, below UI */}
+      <div ref={touchRef} style={{ position: "absolute", inset: 0, zIndex: 5, touchAction: "none" }} />
 
       {/* Sidebar */}
       <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: "80px 0", background: "linear-gradient(90deg, rgba(6,2,8,.7), transparent)" }}>
@@ -308,9 +357,6 @@ export default function Orbit({ setScreen }) {
         <div style={{ fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: layer.hex, whiteSpace: "nowrap", ...ss }}>{layer.name}</div>
         <div style={{ fontSize: 8, letterSpacing: 2, color: "rgba(220,195,172,.3)", marginTop: 3, ...ss }}>{layer.sub}</div>
       </div>
-
-      {/* Tap orb area to close panel if open */}
-      {panelOpen && <div onClick={() => setPanelOpen(false)} style={{ position: "absolute", top: 80, left: 44, right: 0, bottom: 0, zIndex: 10 }} />}
 
       {/* Bottom panel — compact */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transform: panelOpen ? "translateY(0)" : "translateY(100%)", transition: "transform .4s cubic-bezier(.32,.72,0,1)" }}>
