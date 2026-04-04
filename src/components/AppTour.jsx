@@ -19,7 +19,7 @@ export default function AppTour({ onDone, theme }) {
   const isL = step === feats.length - 1;
 
   return (
-    <div style={{ width: "100%", height: "100vh", background: T.bg, display: "flex", flexDirection: "column", position: "relative", overflow: "hidden", transition: "background .5s" }}>
+    <div style={{ width: "100%", height: "100dvh", background: T.bg, display: "flex", flexDirection: "column", position: "relative", overflow: "hidden", transition: "background .5s" }}>
       <Orb style={{ top: "-10%", right: "-10%" }} color={T.o1} opacity={0.2} w={280} h={280} />
       <div style={{ padding: "20px 24px 0", display: "flex", justifyContent: "flex-end", position: "relative", zIndex: 2 }}>
         <div onClick={onDone} style={{ fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(242,232,226,.3)", cursor: "pointer", padding: "8px 0" }}>Пропустить</div>

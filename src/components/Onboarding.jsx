@@ -25,7 +25,7 @@ export default function Onboarding({ onDone }) {
   const canNext = (cur.type !== "q" || (cur.key && ans[cur.key])) && (cur.type !== "consent" || agreed);
 
   return (
-    <div style={{ width: "100%", height: "100vh", background: "#080A06", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
+    <div style={{ width: "100%", height: "100dvh", background: "#080A06", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <div style={{ position: "absolute", width: "78%", height: "78%", top: "-18%", left: "-18%", borderRadius: "50%", background: "radial-gradient(circle,rgba(140,20,100,.85),rgba(80,20,120,.6) 55%,transparent 72%)", filter: "blur(55px)", animation: "breathe 18s ease-in-out infinite" }} />
         <div style={{ position: "absolute", width: "65%", height: "65%", bottom: "-12%", right: "-10%", borderRadius: "50%", background: "radial-gradient(circle,rgba(30,20,120,.75),rgba(100,20,80,.5) 55%,transparent 72%)", filter: "blur(50px)", animation: "breathe 22s 4s ease-in-out infinite" }} />
