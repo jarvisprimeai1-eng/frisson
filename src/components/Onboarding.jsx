@@ -45,7 +45,7 @@ export default function Onboarding({ onDone }) {
         ))}
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "60px 28px 20px", position: "relative", zIndex: 2 }}>
+      <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 28px 0", position: "relative", zIndex: 2 }}>
         {step > 0 && (
           <div style={{ display: "flex", gap: 6, marginBottom: 36, animation: "fadeUp .3s ease both" }}>
             {steps.slice(1).map((_, i) => (
@@ -143,7 +143,7 @@ export default function Onboarding({ onDone }) {
         )}
       </div>
 
-      <div style={{ padding: "0 28px 32px", position: "relative", zIndex: 2 }}>
+      <div style={{ padding: "16px 28px", paddingBottom: "max(24px, env(safe-area-inset-bottom, 24px))", position: "relative", zIndex: 2, flexShrink: 0 }}>
         <div onClick={() => canNext && (isLast ? onDone() : setStep((s) => s + 1))} style={{
           width: "100%", padding: 16, borderRadius: 28, textAlign: "center",
           cursor: canNext ? "pointer" : "default",
