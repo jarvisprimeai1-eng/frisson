@@ -9,8 +9,8 @@ export default function Nav({ active, setScreen, theme }) {
       ic: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>,
     },
     {
-      id: "library", l: "Практики",
-      ic: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>,
+      id: "library", l: "Библиотека",
+      ic: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27z"/></svg>,
     },
     {
       id: "journal", l: "Дневник",
@@ -18,7 +18,7 @@ export default function Nav({ active, setScreen, theme }) {
     },
     {
       id: "profile", l: "Профиль",
-      ic: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+      ic: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>,
     },
   ];
 
@@ -29,7 +29,8 @@ export default function Nav({ active, setScreen, theme }) {
       borderTop: `1px solid ${T.nav}`,
       display: "flex",
       justifyContent: "space-around",
-      padding: "10px 0 22px",
+      padding: "10px 0 18px",
+      transition: "all .6s",
     }}>
       {items.map((it) => (
         <div
@@ -37,7 +38,7 @@ export default function Nav({ active, setScreen, theme }) {
           onClick={() => setScreen(it.id)}
           style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" }}
         >
-          <div style={{ color: active === it.id ? T.accent : "rgba(242,232,226,.25)", transition: "color .3s" }}>
+          <div style={{ color: active === it.id ? T.accent : "rgba(242,232,226,.25)", transition: "color .4s" }}>
             {it.ic}
           </div>
           <span style={{
@@ -46,7 +47,7 @@ export default function Nav({ active, setScreen, theme }) {
             textTransform: "uppercase",
             fontFamily: FONT_SANS,
             color: active === it.id ? T.accent : "rgba(242,232,226,.25)",
-            transition: "color .3s",
+            transition: "color .4s",
           }}>
             {it.l}
           </span>

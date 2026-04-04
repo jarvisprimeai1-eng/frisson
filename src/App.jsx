@@ -21,7 +21,7 @@ export default function App() {
     { score: 42, date: "1 мар" },
     { score: 55, date: "8 мар" },
     { score: 48, date: "15 мар" },
-    { score: 62, date: "22 мар" },
+    { score: 63, date: "21 мар" },
   ]);
   const [pLog] = useState([0, 1, 0, 2, 1, 0, 0]);
   const [libSec, setLibSec] = useState("all");
@@ -44,8 +44,8 @@ export default function App() {
   return (
     <>
       <GlobalStyles />
-      <div style={{ width: "100%", height: "100vh", background: "#04020a", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ width: "100%", maxWidth: 430, height: "100vh", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
+      <div style={{ width: "100%", height: "100vh", background: "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden" }}>
+        <div style={{ width: "100%", maxWidth: 430, height: "100vh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: "0 0 80px rgba(92,14,28,.2)" }}>
           <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>{screens[screen]}</div>
           {showNav && <Nav active={screen} setScreen={setScreen} theme={theme} />}
         </div>
