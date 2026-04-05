@@ -12,7 +12,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "1.8.3";
+export const VERSION = "1.8.4";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -20,13 +20,20 @@ export default function App() {
   const [screen, setScreen] = useState("home");
   const [theme, setTheme] = useState(() => localStorage.getItem("frisson-theme") || "full");
   const setThemePersisted = (t) => { localStorage.setItem("frisson-theme", t); setTheme(t); };
-  const [eScore, setEScore] = useState(null);
-  const [eHist, setEHist] = useState([
-    { score: 42, date: "1 мар" },
-    { score: 55, date: "8 мар" },
-    { score: 48, date: "15 мар" },
-    { score: 63, date: "21 мар" },
-  ]);
+  const [eScore, setEScoreRaw] = useState(() => {
+    const v = localStorage.getItem("frisson_escore");
+    return v !== null && v !== "null" ? parseInt(v) : null;
+  });
+  const setEScore = (v) => { localStorage.setItem("frisson_escore", v === null ? "null" : String(v)); setEScoreRaw(v); };
+  const [eHist, setEHistRaw] = useState(() => {
+    try { const v = JSON.parse(localStorage.getItem("frisson_ehist")); return Array.isArray(v) ? v : []; }
+    catch { return []; }
+  });
+  const setEHist = (updater) => setEHistRaw((prev) => {
+    const next = typeof updater === "function" ? updater(prev) : updater;
+    localStorage.setItem("frisson_ehist", JSON.stringify(next));
+    return next;
+  });
   const [pLog] = useState([0, 1, 0, 2, 1, 0, 0]);
   const [libSec, setLibSec] = useState("all");
   const [gems, setGems] = useState(() => parseInt(localStorage.getItem("frisson_gems")) || 0);
