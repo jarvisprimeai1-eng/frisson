@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
+const SCENARIOS = [
+  { id: "anxiety", name: "Тревога", hex: "#D4453C", desc: "Внутри сжимается глубина и теряется ощущение безопасности. Сознание перегружается и пытается всё контролировать. Чувства застревают, эмоции вспыхивают. Поведение становится суетливым или напряжённым. Система живёт не из центра, а из напряжения.", speedMul: 2.4, chaos: 0.0035, pulseAmp: 0.0018, pulseFreq: 4.5, contract: 0.001, tint: 0xFF5040 },
+  { id: "love", name: "Любовь · Наполненность", hex: "#E88FC6", desc: "Внутри есть спокойствие и контакт с собой. Самость проявлена, сознание выбирает без страха. Чувства текут, эмоции мягкие. Поведение становится естественным и притягательным. Система раскрывается и дышит.", speedMul: 0.75, chaos: 0, pulseAmp: 0.0012, pulseFreq: 0.6, contract: -0.0003, tint: 0xF0A0D0 },
+  { id: "power", name: "Сила · Внутренний огонь", hex: "#E8A04C", desc: "Внутри собирается энергия и появляется импульс к действию. Самость яркая, сознание задаёт направление. Чувства становятся топливом, эмоции — импульсом. Поведение — уверенное и направленное. Система движется вперёд.", speedMul: 2.0, chaos: 0, pulseAmp: 0.0018, pulseFreq: 1.6, contract: -0.0008, tint: 0xFFB040 },
+  { id: "conflict", name: "Внутренний конфликт", hex: "#9E6BC4", desc: "Внутри одновременно живут противоположные желания. Сознание не может выбрать, энергия рассеивается. Чувства смешиваются, эмоции нестабильны. Поведение становится непоследовательным. Система теряет единый вектор.", speedMul: 1.5, chaos: 0.0022, pulseAmp: 0, pulseFreq: 0, contract: 0, tint: 0xA070C8, split: true },
+  { id: "fear", name: "Страх", hex: "#4A7AB8", desc: "Внутри активируется сигнал опасности. Самость сужается, сознание фиксируется на угрозе. Чувства замирают, эмоции резко усиливаются. Поведение уходит в избегание или защиту. Система сжимается, чтобы выжить.", speedMul: 0.45, chaos: 0.0008, pulseAmp: 0.0025, pulseFreq: 0.35, contract: 0.0022, tint: 0x5080C0, jolt: true },
+];
+
 const LAYERS = [
   { id:1, name:"Бессознательное", sub:"центр · самый глубокий", hex:"#8B1A3A", col:0x8B1A3A, lc:0x6B0F2A, radius:22, speed:0.18, bright:0.82, sz:0.42, lineAmt:0.6, desc:"Здесь хранится всё, что накопилось до того, как ты начала осознавать — детские программы, родительские предписания, старая боль и нерастраченная любовь." },
   { id:2, name:"Самость / Подлинность", sub:"уровень 2", hex:"#C44B88", col:0xC44B88, lc:0x9B3A6B, radius:26, speed:0.28, bright:0.75, sz:0.40, lineAmt:0.45, desc:"То, кем ты являешься до всех масок и ролей. Когда ты в контакте с подлинностью, исчезает усталость от притворства, приходят «свои» люди." },
@@ -16,14 +24,24 @@ export default function Orbit({ setScreen }) {
   const stateRef = useRef(null);
   const camRef = useRef(null);
   const [activeId, setActiveId] = useState(1);
+  const [activeScenario, setActiveScenarioState] = useState(null);
+  const [panelMode, setPanelMode] = useState("layer"); // "layer" | "scenario"
+  const scenarioRef = useRef(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const audioRef = useRef({ ctx: null, gain: null, oscs: [], analyser: null, freq: new Uint8Array(64), bass: 0, mid: 0 });
 
   const layer = LAYERS[activeId - 1];
 
+  function setScenario(sc) {
+    scenarioRef.current = sc;
+    setActiveScenarioState(sc);
+    if (sc) { setPanelMode("scenario"); setPanelOpen(true); }
+  }
+
   function openLayer(id) {
     setActiveId(id);
+    setPanelMode("layer");
     setPanelOpen(true);
     const l = LAYERS[id - 1];
     const s = stateRef.current;
@@ -173,11 +191,17 @@ export default function Orbit({ setScreen }) {
 
       [points, lines, electrons].forEach((o) => { o.rotation.x = state.sX; o.rotation.y = state.sY; o.rotation.z = state.sZ; o.position.z = state.cZ; });
 
+      const sc = scenarioRef.current;
+      const scS = sc ? sc.speedMul : 1;
+      const effS = state.cS * scS;
+      const scPulse = sc ? Math.sin(t * (sc.pulseFreq || 1)) * (sc.pulseAmp || 0) : 0;
+      const joltActive = sc && sc.jolt && (Math.sin(t * 1.3) > 0.95);
+
       const p = geo.getAttribute("position"), a = p.array;
       for (let i = 0; i < N; i++) {
         const i3 = i * 3, x = a[i3], y = a[i3 + 1], z = a[i3 + 2], px = PH[i];
-        VA[i3] += Math.sin(t * 0.05 + px) * 0.001 * state.cS; VA[i3 + 1] += Math.cos(t * 0.06 + px * 1.3) * 0.001 * state.cS; VA[i3 + 2] += Math.sin(t * 0.055 + px * 0.7) * 0.001 * state.cS;
-        VA[i3] += Math.sin(t * 0.02 + px * 2.1 + y * 0.1) * 0.0008 * state.cS; VA[i3 + 1] += Math.cos(t * 0.025 + px * 1.7 + z * 0.1) * 0.0008 * state.cS; VA[i3 + 2] += Math.sin(t * 0.022 + px * 0.9 + x * 0.1) * 0.0008 * state.cS;
+        VA[i3] += Math.sin(t * 0.05 + px) * 0.001 * effS; VA[i3 + 1] += Math.cos(t * 0.06 + px * 1.3) * 0.001 * effS; VA[i3 + 2] += Math.sin(t * 0.055 + px * 0.7) * 0.001 * effS;
+        VA[i3] += Math.sin(t * 0.02 + px * 2.1 + y * 0.1) * 0.0008 * effS; VA[i3 + 1] += Math.cos(t * 0.025 + px * 1.7 + z * 0.1) * 0.0008 * effS; VA[i3 + 2] += Math.sin(t * 0.022 + px * 0.9 + x * 0.1) * 0.0008 * effS;
         const d = Math.sqrt(x * x + y * y + z * z) || 0.01;
         const pull = Math.max(0, d - (state.cR + bass * 6)) * 0.002 + 0.0003;
         VA[i3] -= (x / d) * pull; VA[i3 + 1] -= (y / d) * pull; VA[i3 + 2] -= (z / d) * pull;
@@ -185,6 +209,16 @@ export default function Orbit({ setScreen }) {
         if (l.id === 4) { const hb = Math.sin(t * 1.2 + px * 0.1) * 0.0015; VA[i3] += (x / d) * hb; VA[i3 + 1] += (y / d) * hb; VA[i3 + 2] += (z / d) * hb; }
         if (l.id === 5) { VA[i3] += (Math.random() - 0.5) * 0.004; VA[i3 + 1] += (Math.random() - 0.5) * 0.004; VA[i3 + 2] += (Math.random() - 0.5) * 0.004; }
         if (l.id === 3) { const nx = -y / d, ny = x / d; VA[i3] += nx * 0.003 * state.cS; VA[i3 + 1] += ny * 0.003 * state.cS; }
+
+        // Scenario physics
+        if (sc) {
+          if (sc.chaos) { VA[i3] += (Math.random() - 0.5) * sc.chaos; VA[i3+1] += (Math.random() - 0.5) * sc.chaos; VA[i3+2] += (Math.random() - 0.5) * sc.chaos; }
+          if (sc.pulseAmp) { VA[i3] += (x/d) * scPulse; VA[i3+1] += (y/d) * scPulse; VA[i3+2] += (z/d) * scPulse; }
+          if (sc.contract) { VA[i3] -= (x/d) * sc.contract; VA[i3+1] -= (y/d) * sc.contract; VA[i3+2] -= (z/d) * sc.contract; }
+          if (sc.split) { const pullX = (x > 0 ? 14 : -14) - x; VA[i3] += pullX * 0.00015; }
+          if (joltActive) { VA[i3] += (Math.random() - 0.5) * 0.02; VA[i3+1] += (Math.random() - 0.5) * 0.02; VA[i3+2] += (Math.random() - 0.5) * 0.02; }
+        }
+
         VA[i3] *= 0.992; VA[i3 + 1] *= 0.992; VA[i3 + 2] *= 0.992;
         a[i3] += VA[i3]; a[i3 + 1] += VA[i3 + 1]; a[i3 + 2] += VA[i3 + 2];
       }
@@ -221,7 +255,9 @@ export default function Orbit({ setScreen }) {
       }
       elGeo.setDrawRange(0, alive); ep.needsUpdate = true;
 
-      mat.color.lerp(new THREE.Color(l.col), 0.018); lineMat.color.lerp(new THREE.Color(l.lc), 0.018);
+      const targetCol = sc ? new THREE.Color(sc.tint) : new THREE.Color(l.col);
+      const targetLc = sc ? new THREE.Color(sc.tint).multiplyScalar(0.6) : new THREE.Color(l.lc);
+      mat.color.lerp(targetCol, 0.018); lineMat.color.lerp(targetLc, 0.018);
       mat.opacity = state.cB + bass * 0.08; mat.size = state.cSz + bass * 0.05;
 
       camera.position.x = Math.sin(t * 0.018) * 6;
@@ -354,18 +390,29 @@ export default function Orbit({ setScreen }) {
 
       {/* Active label + name */}
       <div style={{ position: "absolute", top: 62, left: "50%", transform: "translateX(-50%)", textAlign: "center", pointerEvents: "none", zIndex: 20 }}>
-        <div style={{ fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: layer.hex, whiteSpace: "nowrap", ...ss }}>{layer.name}</div>
-        <div style={{ fontSize: 8, letterSpacing: 2, color: "rgba(220,195,172,.3)", marginTop: 3, ...ss }}>{layer.sub}</div>
+        <div style={{ fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: (panelMode === "scenario" && activeScenario) ? activeScenario.hex : layer.hex, whiteSpace: "nowrap", ...ss }}>{(panelMode === "scenario" && activeScenario) ? activeScenario.name : layer.name}</div>
+        <div style={{ fontSize: 8, letterSpacing: 2, color: "rgba(220,195,172,.3)", marginTop: 3, ...ss }}>{(panelMode === "scenario" && activeScenario) ? "сценарий" : layer.sub}</div>
+      </div>
+
+      {/* Scenario chips row */}
+      <div style={{ position: "absolute", top: 96, left: 0, right: 0, zIndex: 20, overflowX: "auto", padding: "0 16px 0 52px", WebkitOverflowScrolling: "touch" }}>
+        <div style={{ display: "flex", gap: 6, whiteSpace: "nowrap" }}>
+          <div onClick={() => { scenarioRef.current = null; setActiveScenarioState(null); }} style={{ cursor: "pointer", padding: "5px 11px", borderRadius: 14, background: !activeScenario ? "rgba(190,130,90,.25)" : "rgba(30,20,25,.5)", border: `1px solid ${!activeScenario ? "rgba(200,150,110,.45)" : "rgba(190,130,90,.15)"}`, fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", color: !activeScenario ? "rgba(240,210,178,.92)" : "rgba(200,175,158,.5)", whiteSpace: "nowrap", flexShrink: 0, ...ss }}>Нейтрально</div>
+          {SCENARIOS.map((sc) => (
+            <div key={sc.id} onClick={() => setScenario(activeScenario?.id === sc.id ? null : sc)} style={{ cursor: "pointer", padding: "5px 11px", borderRadius: 14, background: activeScenario?.id === sc.id ? `${sc.hex}30` : "rgba(30,20,25,.5)", border: `1px solid ${activeScenario?.id === sc.id ? sc.hex : "rgba(190,130,90,.15)"}`, fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", color: activeScenario?.id === sc.id ? sc.hex : "rgba(200,175,158,.5)", whiteSpace: "nowrap", flexShrink: 0, ...ss }}>{sc.name}</div>
+          ))}
+        </div>
       </div>
 
       {/* Bottom panel — compact */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transform: panelOpen ? "translateY(0)" : "translateY(100%)", transition: "transform .4s cubic-bezier(.32,.72,0,1)" }}>
-        <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.94) 18%, rgba(6,2,8,.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${layer.hex}22`, padding: "0 16px 20px 52px", position: "relative" }}>
-          <div onClick={() => setPanelOpen(false)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 8px", cursor: "pointer" }}>
-            <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: `${layer.hex}55` }} />
+        <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.94) 18%, rgba(6,2,8,.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${((panelMode === "scenario" && activeScenario) ? activeScenario.hex : layer.hex)}22`, padding: "0 16px 20px 52px", position: "relative", maxHeight: "46vh", overflowY: "auto" }}>
+          <div onClick={() => setPanelOpen(false)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 8px", cursor: "pointer", position: "sticky", top: 0, background: "linear-gradient(180deg, rgba(6,2,8,.95) 70%, transparent)" }}>
+            <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: `${((panelMode === "scenario" && activeScenario) ? activeScenario.hex : layer.hex)}55` }} />
           </div>
-          <div style={{ fontSize: 15, fontStyle: "italic", fontWeight: "normal", color: layer.hex, lineHeight: 1.25, marginBottom: 6, ...ss }}>{layer.name}</div>
-          <div style={{ fontSize: 11, lineHeight: 1.75, color: "rgba(200,175,158,.75)", wordWrap: "break-word", ...ss }}>{layer.desc}</div>
+          <div style={{ fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: "rgba(190,130,90,.45)", marginBottom: 6, ...ss }}>{(panelMode === "scenario" && activeScenario) ? "Сценарий" : `Уровень ${layer.id}`}</div>
+          <div style={{ fontSize: 15, fontStyle: "italic", fontWeight: "normal", color: (panelMode === "scenario" && activeScenario) ? activeScenario.hex : layer.hex, lineHeight: 1.25, marginBottom: 8, ...ss }}>{(panelMode === "scenario" && activeScenario) ? activeScenario.name : layer.name}</div>
+          <div style={{ fontSize: 11, lineHeight: 1.75, color: "rgba(200,175,158,.78)", wordWrap: "break-word", ...ss }}>{(panelMode === "scenario" && activeScenario) ? activeScenario.desc : layer.desc}</div>
         </div>
       </div>
     </div>
