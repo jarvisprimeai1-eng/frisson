@@ -9,9 +9,19 @@ export default function GlobalStyles() {
       @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
       @keyframes shimmer{0%,100%{opacity:.15}50%{opacity:.5}}
       @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-44px) scale(1.2)}}
+      @keyframes moonHalo{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.35);opacity:.6}}
+      @keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+      @keyframes driftY{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-12px) translateX(6px)}100%{transform:translateY(0) translateX(0)}}
+      @keyframes screenFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+      @keyframes navPop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
       .fu1{animation:fadeUp .5s .06s ease both}.fu2{animation:fadeUp .5s .12s ease both}
       .fu3{animation:fadeUp .5s .18s ease both}.fu4{animation:fadeUp .5s .24s ease both}.fu5{animation:fadeUp .5s .3s ease both}
       .pc{transition:transform .15s ease}.pc:active{transform:scale(.97)}
+      .screen-in{animation:screenFade .35s ease both}
+      .moon-halo{animation:moonHalo 4s ease-in-out infinite}
+      .card-float{animation:floatBob 5s ease-in-out infinite}
+      .nav-active-pop{animation:navPop .5s ease}
+      .ambient-dot{animation:driftY 8s ease-in-out infinite}
     `}</style>
   );
 }

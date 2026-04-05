@@ -29,7 +29,10 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
 
       <div className="fu1" style={{ padding: "50px 24px 14px", position: "relative", zIndex: 1, textAlign: "center" }}>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(242,232,226,.38)", marginBottom: 6 }}>{moon.n}</div>
-        <div style={{ fontSize: 42, margin: "4px 0", lineHeight: 1 }}>{moon.e}</div>
+        <div style={{ position: "relative", display: "inline-block", margin: "4px 0" }}>
+          <div className="moon-halo" style={{ position: "absolute", inset: -14, borderRadius: "50%", background: `radial-gradient(circle, rgba(${T.ar},.5), transparent 70%)`, filter: "blur(14px)", pointerEvents: "none" }} />
+          <div style={{ fontSize: 42, lineHeight: 1, position: "relative" }}>{moon.e}</div>
+        </div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 26, fontWeight: 300, lineHeight: 1.25, color: T.text, marginBottom: 6 }}>{gr},<br/><span style={{ color: T.accent }}>Anastasiya</span></div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: `rgba(${T.ar},.7)`, lineHeight: 1.5, transition: "color .6s" }}>{msg}</div>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(242,232,226,.15)", marginTop: 10 }}>Frisson v{VERSION}</div>
@@ -69,8 +72,8 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
           <span onClick={() => setScreen("library")} style={{ fontSize: 10, color: T.accent, cursor: "pointer", fontFamily: FONT_SANS }}>Все →</span>
         </div>
         <div style={{ display: "flex", gap: 11, overflowX: "auto", margin: "0 -24px", padding: "4px 24px 8px" }}>
-          {cards.map((card) => (
-            <div key={card.title} onClick={() => { setLibSec(card.sec); setScreen("library"); }} className="pc" style={{ minWidth: 148, height: 192, borderRadius: 22, position: "relative", overflow: "hidden", flexShrink: 0, cursor: "pointer", background: card.bg, border: "1px solid rgba(255,255,255,.07)" }}>
+          {cards.map((card, idx) => (
+            <div key={card.title} onClick={() => { setLibSec(card.sec); setScreen("library"); }} className="pc card-float" style={{ minWidth: 148, height: 192, borderRadius: 22, position: "relative", overflow: "hidden", flexShrink: 0, cursor: "pointer", background: card.bg, border: "1px solid rgba(255,255,255,.07)", animationDelay: `${idx * 0.6}s` }}>
               {card.blobs.map((b, i) => (
                 <div key={i} style={{ position: "absolute", left: b.x, top: b.y, width: b.w, height: b.h, transform: "translate(-50%,-50%)", borderRadius: `${48 + i * 7}% ${52 - i * 5}% ${55 - i * 3}% ${45 + i * 4}% / ${44 + i * 6}% ${56 - i * 4}% ${48 + i * 5}% ${52 - i * 3}%`, background: b.c, filter: `blur(${b.b}px)` }} />
               ))}

@@ -36,27 +36,35 @@ export default function Nav({ active, setScreen, theme }) {
       padding: "10px 0 18px",
       transition: "all .6s",
     }}>
-      {items.map((it) => (
-        <div
-          key={it.id}
-          onClick={() => setScreen(it.id)}
-          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer" }}
-        >
-          <div style={{ color: active === it.id ? T.accent : "rgba(242,232,226,.25)", transition: "color .4s" }}>
-            {it.ic}
+      {items.map((it) => {
+        const isActive = active === it.id;
+        return (
+          <div
+            key={it.id}
+            onClick={() => setScreen(it.id)}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer", position: "relative" }}
+          >
+            <div
+              key={`${it.id}-${isActive}`}
+              className={isActive ? "nav-active-pop" : ""}
+              style={{ color: isActive ? T.accent : "rgba(242,232,226,.25)", transition: "color .4s", filter: isActive ? `drop-shadow(0 0 6px ${T.accent}aa)` : "none" }}
+            >
+              {it.ic}
+            </div>
+            <span style={{
+              fontSize: 9,
+              letterSpacing: ".1em",
+              textTransform: "uppercase",
+              fontFamily: FONT_SANS,
+              color: isActive ? T.accent : "rgba(242,232,226,.25)",
+              transition: "color .4s",
+            }}>
+              {it.l}
+            </span>
+            {isActive && <div style={{ position: "absolute", top: -10, width: 4, height: 4, borderRadius: "50%", background: T.accent, boxShadow: `0 0 8px ${T.accent}` }} />}
           </div>
-          <span style={{
-            fontSize: 9,
-            letterSpacing: ".1em",
-            textTransform: "uppercase",
-            fontFamily: FONT_SANS,
-            color: active === it.id ? T.accent : "rgba(242,232,226,.25)",
-            transition: "color .4s",
-          }}>
-            {it.l}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

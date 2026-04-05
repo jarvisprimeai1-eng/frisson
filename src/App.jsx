@@ -12,7 +12,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "1.10.0";
+export const VERSION = "1.11.0";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -63,7 +63,24 @@ export default function App() {
       <GlobalStyles />
       <div style={{ width: "100%", height: "100dvh", background: "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden" }}>
         <div style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: "0 0 80px rgba(92,14,28,.2)", position: "relative" }}>
-          <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>{screens[screen]}</div>
+          {/* Ambient floating dots — app-wide background */}
+          {screen !== "orbit" && (
+            <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>
+              {Array.from({ length: 18 }, (_, i) => (
+                <div key={i} className="ambient-dot" style={{
+                  position: "absolute",
+                  left: `${(i * 53 + 13) % 100}%`,
+                  top: `${(i * 37 + 7) % 100}%`,
+                  width: 2, height: 2, borderRadius: "50%",
+                  background: `rgba(${T.ar},.${3 + (i % 4)})`,
+                  boxShadow: `0 0 4px rgba(${T.ar},.4)`,
+                  animationDelay: `${(i * 0.4) % 8}s`,
+                  animationDuration: `${6 + (i % 5)}s`,
+                }} />
+              ))}
+            </div>
+          )}
+          <div ref={scrollRef} key={screen} className="screen-in" style={{ flex: 1, overflowY: "auto", overflowX: "hidden", position: "relative", zIndex: 1 }}>{screens[screen]}</div>
           {showNav && <Nav active={screen} setScreen={setScreen} theme={theme} />}
           <div style={{ position: "absolute", bottom: showNav ? 22 : 4, right: 6, fontSize: 8, color: "rgba(255,255,255,.12)", fontFamily: "sans-serif", pointerEvents: "none", zIndex: 50 }}>v{VERSION}</div>
         </div>
