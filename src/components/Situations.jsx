@@ -4,9 +4,15 @@ import { STATES } from "../data/situations";
 import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
 import Orb from "./Orb";
 
-export default function Situations({ setScreen, theme }) {
+export default function Situations({ setScreen, theme, goToMed }) {
   const T = THEMES[theme] || THEMES.full;
   const [openItem, setOpenItem] = useState(null);
+
+  // Extract meditation title from rec string like 'Медитация «Доверие к миру»'
+  const extractTitle = (rec) => {
+    const m = rec.match(/[«"]([^»"]+)[»"]/);
+    return m ? m[1] : null;
+  };
 
   return (
     <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: "background .6s" }}>
@@ -53,16 +59,23 @@ export default function Situations({ setScreen, theme }) {
 
                   {isOpen && (
                     <div style={{
-                      padding: "12px 16px",
+                      padding: "10px 12px",
                       background: `${st.hex}0c`, border: `1px solid ${st.hex}30`, borderTop: "none",
                       borderRadius: "0 0 13px 13px",
                     }}>
-                      {item.rec.split(" · ").map((r, ri) => (
-                        <div key={ri} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: ri < item.rec.split(" · ").length - 1 ? 10 : 0 }}>
-                          <div style={{ width: 30, height: 30, borderRadius: "50%", background: `${st.hex}22`, border: `1px solid ${st.hex}44`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: st.hex, flexShrink: 0 }}>▶</div>
-                          <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, color: "rgba(242,232,226,.9)", lineHeight: 1.45 }}>{r}</div>
-                        </div>
-                      ))}
+                      {item.rec.split(" · ").map((r, ri) => {
+                        const title = extractTitle(r);
+                        const canGo = title && goToMed;
+                        return (
+                          <div key={ri} onClick={canGo ? () => goToMed(title) : undefined} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", marginBottom: 2, cursor: canGo ? "pointer" : "default", borderRadius: 10, background: "transparent", transition: "background .2s" }}>
+                            <div style={{ width: 30, height: 30, borderRadius: "50%", background: `${st.hex}22`, border: `1px solid ${st.hex}44`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: st.hex, flexShrink: 0 }}>▶</div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, color: "rgba(242,232,226,.9)", lineHeight: 1.45 }}>{r}</div>
+                              {canGo && <div style={{ fontFamily: FONT_SANS, fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: st.hex, marginTop: 3 }}>Перейти к практике →</div>}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

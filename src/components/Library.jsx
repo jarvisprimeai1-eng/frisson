@@ -5,14 +5,25 @@ import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
 import Orb from "./Orb";
 import Lock from "./Lock";
 
-export default function Library({ setScreen, theme, initSec }) {
+export default function Library({ setScreen, theme, initSec, initMed, clearMed }) {
   const T = THEMES[theme] || THEMES.full;
-  const [det, setDet] = useState(null);
+  const ALL_MEDS = SECTIONS.flatMap((s) => s.meds);
+  const [det, setDet] = useState(() => {
+    if (initMed) { const m = ALL_MEDS.find((x) => x.title === initMed); return m || null; }
+    return null;
+  });
   const [play, setPlay] = useState(false);
   const [prog, setProg] = useState(0);
   const [active, setActive] = useState(initSec || "all");
 
   useEffect(() => { setActive(initSec || "all"); }, [initSec]);
+  useEffect(() => {
+    if (initMed) {
+      const m = ALL_MEDS.find((x) => x.title === initMed);
+      if (m) setDet(m);
+      if (clearMed) clearMed();
+    }
+  }, [initMed]);
 
   if (det) {
     const sec = SECTIONS.find((s) => s.meds && s.meds.some((m) => m.n === det.n));
