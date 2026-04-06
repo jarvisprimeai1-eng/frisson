@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { MED_GUIDES } from "../data/medGuides";
 
 // Sound profiles: each scenario has therapeutic frequencies
 // Neutral: 528 Hz (Solfeggio love/repair) + 8 Hz binaural → alpha
@@ -575,6 +576,19 @@ export default function Orbit({ setScreen, addGems }) {
 
   const ss = { fontFamily: "Georgia, serif" };
   const fmtTimer = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+
+  // Current guide text during meditation
+  const guideText = (() => {
+    if (!meditating || medDuration === 0) return null;
+    const progress = 1 - (medTime / medDuration);
+    const guideId = activeScenario?.id || "neutral";
+    const guide = MED_GUIDES[guideId] || MED_GUIDES.neutral;
+    let current = null;
+    for (let i = guide.length - 1; i >= 0; i--) {
+      if (progress >= guide[i].at) { current = guide[i]; break; }
+    }
+    return current;
+  })();
   const acHex = activeScenario ? activeScenario.hex : layer.hex;
   const hideUI = meditating ? 0 : 1;
 
@@ -605,21 +619,33 @@ export default function Orbit({ setScreen, addGems }) {
         <button onClick={toggleSound} style={{ pointerEvents: "all", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, background: soundOn ? "rgba(140,30,60,.36)" : "rgba(100,20,50,.2)", border: `1px solid ${soundOn ? "rgba(200,130,90,.5)" : "rgba(190,130,90,.25)"}`, borderRadius: 16, padding: "5px 11px", fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: soundOn ? "rgba(240,210,178,.92)" : "rgba(210,175,145,.6)", transition: "all .3s", whiteSpace: "nowrap", ...ss }}>{meditating ? "■ Стоп" : soundOn ? "■ Стоп" : `♫ ${getProfile().label}`}</button>
       </div>
 
-      {/* Meditation timer — bottom bar, orb stays visible */}
+      {/* Meditation: guide text + timer bar */}
       {meditating && (
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 12, zIndex: 28, display: "flex", flexDirection: "column", alignItems: "center", pointerEvents: "none" }}>
-          <div style={{ background: "rgba(6,2,8,.7)", backdropFilter: "blur(12px)", borderRadius: 20, padding: "12px 24px", display: "flex", alignItems: "center", gap: 16, border: `1px solid ${acHex}22` }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 28, fontWeight: 200, color: `${acHex}dd`, letterSpacing: 3, ...ss }}>{fmtTimer(medTime)}</div>
-              <div style={{ fontSize: 7, letterSpacing: 2, textTransform: "uppercase", color: `${acHex}55`, marginTop: 2, ...ss }}>{getProfile().label}</div>
+        <>
+          {/* Guide text — center of screen */}
+          {guideText && (
+            <div key={guideText.text} style={{ position: "absolute", left: 0, right: 0, top: "50%", transform: "translateY(-50%)", zIndex: 27, pointerEvents: "none", textAlign: "center", padding: "0 32px", animation: "fadeUp .6s ease both" }}>
+              {guideText.breath && (
+                <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: guideText.breath === "in" ? "rgba(160,212,228,.5)" : guideText.breath === "hold" ? "rgba(240,208,96,.4)" : "rgba(200,160,180,.45)", marginBottom: 10, ...ss }}>
+                  {guideText.breath === "in" ? "вдох ↑" : guideText.breath === "hold" ? "задержка ◦" : "выдох ↓"}
+                </div>
+              )}
+              <div style={{ fontSize: 15, fontStyle: "italic", lineHeight: 1.7, color: "rgba(242,232,226,.7)", textShadow: "0 0 20px rgba(6,2,8,.8)", maxWidth: 300, margin: "0 auto", ...ss }}>{guideText.text}</div>
             </div>
-            <div style={{ width: 1, height: 32, background: `${acHex}22` }} />
-            <div onClick={stopMeditation} style={{ pointerEvents: "all", cursor: "pointer", padding: "8px 16px", borderRadius: 14, background: `${acHex}18`, border: `1px solid ${acHex}33`, fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: `${acHex}aa`, ...ss }}>Завершить</div>
+          )}
+
+          {/* Timer bar — bottom */}
+          <div style={{ position: "absolute", left: 0, right: 0, bottom: 12, zIndex: 28, display: "flex", flexDirection: "column", alignItems: "center", pointerEvents: "none" }}>
+            <div style={{ background: "rgba(6,2,8,.7)", backdropFilter: "blur(12px)", borderRadius: 20, padding: "10px 20px", display: "flex", alignItems: "center", gap: 14, border: `1px solid ${acHex}22` }}>
+              <div style={{ fontSize: 22, fontWeight: 200, color: `${acHex}cc`, letterSpacing: 2, ...ss }}>{fmtTimer(medTime)}</div>
+              <div style={{ width: 1, height: 24, background: `${acHex}22` }} />
+              <div onClick={stopMeditation} style={{ pointerEvents: "all", cursor: "pointer", padding: "6px 14px", borderRadius: 12, background: `${acHex}18`, border: `1px solid ${acHex}33`, fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: `${acHex}aa`, ...ss }}>Завершить</div>
+            </div>
+            <div style={{ width: 80, height: 2, borderRadius: 1, background: "rgba(255,255,255,.06)", marginTop: 6, overflow: "hidden" }}>
+              <div style={{ height: "100%", background: acHex, borderRadius: 1, width: medDuration ? `${(medTime / medDuration) * 100}%` : "0%", transition: "width 1s linear" }} />
+            </div>
           </div>
-          <div style={{ width: 100, height: 2, borderRadius: 1, background: "rgba(255,255,255,.06)", marginTop: 8, overflow: "hidden" }}>
-            <div style={{ height: "100%", background: acHex, borderRadius: 1, width: medDuration ? `${(medTime / medDuration) * 100}%` : "0%", transition: "width 1s linear" }} />
-          </div>
-        </div>
+        </>
       )}
 
       {/* Crystal reward popup — large and celebratory */}
