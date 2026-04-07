@@ -19,12 +19,12 @@ export default function Situations({ setScreen, theme, goToMed, THEMES }) {
       <Orb style={{ top: -40, right: -60 }} color={T.o1} opacity={0.12} w={220} h={220} />
       <div style={{ padding: "50px 24px 18px", position: "relative", zIndex: 1 }}>
         <div onClick={() => setScreen("home")} style={{ display: "flex", alignItems: "center", gap: 9, cursor: "pointer", marginBottom: 22 }}>
-          <span style={{ fontSize: 14, color: "rgba(242,232,226,.4)" }}>←</span>
-          <span style={{ fontSize: 11, letterSpacing: ".15em", textTransform: "uppercase", color: "rgba(242,232,226,.4)", fontFamily: FONT_SANS }}>Назад</span>
+          <span style={{ fontSize: 14, color: "rgba(var(--txt),.4)" }}>←</span>
+          <span style={{ fontSize: 11, letterSpacing: ".15em", textTransform: "uppercase", color: "rgba(var(--txt),.4)", fontFamily: FONT_SANS }}>Назад</span>
         </div>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".25em", textTransform: "uppercase", color: T.accent, marginBottom: 8 }}>Навигатор практик</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 28, fontWeight: 300, lineHeight: 1.2, color: "rgba(242,232,226,.95)", marginBottom: 8 }}>Что вас беспокоит<br/>прямо сейчас?</div>
-        <div style={{ fontSize: 12, color: "rgba(242,232,226,.4)", lineHeight: 1.6, fontFamily: FONT_SANS }}>Нажмите на проблему — откроется практика</div>
+        <div style={{ fontFamily: FONT_SERIF, fontSize: 28, fontWeight: 300, lineHeight: 1.2, color: "rgba(var(--txt),.95)", marginBottom: 8 }}>Что вас беспокоит<br/>прямо сейчас?</div>
+        <div style={{ fontSize: 12, color: "rgba(var(--txt),.4)", lineHeight: 1.6, fontFamily: FONT_SANS }}>Нажмите на проблему — откроется практика</div>
       </div>
 
       <div style={{ padding: "0 24px", position: "relative", zIndex: 1 }}>
@@ -54,8 +54,8 @@ export default function Situations({ setScreen, theme, goToMed, THEMES }) {
                       transition: "all .2s",
                     }}
                   >
-                    <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: isOpen ? st.hex : "rgba(242,232,226,.35)", marginTop: 1, flexShrink: 0, transition: "color .2s" }}>→</div>
-                    <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: isOpen ? "rgba(242,232,226,.95)" : "rgba(242,232,226,.75)", lineHeight: 1.5, transition: "color .2s" }}>{item.problem}</div>
+                    <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: isOpen ? st.hex : "rgba(var(--txt),.35)", marginTop: 1, flexShrink: 0, transition: "color .2s" }}>→</div>
+                    <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: isOpen ? "rgba(var(--txt),.95)" : "rgba(var(--txt),.75)", lineHeight: 1.5, transition: "color .2s" }}>{item.problem}</div>
                   </div>
 
                   {isOpen && (
@@ -71,7 +71,7 @@ export default function Situations({ setScreen, theme, goToMed, THEMES }) {
                           <div key={ri} onClick={canGo ? () => goToMed(title, "situations") : undefined} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", marginBottom: 2, cursor: canGo ? "pointer" : "default", borderRadius: 10, background: "transparent", transition: "background .2s" }}>
                             <div style={{ width: 30, height: 30, borderRadius: "50%", background: `${st.hex}22`, border: `1px solid ${st.hex}44`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: st.hex, flexShrink: 0 }}>▶</div>
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, color: "rgba(242,232,226,.9)", lineHeight: 1.45 }}>{r}</div>
+                              <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, color: "rgba(var(--txt),.9)", lineHeight: 1.45 }}>{r}</div>
                               {canGo && <div style={{ fontFamily: FONT_SANS, fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: st.hex, marginTop: 3 }}>Перейти к практике →</div>}
                             </div>
                           </div>
@@ -86,7 +86,7 @@ export default function Situations({ setScreen, theme, goToMed, THEMES }) {
         ))}
 
         <div onClick={() => setScreen("sub")} style={{ marginTop: 8, padding: "14px 18px", background: T.dim, border: `1px solid ${T.border}`, borderRadius: 14, textAlign: "center", cursor: "pointer" }}>
-          <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(242,232,226,.65)" }}>Открыть полную библиотеку</div>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(var(--txt),.65)" }}>Открыть полную библиотеку</div>
           <div style={{ fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", color: T.accent, marginTop: 5, fontFamily: FONT_SANS }}>Frisson Premium →</div>
         </div>
       </div>

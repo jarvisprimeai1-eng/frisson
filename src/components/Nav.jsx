@@ -46,7 +46,7 @@ export default function Nav({ active, setScreen, theme, THEMES }) {
             <div
               key={`${it.id}-${isActive}`}
               className={isActive ? "nav-active-pop" : ""}
-              style={{ color: isActive ? T.accent : "rgba(242,232,226,.25)", transition: "color .4s", filter: isActive ? `drop-shadow(0 0 6px ${T.accent}aa)` : "none" }}
+              style={{ color: isActive ? T.accent : "rgba(var(--txt),.25)", transition: "color .4s", filter: isActive ? `drop-shadow(0 0 6px ${T.accent}aa)` : "none" }}
             >
               {it.ic}
             </div>
@@ -55,7 +55,7 @@ export default function Nav({ active, setScreen, theme, THEMES }) {
               letterSpacing: ".1em",
               textTransform: "uppercase",
               fontFamily: FONT_SANS,
-              color: isActive ? T.accent : "rgba(242,232,226,.25)",
+              color: isActive ? T.accent : "rgba(var(--txt),.25)",
               transition: "color .4s",
             }}>
               {it.l}

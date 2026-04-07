@@ -82,8 +82,8 @@ export default function Journal({ theme, addGems, THEMES }) {
     });
   };
 
-  const taStyle = { width: "100%", minHeight: 100, background: "transparent", border: "none", outline: "none", resize: "vertical", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(242,232,226,.85)", lineHeight: 1.7, WebkitAppearance: "none", display: "block" };
-  const saveBtnStyle = (active) => ({ padding: "7px 18px", borderRadius: 20, background: active ? T.dim : "rgba(255,255,255,.04)", border: `1px solid ${active ? T.accent : "rgba(255,255,255,.08)"}`, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: active ? "rgba(242,232,226,.82)" : "rgba(242,232,226,.25)", cursor: active ? "pointer" : "default", transition: "all .2s" });
+  const taStyle = { width: "100%", minHeight: 100, background: "transparent", border: "none", outline: "none", resize: "vertical", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.85)", lineHeight: 1.7, WebkitAppearance: "none", display: "block" };
+  const saveBtnStyle = (active) => ({ padding: "7px 18px", borderRadius: 20, background: active ? T.dim : "rgba(255,255,255,.04)", border: `1px solid ${active ? T.accent : "rgba(255,255,255,.08)"}`, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: active ? "rgba(var(--txt),.82)" : "rgba(var(--txt),.25)", cursor: active ? "pointer" : "default", transition: "all .2s" });
 
   return (
     <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: "background .6s" }}>
@@ -95,17 +95,17 @@ export default function Journal({ theme, addGems, THEMES }) {
 
       <div style={{ padding: "50px 24px 18px", position: "relative", zIndex: 1 }}>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".25em", textTransform: "uppercase", color: T.accent, marginBottom: 6 }}>{todayStr()}</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 32, fontWeight: 300, lineHeight: 1.15, color: "rgba(242,232,226,.95)", marginBottom: 20 }}>Дневник</div>
+        <div style={{ fontFamily: FONT_SERIF, fontSize: 32, fontWeight: 300, lineHeight: 1.15, color: "rgba(var(--txt),.95)", marginBottom: 20 }}>Дневник</div>
         <div style={{ display: "flex", background: T.card, border: `1px solid ${T.border}`, borderRadius: 13, padding: 3 }}>
           {[{ id: "intent", l: "Намерения" }, { id: "grat", l: "Благодарность" }, { id: "goals", l: "Цели ✦" }, { id: "reflect", l: "Рефлексия" }].map((t) => (
-            <div key={t.id} onClick={() => { setTab(t.id); setText(""); }} style={{ flex: 1, padding: "10px 4px", textAlign: "center", fontSize: 10, letterSpacing: ".04em", textTransform: "uppercase", fontFamily: FONT_SANS, borderRadius: 11, cursor: "pointer", background: tab === t.id ? T.dim : "transparent", color: tab === t.id ? "rgba(242,232,226,.88)" : "rgba(242,232,226,.38)", transition: "all .3s", minHeight: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>{t.l}</div>
+            <div key={t.id} onClick={() => { setTab(t.id); setText(""); }} style={{ flex: 1, padding: "10px 4px", textAlign: "center", fontSize: 10, letterSpacing: ".04em", textTransform: "uppercase", fontFamily: FONT_SANS, borderRadius: 11, cursor: "pointer", background: tab === t.id ? T.dim : "transparent", color: tab === t.id ? "rgba(var(--txt),.88)" : "rgba(var(--txt),.38)", transition: "all .3s", minHeight: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>{t.l}</div>
           ))}
         </div>
       </div>
 
       <div style={{ margin: "0 24px 18px", padding: "17px 20px", background: T.dim, border: `1px solid ${T.border}`, borderRadius: 18, position: "relative", zIndex: 1 }}>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: T.accent, marginBottom: 8 }}>✦ Вопрос дня</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 17, lineHeight: 1.65, color: "rgba(242,232,226,.82)" }}>
+        <div style={{ fontFamily: FONT_SERIF, fontSize: 17, lineHeight: 1.65, color: "rgba(var(--txt),.82)" }}>
           {tab === "intent" && "«Каким я хочу быть сегодня? Пишу в настоящем времени.»"}
           {tab === "grat" && "«За что ты благодарна сегодня — себе и миру?»"}
           {tab === "goals" && "«Что я создаю в своей жизни прямо сейчас?»"}
@@ -119,7 +119,7 @@ export default function Journal({ theme, addGems, THEMES }) {
         {tab === "intent" && <>
           <div style={{ padding: "14px 18px", marginBottom: 14, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: 18 }}>
             <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: T.accent, marginBottom: 8 }}>✦ Формат намерения</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 14, lineHeight: 1.75, color: "rgba(242,232,226,.75)" }}>Пишите в настоящем времени: <span style={{ color: T.accent }}>"Я есть", "У меня уже есть"</span>. Это фиксирует образ желаемого состояния.</div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 14, lineHeight: 1.75, color: "rgba(var(--txt),.75)" }}>Пишите в настоящем времени: <span style={{ color: T.accent }}>"Я есть", "У меня уже есть"</span>. Это фиксирует образ желаемого состояния.</div>
           </div>
           <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Я есть... / У меня уже есть... / Я наполненная..." rows={3} style={taStyle} />
@@ -130,10 +130,10 @@ export default function Journal({ theme, addGems, THEMES }) {
           {data.intent.map((e) => (
             <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(242,232,226,.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(230,218,210,.85)" }}>{e.text}</div>
+                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
+                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>
               </div>
-              <div onClick={() => delEntry("intent", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(242,232,226,.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("intent", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
             </div>
           ))}
         </>}
@@ -149,10 +149,10 @@ export default function Journal({ theme, addGems, THEMES }) {
           {data.grat.map((e) => (
             <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(242,232,226,.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(230,218,210,.85)" }}>{e.text}</div>
+                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
+                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>
               </div>
-              <div onClick={() => delEntry("grat", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(242,232,226,.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("grat", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
             </div>
           ))}
         </>}
@@ -161,23 +161,23 @@ export default function Journal({ theme, addGems, THEMES }) {
         {tab === "goals" && <>
           <div style={{ padding: "16px 18px", marginBottom: 14, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: 18 }}>
             <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: T.accent, marginBottom: 10 }}>✦ Перед тем как писать цели</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(242,232,226,.9)", marginBottom: 4 }}>Мои истинные цели</div>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 11, color: "rgba(242,232,226,.45)", lineHeight: 1.55 }}>Послушайте эту практику перед тем, как ставить цели.</div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.9)", marginBottom: 4 }}>Мои истинные цели</div>
+            <div style={{ fontFamily: FONT_SANS, fontSize: 11, color: "rgba(var(--txt),.45)", lineHeight: 1.55 }}>Послушайте эту практику перед тем, как ставить цели.</div>
           </div>
           <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
-            <input value={goalText} onChange={(e) => setGoalText(e.target.value)} placeholder="Новая цель..." onKeyDown={(e) => e.key === "Enter" && addGoal()} style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(242,232,226,.85)", WebkitAppearance: "none" }} />
+            <input value={goalText} onChange={(e) => setGoalText(e.target.value)} placeholder="Новая цель..." onKeyDown={(e) => e.key === "Enter" && addGoal()} style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.85)", WebkitAppearance: "none" }} />
             <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
               <div onClick={addGoal} style={saveBtnStyle(goalText.trim())}>Добавить →</div>
             </div>
           </div>
           {data.goals.map((g) => (
             <div key={g.id} style={{ display: "flex", alignItems: "center", gap: 13, padding: "14px 16px", background: g.done ? T.dim : T.card, border: `1px solid ${T.border}`, borderRadius: 14, marginBottom: 8, transition: "all .3s" }}>
-              <div onClick={() => toggleGoal(g.id)} style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: g.done ? T.dim : "rgba(255,255,255,.05)", border: `1.5px solid ${g.done ? T.accent : "rgba(255,255,255,.15)"}`, fontSize: 13, color: "rgba(242,232,226,.9)", cursor: "pointer" }}>{g.done ? "✦" : "○"}</div>
+              <div onClick={() => toggleGoal(g.id)} style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: g.done ? T.dim : "rgba(255,255,255,.05)", border: `1.5px solid ${g.done ? T.accent : "rgba(255,255,255,.15)"}`, fontSize: 13, color: "rgba(var(--txt),.9)", cursor: "pointer" }}>{g.done ? "✦" : "○"}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(242,232,226,.3)", marginBottom: 3 }}>{fmtDate(g.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(230,218,210,.88)", lineHeight: 1.35, textDecoration: g.done ? "line-through" : "none", opacity: g.done ? 0.5 : 1 }}>{g.text}</div>
+                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 3 }}>{fmtDate(g.ts)}</div>
+                <div style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(var(--txt),.88)", lineHeight: 1.35, textDecoration: g.done ? "line-through" : "none", opacity: g.done ? 0.5 : 1 }}>{g.text}</div>
               </div>
-              <div onClick={() => delEntry("goals", g.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(242,232,226,.2)", flexShrink: 0 }}>×</div>
+              <div onClick={() => delEntry("goals", g.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0 }}>×</div>
             </div>
           ))}
         </>}
@@ -185,17 +185,17 @@ export default function Journal({ theme, addGems, THEMES }) {
         {/* ── РЕФЛЕКСИЯ ── */}
         {tab === "reflect" && <>
           <div style={{ padding: 18, background: T.card, border: `1px solid ${T.border}`, borderRadius: 18, marginBottom: 14 }}>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(242,232,226,.38)", marginBottom: 12 }}>Состояние после практики</div>
+            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(var(--txt),.38)", marginBottom: 12 }}>Состояние после практики</div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {MOODS.map((pr, i) => (
                 <div key={i} onClick={() => setMood(mood === i ? null : i)} style={{ textAlign: "center", cursor: "pointer", opacity: mood === i ? 1 : 0.4, transition: "all .2s", transform: mood === i ? "scale(1.15)" : "scale(1)" }}>
                   <div style={{ fontSize: 26 }}>{pr[0]}</div>
-                  <div style={{ fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: mood === i ? T.accent : "rgba(242,232,226,.35)", fontFamily: FONT_SANS, marginTop: 5 }}>{pr[1]}</div>
+                  <div style={{ fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: mood === i ? T.accent : "rgba(var(--txt),.35)", fontFamily: FONT_SANS, marginTop: 5 }}>{pr[1]}</div>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(242,232,226,.4)", marginBottom: 8 }}>✦ Инсайты, мысли, идеи</div>
+          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(var(--txt),.4)", marginBottom: 8 }}>✦ Инсайты, мысли, идеи</div>
           <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Что я почувствовала во время практики? Какие образы, мысли, идеи пришли?" rows={3} style={taStyle} />
             <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
@@ -205,13 +205,13 @@ export default function Journal({ theme, addGems, THEMES }) {
           {data.reflect.map((e) => (
             <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(242,232,226,.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
+                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
                 {e.mood !== undefined && e.mood !== null && (
-                  <div style={{ fontSize: 18, marginBottom: 6 }}>{MOODS[e.mood]?.[0]} <span style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(242,232,226,.35)", verticalAlign: "middle" }}>{MOODS[e.mood]?.[1]}</span></div>
+                  <div style={{ fontSize: 18, marginBottom: 6 }}>{MOODS[e.mood]?.[0]} <span style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.35)", verticalAlign: "middle" }}>{MOODS[e.mood]?.[1]}</span></div>
                 )}
-                {e.text && <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(230,218,210,.85)" }}>{e.text}</div>}
+                {e.text && <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>}
               </div>
-              <div onClick={() => delEntry("reflect", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(242,232,226,.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("reflect", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
             </div>
           ))}
         </>}

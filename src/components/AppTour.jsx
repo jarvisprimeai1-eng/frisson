@@ -22,7 +22,7 @@ export default function AppTour({ onDone, theme, THEMES }) {
     <div style={{ width: "100%", height: "100dvh", background: T.bg, display: "flex", flexDirection: "column", position: "relative", overflow: "hidden", transition: "background .5s" }}>
       <Orb style={{ top: "-10%", right: "-10%" }} color={T.o1} opacity={0.2} w={280} h={280} />
       <div style={{ padding: "20px 24px 0", display: "flex", justifyContent: "flex-end", position: "relative", zIndex: 2 }}>
-        <div onClick={onDone} style={{ fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(242,232,226,.3)", cursor: "pointer", padding: "8px 0" }}>Пропустить</div>
+        <div onClick={onDone} style={{ fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(var(--txt),.3)", cursor: "pointer", padding: "8px 0" }}>Пропустить</div>
       </div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", padding: "12px 0", position: "relative", zIndex: 2 }}>
         {feats.map((_, i) => (
@@ -34,15 +34,15 @@ export default function AppTour({ onDone, theme, THEMES }) {
           <div style={{ fontFamily: FONT_SERIF, fontSize: 36, color: cur.color }}>{cur.ic}</div>
         </div>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".3em", textTransform: "uppercase", color: cur.color, marginBottom: 12 }}>{cur.sec}</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 30, fontWeight: 300, color: "rgba(242,232,226,.95)", textAlign: "center", lineHeight: 1.2, marginBottom: 18 }}>{cur.title}</div>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: "rgba(242,232,226,.62)", textAlign: "center", maxWidth: 300, marginBottom: 24 }}>{cur.desc}</div>
+        <div style={{ fontFamily: FONT_SERIF, fontSize: 30, fontWeight: 300, color: "rgba(var(--txt),.95)", textAlign: "center", lineHeight: 1.2, marginBottom: 18 }}>{cur.title}</div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: "rgba(var(--txt),.62)", textAlign: "center", maxWidth: 300, marginBottom: 24 }}>{cur.desc}</div>
         <div style={{ padding: "14px 20px", background: `${cur.color}18`, border: `1px solid ${cur.color}35`, borderRadius: 16, maxWidth: 300, width: "100%" }}>
           <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: cur.color, marginBottom: 6 }}>✦ Совет</div>
-          <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, lineHeight: 1.7, color: "rgba(242,232,226,.75)" }}>{cur.tip}</div>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 13.5, lineHeight: 1.7, color: "rgba(var(--txt),.75)" }}>{cur.tip}</div>
         </div>
       </div>
       <div style={{ padding: "0 28px 40px", position: "relative", zIndex: 2 }}>
-        <div onClick={isL ? onDone : () => setStep((s) => s + 1)} style={{ width: "100%", padding: 16, borderRadius: 28, textAlign: "center", cursor: "pointer", background: `${cur.color}40`, border: `1.5px solid ${cur.color}80`, backdropFilter: "blur(16px)", boxShadow: `0 0 24px ${cur.color}30`, fontFamily: FONT_SANS, fontSize: 10, fontWeight: 400, letterSpacing: ".25em", textTransform: "uppercase", color: "rgba(242,232,226,.92)", transition: "all .4s" }}>{isL ? "Начать →" : "Следующий шаг →"}</div>
+        <div onClick={isL ? onDone : () => setStep((s) => s + 1)} style={{ width: "100%", padding: 16, borderRadius: 28, textAlign: "center", cursor: "pointer", background: `${cur.color}40`, border: `1.5px solid ${cur.color}80`, backdropFilter: "blur(16px)", boxShadow: `0 0 24px ${cur.color}30`, fontFamily: FONT_SANS, fontSize: 10, fontWeight: 400, letterSpacing: ".25em", textTransform: "uppercase", color: "rgba(var(--txt),.92)", transition: "all .4s" }}>{isL ? "Начать →" : "Следующий шаг →"}</div>
       </div>
     </div>
   );

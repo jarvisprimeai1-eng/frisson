@@ -12,7 +12,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "3.0.0";
+export const VERSION = "3.0.1";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -69,7 +69,7 @@ export default function App() {
     <>
       <GlobalStyles />
       <div style={{ width: "100%", height: "100dvh", background: dayMode === "day" ? "#E8E4DE" : "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", transition: "background .6s" }}>
-        <div style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: dayMode === "day" ? "0 0 60px rgba(0,0,0,.08)" : "0 0 80px rgba(92,14,28,.2)", position: "relative" }}>
+        <div className={dayMode === "day" ? "day-mode" : ""} style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: dayMode === "day" ? "0 0 60px rgba(0,0,0,.08)" : "0 0 80px rgba(92,14,28,.2)", position: "relative" }}>
           {/* Ambient floating dots — app-wide background */}
           {screen !== "orbit" && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>

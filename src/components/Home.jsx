@@ -28,7 +28,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
       <Orb style={{ bottom: 300, left: -60 }} color={T.o2} opacity={0.1} w={200} h={200} delay={3} />
 
       <div className="fu1" style={{ padding: "50px 24px 14px", position: "relative", zIndex: 1, textAlign: "center" }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(242,232,226,.38)", marginBottom: 6 }}>{moon.n}</div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.38)", marginBottom: 6 }}>{moon.n}</div>
         <div style={{ position: "relative", display: "inline-block", margin: "4px 0" }}>
           <div className="moon-halo" style={{ position: "absolute", inset: -14, borderRadius: "50%", background: `radial-gradient(circle, rgba(${T.ar},.5), transparent 70%)`, filter: "blur(14px)", pointerEvents: "none" }} />
           <div style={{ fontSize: 42, lineHeight: 1, position: "relative" }}>{moon.e}</div>
@@ -42,7 +42,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
       </div>
 
       <div className="fu2" style={{ margin: "16px 24px", position: "relative", zIndex: 1 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(242,232,226,.35)", marginBottom: 10, textAlign: "center" }}>Как ты сейчас?</div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.35)", marginBottom: 10, textAlign: "center" }}>Как ты сейчас?</div>
         <div style={{ display: "flex", gap: 8 }}>
           {Object.entries(THEMES).map(([k, m]) => (
             <div key={k} onClick={() => setTheme(k)} className="pc" style={{
@@ -53,7 +53,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
               transition: "all .4s",
             }}>
               <div style={{ fontSize: 22, marginBottom: 4 }}>{m.e}</div>
-              <div style={{ fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: theme === k ? m.accent : "rgba(242,232,226,.35)", fontFamily: FONT_SANS }}>{m.l}</div>
+              <div style={{ fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: theme === k ? m.accent : "rgba(var(--txt),.35)", fontFamily: FONT_SANS }}>{m.l}</div>
             </div>
           ))}
         </div>
@@ -62,7 +62,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
       <div className="fu2" onClick={() => setScreen("profile")} style={{ margin: "0 24px 18px", padding: "13px 17px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 17, display: "flex", alignItems: "center", gap: 13, cursor: "pointer", position: "relative", zIndex: 1, transition: "background .6s,border-color .6s" }}>
         <div style={{ width: 38, height: 38, borderRadius: 11, background: T.dim, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_SERIF, fontSize: 16, color: T.accent, flexShrink: 0 }}>◈</div>
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(242,232,226,.38)", marginBottom: 3 }}>Психологическая энергия</div>
+          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.38)", marginBottom: 3 }}>Психологическая энергия</div>
           <div style={{ fontFamily: FONT_SERIF, fontSize: 18, color: T.text }}>{lv ? `${eScore} — ${lv.l}` : "Пройдите тест в профиле"}</div>
           <div style={{ height: 3, background: "rgba(255,255,255,.06)", borderRadius: 2, marginTop: 7, overflow: "hidden" }}><div className={lv ? "pulse-glow" : ""} style={{ height: "100%", borderRadius: 2, background: T.accent, width: lv ? `${eScore}%` : "0%", transition: "width 1.2s ease", "--glow-color": `${T.accent}66` }} /></div>
         </div>
@@ -71,7 +71,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
 
       <div className="fu3" style={{ padding: "0 24px 22px", position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(242,232,226,.38)" }}>Состояния</div>
+          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(var(--txt),.38)" }}>Состояния</div>
           <span onClick={() => setScreen("library")} style={{ fontSize: 10, color: T.accent, cursor: "pointer", fontFamily: FONT_SANS }}>Все →</span>
         </div>
         <div style={{ display: "flex", gap: 11, overflowX: "auto", margin: "0 -24px", padding: "4px 24px 8px" }}>
@@ -93,14 +93,14 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
       <div className="fu3 press-card" onClick={() => setScreen("situations")} style={{ margin: "0 24px 20px", padding: "18px 20px", background: T.dim, border: `1px solid ${T.border}`, borderRadius: 18, display: "flex", alignItems: "center", gap: 14, cursor: "pointer", position: "relative", zIndex: 1, transition: "background .6s" }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontFamily: FONT_SERIF, fontSize: 17, color: T.text, marginBottom: 3 }}>Что меня беспокоит прямо сейчас?</div>
-          <div style={{ fontSize: 11, color: "rgba(242,232,226,.42)", fontFamily: FONT_SANS, lineHeight: 1.45 }}>Выберите ситуацию — получите практики именно для вас</div>
+          <div style={{ fontSize: 11, color: "rgba(var(--txt),.42)", fontFamily: FONT_SANS, lineHeight: 1.45 }}>Выберите ситуацию — получите практики именно для вас</div>
         </div>
         <div style={{ fontSize: 18, color: T.accent }}>→</div>
       </div>
 
       <div className="fu4" style={{ padding: "0 24px 22px", position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(242,232,226,.38)" }}>Для тебя сейчас</div>
+          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(var(--txt),.38)" }}>Для тебя сейчас</div>
           <span onClick={() => setScreen("library")} style={{ fontSize: 10, color: T.accent, cursor: "pointer", fontFamily: FONT_SANS }}>Все →</span>
         </div>
         {(RECOMMENDATIONS[theme] || RECOMMENDATIONS.full).map((r) => {
@@ -111,10 +111,10 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
               <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2.5, background: lc, borderRadius: "2px 0 0 2px" }} />
               <div style={{ width: 34, height: 34, borderRadius: 10, background: `${lc}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontFamily: FONT_SERIF, fontSize: 16, color: lc }}>◦</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(242,232,226,.9)", marginBottom: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.t}</div>
+                <div style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(var(--txt),.9)", marginBottom: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.t}</div>
                 <div style={{ fontSize: 9.5, color: lc, fontFamily: FONT_SANS, letterSpacing: ".04em" }}>{r.s}</div>
               </div>
-              {r.free ? <div style={{ width: 28, height: 28, borderRadius: "50%", background: `${lc}22`, border: `1px solid ${lc}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, color: "rgba(242,232,226,.7)" }}>▶</div> : <Lock />}
+              {r.free ? <div style={{ width: 28, height: 28, borderRadius: "50%", background: `${lc}22`, border: `1px solid ${lc}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, color: "rgba(var(--txt),.7)" }}>▶</div> : <Lock />}
             </div>
           );
         })}
@@ -126,17 +126,17 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
           <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: T.accent, marginBottom: 10 }}>Frisson Premium</div>
           <div style={{ fontFamily: FONT_SERIF, fontSize: 26, fontWeight: 300, lineHeight: 1.2, color: T.text, marginBottom: 12 }}>Полная библиотека<br/>практик — открыта</div>
           <div style={{ borderTop: "1px solid rgba(255,255,255,.07)", paddingTop: 14, marginBottom: 14 }}>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 30, fontWeight: 300, color: T.text, lineHeight: 1, marginBottom: 4 }}>150 <span style={{ fontSize: 13, color: "rgba(242,232,226,.4)", fontFamily: FONT_SANS }}>zł / мес</span></div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 30, fontWeight: 300, color: T.text, lineHeight: 1, marginBottom: 4 }}>150 <span style={{ fontSize: 13, color: "rgba(var(--txt),.4)", fontFamily: FONT_SANS }}>zł / мес</span></div>
             <div style={{ fontSize: 11, color: T.accent, fontFamily: FONT_SANS }}>или 900 zł / год — выгода 50%</div>
           </div>
-          <div style={{ width: "100%", padding: 12, borderRadius: 13, textAlign: "center", background: T.dim, border: `1px solid ${T.border}`, fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(242,232,226,.88)" }}>Открыть доступ</div>
+          <div style={{ width: "100%", padding: 12, borderRadius: 13, textAlign: "center", background: T.dim, border: `1px solid ${T.border}`, fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.88)" }}>Открыть доступ</div>
         </div>
       </div>
 
       <div className="fu5 press-card" onClick={() => setScreen("journal")} style={{ margin: "0 24px 24px", padding: "17px 20px", background: "linear-gradient(135deg,rgba(160,130,50,.1),rgba(125,23,54,.08))", border: "1px solid rgba(160,138,65,.18)", borderRadius: 18, display: "flex", alignItems: "center", gap: 13, cursor: "pointer", position: "relative", zIndex: 1 }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontFamily: FONT_SERIF, fontSize: 16.5, color: T.text, marginBottom: 2 }}>Дневник</div>
-          <div style={{ fontSize: 10.5, color: "rgba(242,232,226,.4)", fontFamily: FONT_SANS }}>Сегодня у вас нет записи</div>
+          <div style={{ fontSize: 10.5, color: "rgba(var(--txt),.4)", fontFamily: FONT_SANS }}>Сегодня у вас нет записи</div>
         </div>
         <div style={{ fontSize: 15, color: "rgba(160,138,65,.5)" }}>→</div>
       </div>
