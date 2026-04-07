@@ -4,8 +4,8 @@ export default function GlobalStyles() {
       @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500&display=swap');
       *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
       body{background:#06030a;transition:background .6s}::-webkit-scrollbar{display:none}
-      :root{--vh:1dvh;--txt:242,232,226;--txt-inv:20,16,12}
-      .day-mode{--txt:30,24,20;--txt-inv:242,232,226}
+      :root{--vh:1dvh;--txt:242,232,226;--txt-inv:20,16,12;--orb-bg:6,2,8}
+      .day-mode{--txt:30,24,20;--txt-inv:242,232,226;--orb-bg:237,232,228}
       @keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.08);opacity:1}}
       @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
       @keyframes shimmer{0%,100%{opacity:.15}50%{opacity:.5}}

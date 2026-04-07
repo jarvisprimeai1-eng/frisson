@@ -34,39 +34,39 @@ const NIGHT = {
   },
 };
 
-// Day themes — Cloud Dancer base with jewel accents
+// Day themes — Cloud Dancer base with rich jewel gradients
 const DAY = {
   empty: {
-    e: "🌑", l: "Пустота", bg: "#F0EDE8",
-    card: "rgba(80,70,120,.06)", border: "rgba(80,70,120,.12)",
-    accent: "#6858A8", ar: "104,88,168",
-    dim: "rgba(80,70,120,.08)", o1: "rgba(100,80,160,.15)", o2: "rgba(60,30,150,.08)",
-    nav: "rgba(80,70,120,.1)", text: "#2a2440",
-    gF: "#E8E4DE", gT: "#F0EDE8"
+    e: "🌑", l: "Пустота", bg: "linear-gradient(165deg, #EDE8F2 0%, #F0EDE8 40%, #E8E4F0 100%)",
+    card: "rgba(80,60,140,.08)", border: "rgba(80,60,140,.18)",
+    accent: "#6048B0", ar: "96,72,176",
+    dim: "rgba(80,60,140,.1)", o1: "rgba(100,60,180,.25)", o2: "rgba(60,30,150,.15)",
+    nav: "rgba(80,60,140,.08)", text: "#2a2040",
+    gF: "#E0DCF0", gT: "#EDE8F2"
   },
   quiet: {
-    e: "🌒", l: "Тихо", bg: "#EDE9E4",
-    card: "rgba(120,60,90,.05)", border: "rgba(120,60,90,.12)",
-    accent: "#8B3A6B", ar: "139,58,107",
-    dim: "rgba(120,60,90,.07)", o1: "rgba(140,50,100,.12)", o2: "rgba(200,120,60,.08)",
-    nav: "rgba(120,60,90,.1)", text: "#3a1830",
-    gF: "#E6E0DA", gT: "#EDE9E4"
+    e: "🌒", l: "Тихо", bg: "linear-gradient(165deg, #F0E4EC 0%, #EDE9E4 40%, #E8DEE8 100%)",
+    card: "rgba(140,40,90,.08)", border: "rgba(140,40,90,.16)",
+    accent: "#9B2868", ar: "155,40,104",
+    dim: "rgba(140,40,90,.1)", o1: "rgba(160,30,110,.22)", o2: "rgba(220,140,60,.12)",
+    nav: "rgba(140,40,90,.08)", text: "#3a1028",
+    gF: "#E8D8E4", gT: "#F0E4EC"
   },
   full: {
-    e: "🌕", l: "Наполнена", bg: "#F0EAE8",
-    card: "rgba(160,30,100,.05)", border: "rgba(160,30,100,.12)",
-    accent: "#A82070", ar: "168,32,112",
-    dim: "rgba(160,30,100,.07)", o1: "rgba(180,40,120,.12)", o2: "rgba(100,40,160,.08)",
-    nav: "rgba(160,30,100,.1)", text: "#380828",
-    gF: "#E8E0DE", gT: "#F0EAE8"
+    e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #F2E4EE 0%, #F0EAE8 40%, #EEE0F0 100%)",
+    card: "rgba(180,20,110,.08)", border: "rgba(180,20,110,.16)",
+    accent: "#B81878", ar: "184,24,120",
+    dim: "rgba(180,20,110,.1)", o1: "rgba(200,30,140,.22)", o2: "rgba(120,40,180,.12)",
+    nav: "rgba(180,20,110,.08)", text: "#380620",
+    gF: "#EAD8E8", gT: "#F2E4EE"
   },
   power: {
-    e: "🔥", l: "В силе", bg: "#F0ECE4",
-    card: "rgba(200,100,30,.05)", border: "rgba(200,100,30,.12)",
-    accent: "#C06820", ar: "192,104,32",
-    dim: "rgba(200,100,30,.08)", o1: "rgba(200,100,30,.12)", o2: "rgba(120,50,100,.08)",
-    nav: "rgba(200,100,30,.1)", text: "#3a1808",
-    gF: "#E8E4DC", gT: "#F0ECE4"
+    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #F4ECE0 0%, #F0ECE4 40%, #F0E4D8 100%)",
+    card: "rgba(210,100,20,.08)", border: "rgba(210,100,20,.16)",
+    accent: "#D07018", ar: "208,112,24",
+    dim: "rgba(210,100,20,.1)", o1: "rgba(220,100,20,.22)", o2: "rgba(140,40,100,.12)",
+    nav: "rgba(210,100,20,.08)", text: "#381808",
+    gF: "#EAE0D0", gT: "#F4ECE0"
   },
 };
 

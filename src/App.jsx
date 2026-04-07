@@ -12,7 +12,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "3.0.1";
+export const VERSION = "3.0.2";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -58,7 +58,7 @@ export default function App() {
   const screens = {
     home: <Home setScreen={setScreen} theme={theme} setTheme={setThemePersisted} eScore={eScore} pLog={pLog} setLibSec={setLibSec} dayMode={dayMode} toggleDayMode={toggleDayMode} THEMES={THEMES} />,
     library: <Library setScreen={setScreen} theme={theme} initSec={libSec} initMed={openMed} clearMed={() => setOpenMed(null)} medFrom={medFrom} clearMedFrom={() => setMedFrom(null)} THEMES={THEMES} />,
-    orbit: <Orbit setScreen={setScreen} addGems={addGems} />,
+    orbit: <Orbit setScreen={setScreen} addGems={addGems} dayMode={dayMode} />,
     journal: <Journal theme={theme} addGems={addGems} THEMES={THEMES} />,
     situations: <Situations setScreen={setScreen} theme={theme} goToMed={goToMed} THEMES={THEMES} />,
     profile: <Profile setScreen={setScreen} theme={theme} eScore={eScore} setEScore={setEScore} eHist={eHist} setEHist={setEHist} pLog={pLog} gems={gems} dayMode={dayMode} toggleDayMode={toggleDayMode} THEMES={THEMES} />,
@@ -68,7 +68,7 @@ export default function App() {
   return (
     <>
       <GlobalStyles />
-      <div style={{ width: "100%", height: "100dvh", background: dayMode === "day" ? "#E8E4DE" : "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", transition: "background .6s" }}>
+      <div style={{ width: "100%", height: "100dvh", background: dayMode === "day" ? "#EDE8E2" : "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", transition: "background .6s" }}>
         <div className={dayMode === "day" ? "day-mode" : ""} style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: dayMode === "day" ? "0 0 60px rgba(0,0,0,.08)" : "0 0 80px rgba(92,14,28,.2)", position: "relative" }}>
           {/* Ambient floating dots — app-wide background */}
           {screen !== "orbit" && (
