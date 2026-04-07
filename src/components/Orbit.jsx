@@ -108,8 +108,8 @@ const LAYERS = [
   { id:6, name:"Поведение", sub:"внешний слой", hex:"#C8960A", col:0xC8960A, lc:0xA07808, radius:30, speed:0.15, bright:0.60, sz:0.46, lineAmt:0.3, desc:"То, что видит мир. Когда бессознательное исцелено, а сознательное выбрало новое, поведение меняется органично, без насилия над собой." },
 ];
 
-export default function Orbit({ setScreen, addGems, dayMode, doMarkPractice }) {
-  const isDay = dayMode === "day";
+export default function Orbit({ setScreen, addGems, doMarkPractice }) {
+  const isDay = false;
   const canvasRef = useRef(null);
   const touchRef = useRef(null);
   const stateRef = useRef(null);

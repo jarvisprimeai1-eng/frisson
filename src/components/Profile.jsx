@@ -8,7 +8,7 @@ import { VERSION } from "../App";
 
 import { ACHIEVEMENTS } from "../data/activity";
 
-export default function Profile({ setScreen, theme, eScore, setEScore, eHist, setEHist, pLog, gems = 0, dayMode, toggleDayMode, THEMES, activity, eScoreHistory }) {
+export default function Profile({ setScreen, theme, eScore, setEScore, eHist, setEHist, pLog, gems = 0, THEMES, activity, eScoreHistory }) {
   const T = THEMES[theme] || THEMES.full;
   const [showT, setShowT] = useState(false);
   const [tI, setTI] = useState(0);
@@ -57,10 +57,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg,#280d18,#1a0812)", border: `1.5px solid ${T.border}`, margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_SERIF, fontSize: 26, color: T.accent }}>{(activity?.name || "F").slice(0,2).toUpperCase()}</div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 24, marginBottom: 4, color: "rgba(var(--txt),.95)" }}>{activity?.name || "Frisson"}</div>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: T.accent, marginBottom: 18 }}>✦ Начало пути</div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 18 }}>
-          <div onClick={() => setScreen("sub")} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 20px", borderRadius: 22, background: T.dim, border: `1px solid ${T.border}`, cursor: "pointer", fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", color: T.text }}>♛ &nbsp;Подписка</div>
-          <div onClick={toggleDayMode} style={{ cursor: "pointer", padding: "8px 14px", borderRadius: 22, background: dayMode === "day" ? "rgba(255,220,120,.12)" : T.dim, border: `1px solid ${dayMode === "day" ? "rgba(255,200,80,.2)" : T.border}`, fontSize: 15, transition: "all .3s" }}>{dayMode === "day" ? "☀️" : "🌙"}</div>
-        </div>
+        <div onClick={() => setScreen("sub")} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 20px", borderRadius: 22, background: T.dim, border: `1px solid ${T.border}`, cursor: "pointer", marginBottom: 18, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(var(--txt),.75)" }}>♛ &nbsp;Активировать подписку</div>
       </div>
 
       <div style={{ margin: "0 24px 18px", background: T.dim, border: `1px solid ${T.border}`, borderRadius: 20, overflow: "hidden", position: "relative", zIndex: 1, transition: "background .6s" }}>

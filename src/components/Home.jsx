@@ -6,7 +6,7 @@ import Orb from "./Orb";
 import Lock from "./Lock";
 import { VERSION } from "../App";
 
-export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibSec, dayMode, toggleDayMode, THEMES, activity, userName, doMarkPractice }) {
+export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibSec, THEMES, activity, userName, doMarkPractice }) {
   const T = THEMES[theme] || THEMES.full;
   const moon = getMoon();
   const gr = useGreeting();
@@ -35,10 +35,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
         </div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 26, fontWeight: 300, lineHeight: 1.25, color: T.text, marginBottom: 6 }}>{gr},<br/><span style={{ color: T.accent }}>{userName || "Frisson"}</span></div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: `rgba(${T.ar},.7)`, lineHeight: 1.5, transition: "color .6s" }}>{msg}</div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginTop: 12 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: `rgba(${T.ar},.2)` }}>Frisson v{VERSION}</div>
-          <div onClick={toggleDayMode} style={{ cursor: "pointer", padding: "4px 10px", borderRadius: 12, background: dayMode === "day" ? "rgba(255,220,120,.15)" : "rgba(100,100,180,.12)", border: `1px solid ${dayMode === "day" ? "rgba(255,200,80,.25)" : "rgba(100,100,180,.2)"}`, fontSize: 13, transition: "all .3s" }}>{dayMode === "day" ? "☀️" : "🌙"}</div>
-        </div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: `rgba(${T.ar},.2)`, marginTop: 10 }}>Frisson v{VERSION}</div>
       </div>
 
       {/* Streak + daily practice */}

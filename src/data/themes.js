@@ -70,8 +70,8 @@ const DAY = {
   },
 };
 
-export function getThemes(mode) { return mode === "day" ? DAY : NIGHT; }
-export const THEMES = NIGHT; // default export for backward compat
+export function getThemes() { return NIGHT; }
+export const THEMES = NIGHT;
 
 export const ENERGY_LEVELS = [
   { min: 0, max: 25, l: "Критическое истощение" },
