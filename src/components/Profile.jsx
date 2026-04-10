@@ -124,7 +124,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
       </div>
 
       {/* Psychological Capital Analytics */}
-      <PsycapAnalytics T={T} setScreen={setScreen} />
+      <PsycapAnalytics T={T} setScreen={setScreen} eScore={eScore} />
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, margin: "0 24px 18px", position: "relative", zIndex: 1 }}>
         {[[`${activity?.totalMeds || 0}`, "Медитаций"], [`${activity?.totalMinutes || 0}`, "Минут"], [`🔥 ${activity?.streak || 0}`, "Дней подряд"], [`${gems} ⟡`, "Кристаллов"]].map((pr, i) => (
