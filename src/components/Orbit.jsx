@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { MED_GUIDES } from "../data/medGuides";
+import { addPsycap } from "../data/psycap";
 
 // Sound profiles: each scenario has therapeutic frequencies
 // Neutral: 528 Hz (Solfeggio love/repair) + 8 Hz binaural → alpha
@@ -222,6 +223,8 @@ export default function Orbit({ setScreen, addGems, doMarkPractice }) {
     const earned = Math.max(1, Math.round(seconds / 60));
     if (addGems) addGems(earned);
     if (doMarkPractice) doMarkPractice(Math.round(seconds / 60));
+    // Track PsyCap growth based on scenario
+    addPsycap(activeScenario?.id || "neutral");
     setGemPop({ amount: earned, id: Date.now() });
     setTimeout(() => setGemPop(null), 4000);
   }

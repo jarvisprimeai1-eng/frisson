@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frisson-v3.2.0';
+const CACHE_NAME = 'frisson-v3.3.0';
 const BASE = '/frisson/';
 
 self.addEventListener('install', (e) => {

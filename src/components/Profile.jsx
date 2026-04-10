@@ -7,6 +7,7 @@ import Orb from "./Orb";
 import { VERSION } from "../App";
 
 import { ACHIEVEMENTS } from "../data/activity";
+import PsycapAnalytics from "./PsycapAnalytics";
 
 export default function Profile({ setScreen, theme, eScore, setEScore, eHist, setEHist, pLog, gems = 0, THEMES, activity, eScoreHistory }) {
   const T = THEMES[theme] || THEMES.full;
@@ -121,6 +122,9 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
           {days.map((d, i) => { const v = pd[i] || 0; const h = Math.max(4, v * 20); return (<div key={d} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}><div style={{ width: "100%", borderRadius: "3px 3px 0 0", height: h, transition: "height .8s ease", background: v > 0 ? T.accent : "rgba(255,255,255,.06)" }} /><div style={{ fontSize: 8, color: "rgba(var(--txt),.3)", fontFamily: FONT_SANS }}>{d}</div></div>); })}
         </div>
       </div>
+
+      {/* Psychological Capital Analytics */}
+      <PsycapAnalytics T={T} setScreen={setScreen} />
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, margin: "0 24px 18px", position: "relative", zIndex: 1 }}>
         {[[`${activity?.totalMeds || 0}`, "Медитаций"], [`${activity?.totalMinutes || 0}`, "Минут"], [`🔥 ${activity?.streak || 0}`, "Дней подряд"], [`${gems} ⟡`, "Кристаллов"]].map((pr, i) => (

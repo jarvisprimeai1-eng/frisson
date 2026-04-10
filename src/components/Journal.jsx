@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 // THEMES passed via props
 import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
+import { addPsycap } from "../data/psycap";
 
 const STORAGE_KEY = "frisson_journal";
 const MOODS = [["🌑", "Пусто"], ["🌒", "Тихо"], ["🌕", "Полна"], ["🔥", "В силе"]];
@@ -48,6 +49,7 @@ export default function Journal({ theme, addGems, THEMES }) {
     setData((d) => ({ ...d, [section]: [entry, ...d[section]] }));
     setText("");
     award(1);
+    addPsycap(section);
     pop();
   };
 
@@ -58,6 +60,7 @@ export default function Journal({ theme, addGems, THEMES }) {
     setText("");
     setMood(null);
     award(1);
+    addPsycap("reflect");
     pop();
   };
 
@@ -67,6 +70,7 @@ export default function Journal({ theme, addGems, THEMES }) {
     setData((d) => ({ ...d, goals: [entry, ...d.goals] }));
     setGoalText("");
     award(1);
+    addPsycap("goals");
     pop();
   };
 
