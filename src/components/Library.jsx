@@ -71,11 +71,11 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
 
   const filters = [
     { id: "all", l: "Все", c: "rgba(var(--txt),.6)" },
-    { id: "resource", l: "Ресурс", c: "#B84010" },
-    { id: "feminine", l: "Женское", c: "#8F4A91" },
-    { id: "receiving", l: "Реализация", c: "#C47808" },
-    { id: "newlevel", l: "Рост", c: "#0A5C5C" },
-    { id: "self", l: "Самость", c: "#7D1736" },
+    { id: "resource", l: "Ресурс", c: "#F08838" },
+    { id: "feminine", l: "Женское", c: "#E64DA8" },
+    { id: "receiving", l: "Реализация", c: "#FFAF32" },
+    { id: "newlevel", l: "Рост", c: "#9F7BD8" },
+    { id: "self", l: "Самость", c: "#D080B0" },
   ];
   const vis = active === "all" ? SECTIONS : SECTIONS.filter((s) => s.id === active);
 

@@ -16,10 +16,14 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
   const spd = theme === "power" ? "4s" : theme === "empty" ? "14s" : "8s";
 
   const cards = [
-    { sub: "Ресурс", title: "Наполниться", sec: "resource", bg: "#110500", blobs: [{ x: "55%", y: "20%", w: 165, h: 135, c: "rgba(196,80,12,.92)", b: 22 }, { x: "10%", y: "60%", w: 135, h: 108, c: "rgba(128,144,192,.5)", b: 18 }, { x: "74%", y: "68%", w: 104, h: 82, c: "rgba(212,144,10,.7)", b: 16 }] },
-    { sub: "Женское", title: "Женственность", sec: "feminine", bg: "#0e0412", blobs: [{ x: "50%", y: "25%", w: 162, h: 148, c: "rgba(176,32,160,.9)", b: 22 }, { x: "12%", y: "62%", w: 130, h: 106, c: "rgba(128,144,192,.6)", b: 18 }, { x: "72%", y: "66%", w: 110, h: 88, c: "rgba(196,80,12,.55)", b: 16 }] },
-    { sub: "Реализация", title: "Получать", sec: "receiving", bg: "#100a00", blobs: [{ x: "48%", y: "22%", w: 158, h: 128, c: "rgba(212,144,10,.92)", b: 22 }, { x: "12%", y: "60%", w: 134, h: 104, c: "rgba(196,80,12,.72)", b: 18 }, { x: "74%", y: "66%", w: 106, h: 84, c: "rgba(128,144,192,.45)", b: 16 }] },
-    { sub: "Новый уровень", title: "Расти", sec: "newlevel", bg: "#080c14", blobs: [{ x: "44%", y: "24%", w: 160, h: 132, c: "rgba(96,112,180,.88)", b: 22 }, { x: "10%", y: "58%", w: 136, h: 108, c: "rgba(138,40,16,.7)", b: 18 }, { x: "72%", y: "66%", w: 108, h: 84, c: "rgba(212,144,10,.6)", b: 16 }] },
+    // Burnt orange + dusty lavender (the moodboard photo!)
+    { sub: "Ресурс", title: "Наполниться", sec: "resource", bg: "#180804", blobs: [{ x: "55%", y: "20%", w: 175, h: 145, c: "rgba(240,120,40,.95)", b: 22 }, { x: "10%", y: "60%", w: 140, h: 115, c: "rgba(160,140,200,.7)", b: 18 }, { x: "74%", y: "68%", w: 110, h: 88, c: "rgba(255,150,80,.8)", b: 16 }] },
+    // Magenta-fuchsia + electric purple + warm pink
+    { sub: "Женское", title: "Женственность", sec: "feminine", bg: "#1a041c", blobs: [{ x: "50%", y: "25%", w: 170, h: 155, c: "rgba(230,77,168,.95)", b: 22 }, { x: "12%", y: "62%", w: 140, h: 115, c: "rgba(160,80,220,.75)", b: 18 }, { x: "72%", y: "66%", w: 115, h: 92, c: "rgba(255,140,180,.7)", b: 16 }] },
+    // Amber gold + burnt sienna + burgundy depth
+    { sub: "Реализация", title: "Получать", sec: "receiving", bg: "#1c0a04", blobs: [{ x: "48%", y: "22%", w: 165, h: 135, c: "rgba(255,175,50,.95)", b: 22 }, { x: "12%", y: "60%", w: 140, h: 110, c: "rgba(220,90,40,.8)", b: 18 }, { x: "74%", y: "66%", w: 112, h: 88, c: "rgba(180,60,120,.6)", b: 16 }] },
+    // Lavender purple + dusty rose + indigo (cool jewel)
+    { sub: "Новый уровень", title: "Расти", sec: "newlevel", bg: "#0c0820", blobs: [{ x: "44%", y: "24%", w: 170, h: 140, c: "rgba(159,123,216,.95)", b: 22 }, { x: "10%", y: "58%", w: 142, h: 114, c: "rgba(200,140,180,.75)", b: 18 }, { x: "72%", y: "66%", w: 112, h: 88, c: "rgba(120,80,200,.7)", b: 16 }] },
   ];
 
   return (

@@ -1,36 +1,41 @@
-// Night themes (original dark)
+// Night themes — juicy dopamine palette
+// Each mood = unique combo of complementary jewel tones
 const NIGHT = {
+  // Пустота — deep midnight indigo + lavender + dusty rose accents
   empty: {
-    e: "🌑", l: "Пустота", bg: "#070818",
-    card: "rgba(40,44,100,.1)", border: "rgba(50,55,130,.18)",
-    accent: "#6060C0", ar: "96,96,192",
-    dim: "rgba(40,44,100,.14)", o1: "rgba(30,30,110,.8)", o2: "rgba(60,30,150,.45)",
-    nav: "rgba(50,55,130,.28)", text: "#dde0f8",
-    gF: "#0e0f28", gT: "#070818"
+    e: "🌑", l: "Пустота", bg: "linear-gradient(165deg, #0a0820 0%, #14122c 50%, #1a0e26 100%)",
+    card: "rgba(140,110,200,.1)", border: "rgba(160,130,210,.22)",
+    accent: "#9F7BD8", ar: "159,123,216",
+    dim: "rgba(140,110,200,.16)", o1: "rgba(120,80,200,.7)", o2: "rgba(200,140,180,.5)",
+    nav: "rgba(140,110,200,.28)", text: "#ede0ff",
+    gF: "#1c1438", gT: "#0a0820"
   },
+  // Тихо — burgundy plum + dusty lavender + warm copper accents
   quiet: {
-    e: "🌒", l: "Тихо", bg: "#090c14",
-    card: "rgba(96,112,180,.06)", border: "rgba(96,112,180,.15)",
-    accent: "#8090C0", ar: "128,144,192",
-    dim: "rgba(96,112,180,.1)", o1: "rgba(96,112,180,.55)", o2: "rgba(180,100,40,.35)",
-    nav: "rgba(96,112,180,.22)", text: "#eaecf8",
-    gF: "#10142a", gT: "#090c14"
+    e: "🌒", l: "Тихо", bg: "linear-gradient(165deg, #1a0a14 0%, #2a1024 50%, #1c0820 100%)",
+    card: "rgba(180,100,160,.1)", border: "rgba(200,120,170,.22)",
+    accent: "#D080B0", ar: "208,128,176",
+    dim: "rgba(180,100,160,.16)", o1: "rgba(180,80,140,.7)", o2: "rgba(220,140,90,.5)",
+    nav: "rgba(180,100,160,.28)", text: "#ffe0f0",
+    gF: "#2c1228", gT: "#1a0a14"
   },
+  // Наполнена — magenta-fuchsia + electric purple + amber pop
   full: {
-    e: "🌕", l: "Наполнена", bg: "#0d0614",
-    card: "rgba(148,38,148,.07)", border: "rgba(180,20,120,.2)",
-    accent: "#B020A0", ar: "176,32,160",
-    dim: "rgba(148,38,148,.12)", o1: "rgba(180,20,120,.7)", o2: "rgba(80,30,180,.5)",
-    nav: "rgba(148,38,148,.3)", text: "#fce8ff",
-    gF: "#2a0428", gT: "#0d0614"
+    e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #1a0418 0%, #320630 50%, #240828 100%)",
+    card: "rgba(220,60,160,.1)", border: "rgba(240,80,180,.25)",
+    accent: "#E64DA8", ar: "230,77,168",
+    dim: "rgba(220,60,160,.18)", o1: "rgba(220,40,160,.75)", o2: "rgba(140,60,220,.55)",
+    nav: "rgba(220,60,160,.3)", text: "#ffe0f4",
+    gF: "#3a0838", gT: "#1a0418"
   },
+  // В силе — burnt orange + rust + warm purple shadow (the moodboard photo!)
   power: {
-    e: "🔥", l: "В силе", bg: "#100806",
-    card: "rgba(180,60,20,.07)", border: "rgba(180,60,20,.18)",
-    accent: "#C04818", ar: "192,72,24",
-    dim: "rgba(138,40,16,.14)", o1: "rgba(180,60,10,.7)", o2: "rgba(100,80,160,.4)",
-    nav: "rgba(180,60,20,.3)", text: "#fceee8",
-    gF: "#2c1008", gT: "#100806"
+    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #1a0a04 0%, #2a1408 50%, #200a14 100%)",
+    card: "rgba(240,120,40,.1)", border: "rgba(240,140,60,.25)",
+    accent: "#F08838", ar: "240,136,56",
+    dim: "rgba(240,120,40,.18)", o1: "rgba(230,100,30,.75)", o2: "rgba(140,80,180,.55)",
+    nav: "rgba(240,120,40,.3)", text: "#fff0e0",
+    gF: "#321608", gT: "#1a0a04"
   },
 };
 
