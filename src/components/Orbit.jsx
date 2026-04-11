@@ -337,7 +337,7 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
     try { if (doMarkPractice) doMarkPractice(Math.round(seconds / 60)); } catch (e) {}
     try {
       const curLayer = LAYERS[activeId - 1];
-      if (curLayer) logOrbitSession(activeId, curLayer.name);
+      if (curLayer) logOrbitSession(activeId, curLayer.name, activeScenario?.name);
     } catch (e) {}
     setGemPop({ amount: earned, id: Date.now() });
     setTimeout(() => setGemPop(null), 4000);

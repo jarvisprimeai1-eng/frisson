@@ -151,7 +151,8 @@ export function logDiary(text, tags = []) {
 }
 
 // Orbit session (>1 min) — capped 1x per layer per day
-export function logOrbitSession(layerId, layerName) {
+// scenarioName: optional, e.g. "Тревога" or "Любовь · Наполненность"
+export function logOrbitSession(layerId, layerName, scenarioName) {
   const d = load();
   const t = today();
   if (!d.orbitDaily[t]) d.orbitDaily[t] = {};
@@ -160,7 +161,9 @@ export function logOrbitSession(layerId, layerName) {
   save(d);
   const axId = LAYER_AXES[layerId];
   if (!axId) return;
-  addEvent("orbit", layerName, [axId], 2, { layerId });
+  // Display name: "Орбита · {scenario}" if scenario chosen, else "Орбита · {layer}"
+  const displayName = scenarioName ? `Орбита · ${scenarioName}` : `Орбита · ${layerName}`;
+  addEvent("orbit", displayName, [axId], 2, { layerId, scenarioName, layerName });
   addStreakBonus();
 }
 
