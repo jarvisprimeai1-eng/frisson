@@ -3,6 +3,9 @@ import * as THREE from "three";
 import { MED_GUIDES } from "../data/medGuides";
 import { logOrbitSession } from "../data/psycap";
 
+const FONT_SANS = "'Plus Jakarta Sans', sans-serif";
+const FONT_SERIF = "'Cormorant', Georgia, serif";
+
 // Sound profiles: each scenario has therapeutic frequencies
 // Neutral: 528 Hz (Solfeggio love/repair) + 8 Hz binaural → alpha
 // Musical meditation profiles — warm pads + chord progressions
