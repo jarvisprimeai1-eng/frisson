@@ -690,7 +690,8 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
 
       {/* Meditation: guide text + timer */}
       {meditating && (() => {
-        const textBottom = isNegative; // fear/anxiety/conflict → text at bottom; others → centered over orb
+        const negIds = ["anxiety", "fear", "conflict"];
+        const textBottom = activeScenario && negIds.includes(activeScenario.id); // fear/anxiety/conflict → text at bottom; others → centered over orb
         const breathEl = guideText?.breath && (
           <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: guideText.breath === "in" ? "rgba(160,212,228,.55)" : guideText.breath === "hold" ? "rgba(240,208,96,.45)" : "rgba(200,160,180,.5)", marginBottom: 6, ...ss }}>
             {guideText.breath === "in" ? "вдох ↑" : guideText.breath === "hold" ? "задержка ◦" : "выдох ↓"}
