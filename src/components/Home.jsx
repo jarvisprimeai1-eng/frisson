@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getEnergyLevel } from "../data/themes";
 import { SECTIONS, RECOMMENDATIONS, MOOD_MESSAGES } from "../data/content";
 import { getMoon, useGreeting, FONT_SERIF, FONT_SANS } from "../utils/helpers";
@@ -11,8 +11,12 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
   const moon = getMoon();
   const gr = useGreeting();
   const lv = eScore !== null ? getEnergyLevel(eScore) : null;
-  const [msgI] = useState(() => Math.floor(Math.random() * 3));
-  const msg = (MOOD_MESSAGES[theme] || MOOD_MESSAGES.full)[msgI];
+  const msgList = MOOD_MESSAGES[theme] || MOOD_MESSAGES.full;
+  const [msg, setMsg] = useState(() => msgList[Math.floor(Math.random() * msgList.length)]);
+  useEffect(() => {
+    const list = MOOD_MESSAGES[theme] || MOOD_MESSAGES.full;
+    setMsg(list[Math.floor(Math.random() * list.length)]);
+  }, [theme]);
   const spd = theme === "power" ? "4s" : theme === "empty" ? "14s" : "8s";
 
   const cards = [
