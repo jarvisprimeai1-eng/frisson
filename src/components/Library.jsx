@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // THEMES passed via props
 import { SECTIONS, COMING_SOON, BOOKS } from "../data/content";
 import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
-import { addPsycap, MED_TO_PSYCAP } from "../data/psycap";
+import { logMeditation } from "../data/psycap";
 import Orb from "./Orb";
 import Lock from "./Lock";
 
@@ -65,8 +65,7 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
                 setPlay(newPlay);
                 // First time pressing play in this session = start practice
                 if (newPlay) {
-                  const psyKey = MED_TO_PSYCAP[det.title];
-                  if (psyKey) addPsycap(psyKey);
+                  logMeditation(det.title, "full");
                   if (doMarkPractice) doMarkPractice(parseInt(det.dur) || 20);
                   if (addGems) addGems(Math.max(1, parseInt(det.dur) || 20));
                 }

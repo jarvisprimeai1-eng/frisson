@@ -7,7 +7,8 @@ import Orb from "./Orb";
 import { VERSION } from "../App";
 
 import { ACHIEVEMENTS } from "../data/activity";
-import PsycapAnalytics from "./PsycapAnalytics";
+import { logEnergyTest } from "../data/psycap";
+import PsycapTracker from "./PsycapTracker";
 
 export default function Profile({ setScreen, theme, eScore, setEScore, eHist, setEHist, pLog, gems = 0, THEMES, activity, eScoreHistory, goToScenario }) {
   const T = THEMES[theme] || THEMES.full;
@@ -40,6 +41,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
           const raw = tA.reduce((s, v) => s + (v || 1), 0);
           const sc = Math.round((raw / (TEST_QUESTIONS.length * 5)) * 100);
           setEScore(sc);
+          logEnergyTest(sc);
           setEHist((h) => [...h, { score: sc, date: new Date().getDate() + " " + ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"][new Date().getMonth()] }].slice(-6));
           setShowT(false);
         }
@@ -123,8 +125,8 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         </div>
       </div>
 
-      {/* Psychological Capital Analytics */}
-      <PsycapAnalytics T={T} setScreen={setScreen} eScore={eScore} goToScenario={goToScenario} />
+      {/* Psychological Capital Tracker */}
+      <PsycapTracker T={T} setScreen={setScreen} goToScenario={goToScenario} />
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, margin: "0 24px 18px", position: "relative", zIndex: 1 }}>
         {[[`${activity?.totalMeds || 0}`, "Медитаций"], [`${activity?.totalMinutes || 0}`, "Минут"], [`🔥 ${activity?.streak || 0}`, "Дней подряд"], [`${gems} ⟡`, "Кристаллов"]].map((pr, i) => (

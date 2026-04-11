@@ -1,158 +1,318 @@
-// Psychological Capital + Femininity (HEROF model)
-// H = Hope · E = self-Efficacy · R = Resilience · O = Optimism · F = Femininity
-// Each practice grows specific dimensions. The more you practice, the higher
-// your scores. Visible to users in Profile with clear explanations.
+// Psychological Capital tracker — 6 axes of inner growth
+// All scores 0-100, persisted in localStorage
 
-const KEY = "frisson_psycap";
+const KEY = "frisson_psycap_v2";
 const MAX = 100;
-const STARTING_VALUE = 12;
+const MIN = 0;
+const BASELINE = 20;
 
+// ── 6 AXES ──────────────────────────────────────────────────────────────
+export const AXES = [
+  { id: "safety",     label: "Внутренняя безопасность", short: "Безопасность", hex: "#7EC8DC", desc: "Ощущение, что с вами всё в порядке и мир не опасен. База для всего остального." },
+  { id: "worth",      label: "Самоценность",             short: "Самоценность", hex: "#E64DA8", desc: "Знание, что вы достойны хорошего просто потому, что вы есть." },
+  { id: "receive",    label: "Способность получать",     short: "Получение",    hex: "#FFAF32", desc: "Умение принимать любовь, деньги, заботу и внимание без вины." },
+  { id: "feminine",   label: "Женская энергия",          short: "Женственность",hex: "#D080B0", desc: "Контакт с мягкостью, чувственностью и магнетизмом вашей природы." },
+  { id: "trust",      label: "Доверие к миру",           short: "Доверие",      hex: "#9F7BD8", desc: "Способность отпускать контроль и доверять жизни." },
+  { id: "authentic",  label: "Аутентичность",            short: "Подлинность",  hex: "#F08838", desc: "Жить из себя настоящей, без масок и чужих ожиданий." },
+];
+
+// ── CONTENT TAGGING ─────────────────────────────────────────────────────
+// Each content item maps to 1-2 axes
+export const MED_TAGS = {
+  // Resource section
+  "Возвращение к наполненности":     ["receive", "feminine"],
+  "Восполниться энергией":           ["feminine", "worth"],
+  "Женское внутреннее расслабление": ["feminine", "safety"],
+  "Я автор своей жизни":             ["authentic", "worth"],
+  // Feminine section
+  "Женская энергия":                 ["feminine", "authentic"],
+  "Возвращение к себе женственной":  ["feminine", "authentic"],
+  "Состояние женской притягательности": ["feminine", "worth"],
+  "Женское счастье — это норма":     ["feminine", "trust"],
+  // Receiving section
+  "Где я перекрыла себе получение":  ["receive", "worth"],
+  "Получение благ от мира":          ["receive", "trust"],
+  "Доверие к миру":                  ["trust", "safety"],
+  "Деньги и безопасность":           ["safety", "receive"],
+  // New level section
+  "Благодарность и новый уровень":   ["trust", "authentic"],
+  "Новый уровень":                   ["authentic", "worth"],
+  "Разговор с собой из будущего":    ["authentic", "worth"],
+  "Вера — мост между реальностями":  ["trust", "safety"],
+  // Self section
+  "Право быть настоящей":            ["authentic", "trust"],
+  // Techniques (future content)
+  "Техника против тревоги":          ["trust", "safety"],
+  "Техника против ревности":         ["worth", "safety"],
+  "Залатываем дефициты":             ["receive", "worth"],
+  "Контакт с женской частью":        ["feminine", "worth"],
+};
+
+// Diary entry tags → axes (user can tag entries)
+export const DIARY_TAGS = {
+  base:        ["authentic"],              // any entry → authenticity
+  желания:     ["feminine", "authentic"],
+  тело:        ["feminine", "safety"],
+  отношения:   ["worth", "trust"],
+  деньги:      ["receive", "worth"],
+};
+
+// Orbit layers → axes
+export const LAYER_AXES = {
+  1: "safety",    // Бессознательное
+  2: "authentic", // Самость / Подлинность
+  3: "worth",     // Сознательное
+  4: "feminine",  // Чувства
+  5: "trust",     // Эмоции
+  6: "receive",   // Поведение
+};
+
+// ── STATE ───────────────────────────────────────────────────────────────
 function defaults() {
+  const axes = {};
+  AXES.forEach((a) => (axes[a.id] = BASELINE));
   return {
-    hope: STARTING_VALUE, efficacy: STARTING_VALUE, resilience: STARTING_VALUE,
-    optimism: STARTING_VALUE, femininity: STARTING_VALUE,
-    history: [],
+    axes,
+    events: [],      // { ts, type, name, axes: [...], points, meta }
+    lastActivity: null,
+    lastTestScore: null,
+    orbitDaily: {},  // { "2026-04-11": { layerId: true } }
+    lastDecay: Date.now(),
   };
 }
 
 function load() {
   try {
-    const d = JSON.parse(localStorage.getItem(KEY)) || defaults();
-    if (d.femininity === undefined) d.femininity = STARTING_VALUE;
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (!d) return defaults();
+    if (!d.axes || !d.events) return defaults();
+    AXES.forEach((a) => { if (d.axes[a.id] === undefined) d.axes[a.id] = BASELINE; });
     return d;
   } catch { return defaults(); }
 }
 function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
 
-// Each practice = HEROF weights (points added per session)
-// Sum is roughly 4-6 per practice — gradual realistic growth
-export const PRACTICE_HEROF = {
-  // Orbit scenarios
-  neutral:   { h: 1, e: 1, r: 1, o: 1, f: 1 },
-  anxiety:   { h: 0, e: 1, r: 3, o: 1, f: 0 }, // recovery → resilience
-  love:      { h: 3, e: 0, r: 1, o: 2, f: 2 }, // love → hope, optimism, femininity
-  power:     { h: 2, e: 4, r: 1, o: 1, f: 0 }, // inner fire → self-efficacy
-  conflict:  { h: 1, e: 3, r: 2, o: 0, f: 0 }, // resolving → efficacy + resilience
-  fear:      { h: 1, e: 1, r: 4, o: 1, f: 0 }, // facing fear → resilience
-  abundance: { h: 3, e: 1, r: 0, o: 3, f: 1 }, // receiving → hope + optimism
-  feminine:  { h: 1, e: 0, r: 1, o: 1, f: 5 }, // direct → femininity
-  capital:   { h: 2, e: 2, r: 2, o: 2, f: 0 }, // direct → all HERO
-  // Journal sections
-  intent:    { h: 3, e: 1, r: 0, o: 2, f: 0 },
-  grat:      { h: 1, e: 0, r: 1, o: 4, f: 0 },
-  goals:     { h: 2, e: 3, r: 0, o: 1, f: 0 },
-  reflect:   { h: 0, e: 1, r: 3, o: 1, f: 1 },
-};
+function today() { return new Date().toISOString().slice(0, 10); }
 
-// Map each Library meditation title to a HEROF practice key
-// Listening to a recorded meditation = full practice with weighted points
-export const MED_TO_PSYCAP = {
-  // Resource section
-  "Возвращение к наполненности": "love",       // filling self with love
-  "Восполниться энергией": "power",             // energy restoration
-  "Женское внутреннее расслабление": "feminine", // feminine relaxation
-  "Я автор своей жизни": "power",               // self-efficacy
-  // Feminine section — all directly feminine
-  "Женская энергия": "feminine",
-  "Возвращение к себе женственной": "feminine",
-  "Состояние женской притягательности": "feminine",
-  "Женское счастье — это норма": "feminine",
-  // Receiving section
-  "Где я перекрыла себе получение": "abundance",
-  "Получение благ от мира": "abundance",
-  "Доверие к миру": "abundance",                // optimism + hope (trust)
-  "Деньги и безопасность": "abundance",
-  // New level section
-  "Благодарность и новый уровень": "abundance", // gratitude → optimism
-  "Новый уровень": "capital",                   // builds all HERO
-  "Разговор с собой из будущего": "capital",    // hope + identity
-  "Вера — мост между реальностями": "fear",     // resilience for transitions
-  // Self section
-  "Право быть настоящей": "feminine",            // authenticity
-};
+function applyDecay(d) {
+  const now = Date.now();
+  const days = Math.floor((now - (d.lastDecay || now)) / 86400000);
+  if (days >= 3) {
+    const decays = Math.floor(days / 3);
+    const floor = d.lastTestScore !== null ? d.lastTestScore : BASELINE;
+    AXES.forEach((a) => {
+      d.axes[a.id] = Math.max(floor, d.axes[a.id] - decays);
+    });
+    d.lastDecay = now;
+  }
+}
 
-// Human-readable practice names for the analytics breakdown
-export const PRACTICE_NAMES = {
-  neutral: "Нейтральная медитация",
-  anxiety: "Работа с тревогой",
-  love: "Любовь · Наполненность",
-  power: "Сила · Внутренний огонь",
-  conflict: "Внутренний конфликт",
-  fear: "Работа со страхом",
-  abundance: "Изобилие · Получение",
-  feminine: "Женственность · Текучесть",
-  capital: "Психологический капитал",
-  intent: "Намерения в дневнике",
-  grat: "Благодарность",
-  goals: "Цели",
-  reflect: "Рефлексия",
-};
-
-export function addPsycap(source) {
-  const w = PRACTICE_HEROF[source];
-  if (!w) return load();
+// ── CORE: add event and update axes ─────────────────────────────────────
+function addEvent(type, name, axes, points, meta = {}) {
   const d = load();
-  d.hope = Math.min(MAX, d.hope + w.h);
-  d.efficacy = Math.min(MAX, d.efficacy + w.e);
-  d.resilience = Math.min(MAX, d.resilience + w.r);
-  d.optimism = Math.min(MAX, d.optimism + w.o);
-  d.femininity = Math.min(MAX, d.femininity + (w.f || 0));
-  d.history.push({ ts: Date.now(), ...w, source });
-  if (d.history.length > 300) d.history = d.history.slice(-300);
+  applyDecay(d);
+  axes.forEach((axId) => {
+    d.axes[axId] = Math.min(MAX, d.axes[axId] + points);
+  });
+  d.events.unshift({
+    ts: Date.now(),
+    type,
+    name,
+    axes,
+    points,
+    meta,
+  });
+  if (d.events.length > 500) d.events = d.events.slice(0, 500);
+  d.lastActivity = Date.now();
   save(d);
   return d;
 }
 
-export function getPsycap() { return load(); }
+// ── PUBLIC API ──────────────────────────────────────────────────────────
 
-export function getPsycapStats() {
+// Meditation listened (full or partial)
+export function logMeditation(title, completion = "full") {
+  const axes = MED_TAGS[title];
+  if (!axes) return;
+  const points = completion === "full" ? 5 : 2;
+  addEvent("meditation", title, axes, points, { completion });
+  addStreakBonus();
+}
+
+// Diary entry completed
+export function logDiary(text, tags = []) {
+  const axSet = new Set(DIARY_TAGS.base);
+  tags.forEach((t) => {
+    const ax = DIARY_TAGS[t];
+    if (ax) ax.forEach((id) => axSet.add(id));
+  });
+  addEvent("diary", text.slice(0, 40), [...axSet], 4, { tags });
+  addStreakBonus();
+}
+
+// Orbit session (>1 min) — capped 1x per layer per day
+export function logOrbitSession(layerId, layerName) {
   const d = load();
-  const total = d.hope + d.efficacy + d.resilience + d.optimism + d.femininity;
-  const avg = Math.round(total / 5);
+  const t = today();
+  if (!d.orbitDaily[t]) d.orbitDaily[t] = {};
+  if (d.orbitDaily[t][layerId]) return; // already counted today
+  d.orbitDaily[t][layerId] = true;
+  save(d);
+  const axId = LAYER_AXES[layerId];
+  if (!axId) return;
+  addEvent("orbit", layerName, [axId], 2, { layerId });
+  addStreakBonus();
+}
 
+// Energy test — recalibrates baseline
+export function logEnergyTest(score) {
+  const d = load();
+  applyDecay(d);
+  d.lastTestScore = score;
+  // Recalibrate: pull each axis toward test score by 40%
+  AXES.forEach((a) => {
+    const current = d.axes[a.id];
+    d.axes[a.id] = Math.round(current * 0.6 + score * 0.4);
+  });
+  d.events.unshift({
+    ts: Date.now(),
+    type: "test",
+    name: `Тест энергии: ${score}`,
+    axes: AXES.map((a) => a.id),
+    points: 0,
+    meta: { score },
+  });
+  if (d.events.length > 500) d.events = d.events.slice(0, 500);
+  d.lastActivity = Date.now();
+  save(d);
+}
+
+// Weekly self-report check-in: 4 sliders (0-100)
+export function logWeeklyCheckin(values) {
+  const d = load();
+  applyDecay(d);
+  // Values: { safety, worth, feminine, trust } — sliders
+  // Blend: 70% current + 30% reported
+  ["safety", "worth", "feminine", "trust"].forEach((id) => {
+    if (typeof values[id] === "number") {
+      d.axes[id] = Math.round(d.axes[id] * 0.7 + values[id] * 0.3);
+    }
+  });
+  d.events.unshift({
+    ts: Date.now(),
+    type: "checkin",
+    name: "Еженедельный чекин",
+    axes: ["safety", "worth", "feminine", "trust"],
+    points: 0,
+    meta: { values },
+  });
+  d.lastActivity = Date.now();
+  save(d);
+}
+
+// Daily streak bonus — +1 to safety once per day
+function addStreakBonus() {
+  const d = load();
+  const t = today();
+  if (d.lastStreakDay === t) return;
+  d.lastStreakDay = t;
+  d.axes.safety = Math.min(MAX, d.axes.safety + 1);
+  save(d);
+}
+
+// ── GETTERS ─────────────────────────────────────────────────────────────
+export function getPsycap() {
+  const d = load();
+  applyDecay(d);
+  save(d);
+  return d;
+}
+
+export function getOverallScore() {
+  const d = getPsycap();
+  const total = AXES.reduce((s, a) => s + d.axes[a.id], 0);
+  return Math.round(total / AXES.length);
+}
+
+export function getLowestAxis() {
+  const d = getPsycap();
+  const sorted = [...AXES].map((a) => ({ ...a, value: d.axes[a.id] })).sort((a, b) => a.value - b.value);
+  return sorted[0];
+}
+
+export function getHighestAxis() {
+  const d = getPsycap();
+  const sorted = [...AXES].map((a) => ({ ...a, value: d.axes[a.id] })).sort((a, b) => b.value - a.value);
+  return sorted[0];
+}
+
+// Get last activity date for a specific axis
+export function getLastAxisActivity(axId) {
+  const d = getPsycap();
+  const evt = d.events.find((e) => e.axes.includes(axId));
+  return evt ? evt.ts : null;
+}
+
+// Monthly delta: current score minus score 30 days ago
+export function getMonthlyDelta() {
+  const d = getPsycap();
   const now = Date.now();
-  const weekAgo = now - 7 * 86400000;
-  const twoWeeksAgo = now - 14 * 86400000;
-  const thisWeek = d.history.filter((h) => h.ts >= weekAgo);
-  const lastWeek = d.history.filter((h) => h.ts >= twoWeeksAgo && h.ts < weekAgo);
-  const sum = (entries) => entries.reduce((s, e) => s + e.h + e.e + e.r + e.o + (e.f || 0), 0);
-  const weeklyGrowth = sum(thisWeek) - sum(lastWeek);
+  const monthAgo = now - 30 * 86400000;
+  const current = getOverallScore();
+  // Sum all positive events in last 30 days
+  const gained = d.events
+    .filter((e) => e.ts >= monthAgo && e.points > 0)
+    .reduce((s, e) => s + e.points, 0);
+  return Math.round(gained / AXES.length);
+}
 
-  const dims = [
-    { id: "hope",       label: "Надежда",          value: d.hope,       hex: "#F08838", desc: "Способность видеть пути и желать большего" },
-    { id: "efficacy",   label: "Самоэффективность", value: d.efficacy,   hex: "#E64DA8", desc: "Уверенность, что справишься с задачами" },
-    { id: "resilience", label: "Стойкость",        value: d.resilience, hex: "#9F7BD8", desc: "Способность восстанавливаться после трудностей" },
-    { id: "optimism",   label: "Оптимизм",         value: d.optimism,   hex: "#FFAF32", desc: "Вера, что хорошее возможно и произойдёт" },
-    { id: "femininity", label: "Женственность",    value: d.femininity, hex: "#D080B0", desc: "Контакт с мягкостью, текучестью и природой" },
-  ];
-  const sorted = [...dims].sort((a, b) => b.value - a.value);
-  const strongest = sorted[0];
-  const weakest = sorted[sorted.length - 1];
+// Score history timeseries for growth chart
+export function getScoreHistory(rangeMs = 30 * 86400000) {
+  const d = getPsycap();
+  const now = Date.now();
+  const start = now - rangeMs;
+  const events = d.events.filter((e) => e.ts >= start).sort((a, b) => a.ts - b.ts);
+  // Build timeseries: starting from current score minus all gains, apply events forward
+  const totalPoints = events.filter((e) => e.points > 0).reduce((s, e) => s + e.points, 0);
+  const startScore = Math.max(MIN, getOverallScore() - Math.round(totalPoints / AXES.length));
+  const points = [{ ts: start, score: startScore }];
+  let current = startScore;
+  events.forEach((e) => {
+    current += Math.round((e.points * e.axes.length) / AXES.length);
+    points.push({ ts: e.ts, score: Math.min(MAX, current), event: e });
+  });
+  if (points[points.length - 1].ts < now) {
+    points.push({ ts: now, score: getOverallScore() });
+  }
+  return points;
+}
 
+// Get events grouped by day for activity feed
+export function getEventsByDay() {
+  const d = getPsycap();
+  const groups = {};
+  d.events.forEach((e) => {
+    const day = new Date(e.ts).toISOString().slice(0, 10);
+    if (!groups[day]) groups[day] = [];
+    groups[day].push(e);
+  });
+  return Object.entries(groups)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([day, events]) => ({ day, events }));
+}
+
+// Smart recommendation based on lowest axis
+export function getRecommendation() {
+  const lowest = getLowestAxis();
   const RECS = {
-    hope:       { scenario: "love",      label: "Любовь · Наполненность",   text: "Откройте сердце надежде. Любовь и наполненность учат видеть возможности и желать без страха." },
-    efficacy:   { scenario: "power",     label: "Сила · Внутренний огонь",  text: "Укрепите веру в свои силы. Практика внутреннего огня собирает энергию для уверенных действий." },
-    resilience: { scenario: "anxiety",   label: "Работа с тревогой",        text: "Учитесь восстанавливаться. Сценарии тревоги и страха тренируют возвращение в покой." },
-    optimism:   { scenario: "abundance", label: "Изобилие · Получение благ", text: "Настройтесь на хорошее. Практика изобилия меняет то, что вы ожидаете от мира." },
-    femininity: { scenario: "feminine",  label: "Женственность · Текучесть", text: "Вернитесь в свою природу. Практика текучести раскрывает мягкость, чувственность и магнетизм." },
+    safety:    { med: "Женское внутреннее расслабление", scenario: "fear",     text: "Начните с практики расслабления или сценария работы со страхом в орбите." },
+    worth:     { med: "Разговор с собой из будущего",    scenario: "power",    text: "Укрепите самоценность через контакт с собой в будущем или внутренний огонь." },
+    receive:   { med: "Где я перекрыла себе получение",  scenario: "abundance", text: "Откройте способность получать — послушайте медитацию или попробуйте сценарий изобилия." },
+    feminine:  { med: "Женская энергия",                  scenario: "feminine", text: "Вернитесь в свою женскую природу через медитацию или текучий сценарий на орбите." },
+    trust:     { med: "Доверие к миру",                   scenario: "love",     text: "Развивайте доверие через практику или сценарий любви и наполненности." },
+    authentic: { med: "Право быть настоящей",             scenario: "capital",  text: "Вернитесь к себе настоящей через медитацию или сценарий психологического капитала." },
   };
-
-  // Practice breakdown — count of each source over all time
-  const practiceCounts = {};
-  d.history.forEach((h) => { practiceCounts[h.source] = (practiceCounts[h.source] || 0) + 1; });
-  const topPractices = Object.entries(practiceCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([id, count]) => ({ id, name: PRACTICE_NAMES[id] || id, count }));
-
-  return {
-    dims, total, avg, weeklyGrowth,
-    strongest, weakest,
-    recommendation: RECS[weakest.id],
-    sessionsThisWeek: thisWeek.length,
-    totalSessions: d.history.length,
-    topPractices,
-  };
+  return { axis: lowest, ...RECS[lowest.id] };
 }
 
 export function resetPsycap() { localStorage.removeItem(KEY); }
