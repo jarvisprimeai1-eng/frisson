@@ -13,7 +13,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "4.6.6";
+export const VERSION = "4.6.7";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -96,18 +96,22 @@ export default function App() {
           {/* Ambient floating dots — app-wide background */}
           {screen !== "orbit" && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>
-              {Array.from({ length: 18 }, (_, i) => (
-                <div key={i} className="ambient-dot" style={{
-                  position: "absolute",
-                  left: `${(i * 53 + 13) % 100}%`,
-                  top: `${(i * 37 + 7) % 100}%`,
-                  width: 2, height: 2, borderRadius: "50%",
-                  background: `rgba(${T.ar},.${3 + (i % 4)})`,
-                  boxShadow: `0 0 4px rgba(${T.ar},.4)`,
-                  animationDelay: `${(i * 0.4) % 8}s`,
-                  animationDuration: `${6 + (i % 5)}s`,
-                }} />
-              ))}
+              {Array.from({ length: 18 }, (_, i) => {
+                const useAlt = T.ar2 && i % 3 === 0;
+                const col = useAlt ? T.ar2 : T.ar;
+                return (
+                  <div key={i} className="ambient-dot" style={{
+                    position: "absolute",
+                    left: `${(i * 53 + 13) % 100}%`,
+                    top: `${(i * 37 + 7) % 100}%`,
+                    width: useAlt ? 3 : 2, height: useAlt ? 3 : 2, borderRadius: "50%",
+                    background: `rgba(${col},.${3 + (i % 4)})`,
+                    boxShadow: `0 0 ${useAlt ? 6 : 4}px rgba(${col},.5)`,
+                    animationDelay: `${(i * 0.4) % 8}s`,
+                    animationDuration: `${6 + (i % 5)}s`,
+                  }} />
+                );
+              })}
             </div>
           )}
           <div ref={scrollRef} key={screen} className="screen-in" style={{ flex: 1, overflowY: screen === "orbit" ? "hidden" : "auto", overflowX: "hidden", position: "relative", zIndex: 1, display: "flex", flexDirection: "column" }}>{screens[screen]}</div>

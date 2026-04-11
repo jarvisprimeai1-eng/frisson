@@ -33,7 +33,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
   return (
     <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: "background .6s" }}>
       <Orb style={{ top: -60, right: -80 }} color={T.o1} opacity={0.16} w={280} h={280} />
-      <Orb style={{ bottom: 300, left: -60 }} color={T.o2} opacity={0.1} w={200} h={200} delay={3} />
+      <Orb style={{ bottom: 300, left: -60 }} color={T.o2} opacity={0.22} w={240} h={240} delay={3} />
 
       <div className="fu1" style={{ padding: "50px 24px 14px", position: "relative", zIndex: 1, textAlign: "center" }}>
         <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.38)", marginBottom: 6 }}>{moon.n}</div>

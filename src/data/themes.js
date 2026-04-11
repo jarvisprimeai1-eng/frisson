@@ -19,23 +19,25 @@ const NIGHT = {
     nav: "rgba(180,100,160,.28)", text: "#ffe0f0",
     gF: "#2c1228", gT: "#1a0a14"
   },
-  // Наполнена — burnt amber + deep wine + magenta sparkle + lavender kiss
-  // (fulfillment moodboard: passion fruit, orange, amber, purple shimmer)
+  // Наполнена — burnt amber + deep wine + magenta sparkle + icy blue breath
+  // (fulfillment moodboard: passion fruit, orange, amber, purple shimmer + ice)
   full: {
     e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #1e0612 0%, #3a0c1c 45%, #2a0818 100%)",
     card: "rgba(232,160,48,.09)", border: "rgba(232,160,48,.24)",
     accent: "#E8A030", ar: "232,160,48",
-    dim: "rgba(232,160,48,.16)", o1: "rgba(216,80,32,.72)", o2: "rgba(184,72,168,.55)",
+    accent2: "#B8D4E8", ar2: "184,212,232",
+    dim: "rgba(232,160,48,.16)", o1: "rgba(216,80,32,.72)", o2: "rgba(184,212,232,.5)",
     nav: "rgba(232,160,48,.28)", text: "#fbe6d2",
     gF: "#3c0e22", gT: "#1e0612"
   },
-  // В силе — deep burgundy wine + chocolate + ice blue accent (Ice Blue × Burgundy)
+  // В силе — deep burgundy wine + chocolate + icy blue counterpoint (Ice Blue × Burgundy)
   power: {
     e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #120408 0%, #2a0a14 50%, #180810 100%)",
-    card: "rgba(142,26,50,.12)", border: "rgba(160,180,210,.22)",
+    card: "rgba(142,26,50,.12)", border: "rgba(180,210,232,.26)",
     accent: "#9C1E36", ar: "156,30,54",
-    dim: "rgba(142,26,50,.18)", o1: "rgba(142,26,50,.75)", o2: "rgba(160,195,220,.45)",
-    nav: "rgba(142,26,50,.3)", text: "#f3dde0",
+    accent2: "#A8CFE4", ar2: "168,207,228",
+    dim: "rgba(142,26,50,.18)", o1: "rgba(142,26,50,.75)", o2: "rgba(168,207,228,.72)",
+    nav: "rgba(168,207,228,.32)", text: "#f3dde0",
     gF: "#2e0c16", gT: "#120408"
   },
 };
