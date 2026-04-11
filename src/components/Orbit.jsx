@@ -5,16 +5,19 @@ import { logOrbitSession } from "../data/psycap";
 
 // Sound profiles: each scenario has therapeutic frequencies
 // Neutral: 528 Hz (Solfeggio love/repair) + 8 Hz binaural → alpha
+// Musical meditation profiles — warm pads + chord progressions
+// Frequencies in Hz for chord notes (C major pentatonic, etc.)
+// Each profile = root drone + chord pad + scale for random chimes
 const SOUND_PROFILES = {
-  neutral:  { label: "528 Hz · Исцеление", base: 528, beat: 8, sub: 132, overtone: 1056, lfoRate: 0.05, lfoDepth: 0.06, desc: "528 Гц — частота исцеления ДНК (Solfeggio). Бинауральный бит 8 Гц переводит мозг в альфа-состояние: спокойное бодрствование и внутренняя тишина." },
-  anxiety:  { label: "396 Hz · Освобождение", base: 396, beat: 4, sub: 99, overtone: 792, lfoRate: 0.035, lfoDepth: 0.04, desc: "396 Гц — освобождение от страха и вины (Solfeggio). Бинауральный бит 4 Гц (тета) мягко замедляет тревожный мозг. Нейроны постепенно перестают дрожать и находят опору." },
-  love:     { label: "639 Hz · Связь", base: 639, beat: 7.83, sub: 160, overtone: 1278, lfoRate: 0.04, lfoDepth: 0.07, desc: "639 Гц — гармонизация отношений и сердечная связь (Solfeggio). Бинауральный бит 7.83 Гц (резонанс Шумана) синхронизирует с частотой Земли. Нейроны начинают дышать в унисон." },
-  power:    { label: "741 Hz · Пробуждение", base: 741, beat: 14, sub: 185, overtone: 1482, lfoRate: 0.08, lfoDepth: 0.05, desc: "741 Гц — пробуждение интуиции и силы (Solfeggio). Бинауральный бит 14 Гц (бета) активирует решительность. Нейроны собираются в единый направленный поток." },
-  conflict: { label: "417 Hz · Трансформация", base: 417, beat: 6, sub: 104, overtone: 834, lfoRate: 0.06, lfoDepth: 0.08, desc: "417 Гц — трансформация и очищение от негативных паттернов (Solfeggio). Бинауральный бит 6 Гц (тета) помогает мозгу отпустить одну из сторон конфликта и найти единый центр." },
-  fear:     { label: "396 Hz · Безопасность", base: 396, beat: 3, sub: 99, overtone: 792, lfoRate: 0.025, lfoDepth: 0.03, desc: "396 Гц — освобождение от страха (Solfeggio). Бинауральный бит 3 Гц (глубокая дельта) возвращает ощущение безопасности на уровне нервной системы. Сжатые нейроны начинают расслабляться." },
-  abundance:{ label: "852 Hz · Изобилие", base: 852, beat: 10, sub: 213, overtone: 1704, lfoRate: 0.045, lfoDepth: 0.06, desc: "852 Гц — возвращение к духовному порядку и открытость к получению (Solfeggio). Бинауральный бит 10 Гц (альфа) настраивает мозг на расслабленную готовность принимать." },
-  feminine: { label: "432 Hz · Женственность", base: 432, beat: 7.83, sub: 108, overtone: 864, lfoRate: 0.03, lfoDepth: 0.09, desc: "432 Гц — природная гармония (Верди). Бинауральный бит 7.83 Гц (резонанс Шумана) соединяет с ритмами природы. Нейроны начинают танцевать — текуче, плавно, женственно." },
-  capital:  { label: "528 Hz · Устойчивость", base: 528, beat: 12, sub: 132, overtone: 1056, lfoRate: 0.05, lfoDepth: 0.04, desc: "528 Гц — восстановление и целостность (Solfeggio). Бинауральный бит 12 Гц (альфа-бета граница) — частота сфокусированной уверенности. Нейроны выстраиваются в устойчивую структуру." },
+  neutral:  { label: "Тёплая тишина",   root: 130.81, chord: [261.63, 329.63, 392.00, 523.25], scale: [523.25, 587.33, 659.25, 783.99, 880.00], desc: "Тёплый пад в тональности C-мажор — мягкий фон для любого состояния. Редкие колокольчики создают ощущение тишины и простора." },
+  anxiety:  { label: "Успокоение",      root: 110.00, chord: [220.00, 261.63, 329.63, 440.00], scale: [440.00, 493.88, 523.25, 587.33, 659.25], desc: "Глубокий медленный пад в A-миноре — тональность мягкости и восстановления. Очень тихо, без резких тонов. Нервная система постепенно замедляется." },
+  love:     { label: "Открытое сердце", root: 146.83, chord: [293.66, 369.99, 440.00, 587.33], scale: [587.33, 659.25, 739.99, 880.00, 987.77], desc: "Тёплая гармония D-мажора с мягкими колокольчиками — резонанс сердечной чакры. Наполненность и нежность." },
+  power:    { label: "Внутренний огонь",root: 164.81, chord: [329.63, 415.30, 493.88, 659.25], scale: [659.25, 739.99, 830.61, 987.77, 1108.73], desc: "Уверенный E-мажорный пад с лёгкими восходящими колокольчиками — поддерживает решимость без напряжения." },
+  conflict: { label: "Центрирование",   root: 123.47, chord: [246.94, 311.13, 369.99, 493.88], scale: [493.88, 554.37, 622.25, 739.99, 830.61], desc: "Мягкий пад между мажором и минором — помогает найти центр посреди противоречий. Успокаивающая неопределённость." },
+  fear:     { label: "Безопасное место",root: 98.00,  chord: [196.00, 246.94, 293.66, 392.00], scale: [392.00, 440.00, 493.88, 587.33, 659.25], desc: "Глубокий низкий пад в G-миноре — как тёплые объятия. Нервной системе сигнал: безопасно, можно расслабиться." },
+  abundance:{ label: "Поток",           root: 174.61, chord: [349.23, 440.00, 523.25, 698.46], scale: [698.46, 783.99, 880.00, 1046.50, 1174.66], desc: "Светлый F-мажорный пад с частыми колокольчиками — ощущение открытости и щедрого потока." },
+  feminine: { label: "Текучесть",       root: 220.00, chord: [277.18, 329.63, 440.00, 554.37], scale: [554.37, 622.25, 739.99, 880.00, 987.77], desc: "Плавный женственный пад в C#-миноре — мягкие тона колокольчиков создают ощущение танца и текучести." },
+  capital:  { label: "Устойчивость",    root: 130.81, chord: [261.63, 329.63, 392.00, 523.25], scale: [523.25, 659.25, 783.99, 987.77, 1174.66], desc: "Устойчивый C-мажорный пад с редкими ясными колокольчиками — основа для фокусированной уверенности." },
 };
 
 const SCENARIOS = [
@@ -176,8 +179,9 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
 
   function cleanupAudio() {
     const a = audioRef.current;
+    if (a.bellTimers) { a.bellTimers.forEach((t) => clearTimeout(t)); a.bellTimers = []; }
     if (!a.ctx) return;
-    a.oscs.forEach((o) => { try { o.stop(); } catch (e) {} });
+    (a.oscs || []).forEach((o) => { try { o.stop(); } catch (e) {} });
     try { a.ctx.close(); } catch (e) {}
     a.ctx = null; a.analyser = null; a.oscs = []; a.bass = 0; a.mid = 0;
   }
@@ -190,87 +194,125 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
       a.ctx = new (window.AudioContext || window.webkitAudioContext)();
     } catch (e) { return; }
     const ctx = a.ctx;
+
+    // Master gain with slow fade-in
     a.gain = ctx.createGain();
     a.gain.gain.setValueAtTime(0, ctx.currentTime);
-    a.gain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 3.5);
+    a.gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 4);
     a.analyser = ctx.createAnalyser(); a.analyser.fftSize = 128;
-    a.gain.connect(a.analyser); a.gain.connect(ctx.destination);
-    a.freq = new Uint8Array(a.analyser.frequencyBinCount);
+    a.gain.connect(a.analyser);
 
-    // ── LOWPASS FILTER: removes harsh highs, makes everything mellower
-    const lowpass = ctx.createBiquadFilter();
-    lowpass.type = "lowpass";
-    lowpass.frequency.value = 800;
-    lowpass.Q.value = 0.7;
-    lowpass.connect(a.gain);
-
-    // ── Background ambience: filtered brown noise (water/wind)
-    const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-    const nd = noiseBuf.getChannelData(0);
-    let lastVal = 0;
-    for (let i = 0; i < nd.length; i++) {
-      const white = Math.random() * 2 - 1;
-      lastVal = (lastVal + 0.02 * white) / 1.02;
-      nd[i] = lastVal * 8;
+    // Soft reverb via convolver (simple exponential decay impulse)
+    const convLen = ctx.sampleRate * 3;
+    const impulse = ctx.createBuffer(2, convLen, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = impulse.getChannelData(ch);
+      for (let i = 0; i < convLen; i++) {
+        d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / convLen, 2.5);
+      }
     }
-    const noise = ctx.createBufferSource();
-    noise.buffer = noiseBuf; noise.loop = true;
-    const noiseFilter = ctx.createBiquadFilter();
-    noiseFilter.type = "lowpass"; noiseFilter.frequency.value = 600; noiseFilter.Q.value = 0.5;
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.value = 0.18;
-    noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(a.gain);
-    noise.start();
+    const conv = ctx.createConvolver();
+    conv.buffer = impulse;
+    const wetGain = ctx.createGain(); wetGain.gain.value = 0.4;
+    const dryGain = ctx.createGain(); dryGain.gain.value = 0.8;
+    conv.connect(wetGain);
+    wetGain.connect(a.gain);
+    dryGain.connect(a.gain);
+    a.gain.connect(ctx.destination);
 
-    // ── Sub bass through soft filter
-    const sub = ctx.createOscillator(), sg = ctx.createGain();
-    sub.type = "sine"; sub.frequency.value = prof.sub; sg.gain.value = 0.22;
-    sub.connect(sg); sg.connect(lowpass); sub.start();
+    // Warmth filter — rolls off brightness for softer pad
+    const warmth = ctx.createBiquadFilter();
+    warmth.type = "lowpass";
+    warmth.frequency.value = 1600;
+    warmth.Q.value = 0.3;
+    warmth.connect(conv);
+    warmth.connect(dryGain);
 
-    // ── Binaural tones (much quieter, filtered)
-    const merger = ctx.createChannelMerger(2);
-    const stereoFilter = ctx.createBiquadFilter();
-    stereoFilter.type = "lowpass"; stereoFilter.frequency.value = 1200; stereoFilter.Q.value = 0.5;
-    merger.connect(stereoFilter); stereoFilter.connect(a.gain);
+    // ── Drone root (deep foundation)
+    const droneOsc = ctx.createOscillator();
+    const droneGain = ctx.createGain();
+    droneOsc.type = "sine";
+    droneOsc.frequency.value = prof.root;
+    droneGain.gain.value = 0.18;
+    droneOsc.connect(droneGain); droneGain.connect(warmth);
+    droneOsc.start();
 
-    const oL = ctx.createOscillator(), gL = ctx.createGain();
-    oL.type = "sine"; oL.frequency.value = prof.base; gL.gain.value = 0.16;
-    oL.connect(gL); gL.connect(merger, 0, 0); oL.start();
-    const oR = ctx.createOscillator(), gR = ctx.createGain();
-    oR.type = "sine"; oR.frequency.value = prof.base + prof.beat; gR.gain.value = 0.16;
-    oR.connect(gR); gR.connect(merger, 0, 1); oR.start();
+    // Slow drone detune (breathing effect)
+    const droneLfo = ctx.createOscillator();
+    const droneLfoGain = ctx.createGain();
+    droneLfo.type = "sine";
+    droneLfo.frequency.value = 0.08;
+    droneLfoGain.gain.value = 1.5;
+    droneLfo.connect(droneLfoGain); droneLfoGain.connect(droneOsc.frequency);
+    droneLfo.start();
 
-    // ── Breath LFO — gentle volume breathing
-    const lfo = ctx.createOscillator(), lg = ctx.createGain();
-    lfo.type = "sine"; lfo.frequency.value = prof.lfoRate; lg.gain.value = prof.lfoDepth;
-    lfo.connect(lg); lg.connect(a.gain.gain); lfo.start();
+    // ── Chord pad — layered sine oscillators for each chord note
+    const chordOscs = [];
+    const chordGains = [];
+    prof.chord.forEach((freq, i) => {
+      // Two slightly detuned oscillators per note for rich texture
+      [0, 1].forEach((det) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = i < 2 ? "sine" : "triangle"; // lower notes sine, upper triangle for soft shimmer
+        o.frequency.value = freq * (det === 0 ? 1 : 1.005);
+        g.gain.value = 0;
+        // Slow fade-in per voice
+        g.gain.setValueAtTime(0, ctx.currentTime);
+        g.gain.linearRampToValueAtTime(0.1 / (1 + i * 0.5), ctx.currentTime + 5 + i);
+        o.connect(g); g.connect(warmth);
+        o.start();
+        chordOscs.push(o);
+        chordGains.push(g);
+      });
+    });
 
-    // ── Bell tones for positive scenarios (bird-like chimes every 6-10s)
-    const positiveIds = ["love", "feminine", "abundance", "capital", "neutral"];
-    const bellOscs = [];
-    if (positiveIds.includes(profileId)) {
-      const bellScheduler = () => {
-        if (!a.ctx) return;
-        const t = ctx.currentTime;
-        const bellNotes = profileId === "feminine" ? [880, 1174.66, 1318.51] : profileId === "love" ? [523.25, 659.25, 783.99] : [659.25, 783.99, 987.77];
-        const freq = bellNotes[Math.floor(Math.random() * bellNotes.length)];
-        const bOsc = ctx.createOscillator();
-        const bGain = ctx.createGain();
-        bOsc.type = "sine";
-        bOsc.frequency.value = freq;
-        bGain.gain.setValueAtTime(0, t);
-        bGain.gain.linearRampToValueAtTime(0.06, t + 0.05);
-        bGain.gain.exponentialRampToValueAtTime(0.001, t + 2.5);
-        bOsc.connect(bGain); bGain.connect(lowpass);
-        bOsc.start(t); bOsc.stop(t + 2.8);
-        bellOscs.push(bOsc);
-        // Schedule next bell in 6-14 seconds
-        setTimeout(bellScheduler, 6000 + Math.random() * 8000);
-      };
-      setTimeout(bellScheduler, 3000 + Math.random() * 4000);
-    }
+    // ── Slow chord volume LFO — breathing pad
+    const padLfo = ctx.createOscillator();
+    const padLfoGain = ctx.createGain();
+    padLfo.type = "sine";
+    padLfo.frequency.value = 0.06;
+    padLfoGain.gain.value = 0.03;
+    padLfo.connect(padLfoGain);
+    padLfoGain.connect(a.gain.gain);
+    padLfo.start();
 
-    a.oscs = [sub, oL, oR, lfo, noise];
+    // ── Random bell/bowl chimes from scale
+    const bellTimers = [];
+    const scheduleBell = () => {
+      if (!a.ctx) return;
+      const t = ctx.currentTime;
+      const freq = prof.scale[Math.floor(Math.random() * prof.scale.length)];
+      // Triangle wave with long decay = singing bowl feel
+      const bOsc = ctx.createOscillator();
+      const bOsc2 = ctx.createOscillator(); // second voice for harmonic
+      const bGain = ctx.createGain();
+      bOsc.type = "sine";
+      bOsc2.type = "sine";
+      bOsc.frequency.value = freq;
+      bOsc2.frequency.value = freq * 2.01; // slightly detuned harmonic
+      bGain.gain.setValueAtTime(0, t);
+      bGain.gain.linearRampToValueAtTime(0.08, t + 0.08);
+      bGain.gain.exponentialRampToValueAtTime(0.001, t + 5);
+      const bPan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      if (bPan) bPan.pan.value = (Math.random() - 0.5) * 0.6;
+      bOsc.connect(bGain);
+      bOsc2.connect(bGain);
+      if (bPan) { bGain.connect(bPan); bPan.connect(warmth); }
+      else bGain.connect(warmth);
+      bOsc.start(t); bOsc2.start(t);
+      bOsc.stop(t + 5.5); bOsc2.stop(t + 5.5);
+      // Schedule next bell — more frequent for positive scenarios
+      const positiveIds = ["love", "feminine", "abundance", "capital"];
+      const nextDelay = positiveIds.includes(profileId) ? 5000 + Math.random() * 6000 : 9000 + Math.random() * 9000;
+      const nextTimer = setTimeout(scheduleBell, nextDelay);
+      bellTimers.push(nextTimer);
+    };
+    const firstBell = setTimeout(scheduleBell, 4000 + Math.random() * 3000);
+    bellTimers.push(firstBell);
+
+    a.bellTimers = bellTimers;
+    a.oscs = [droneOsc, droneLfo, padLfo, ...chordOscs];
   }
 
   function stopSound() {
