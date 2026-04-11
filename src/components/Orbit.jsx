@@ -647,7 +647,7 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
       <div ref={touchRef} style={{ position: "absolute", inset: 0, zIndex: 5, touchAction: "none", pointerEvents: showTimerPicker || meditating ? "none" : "auto" }} />
 
       {/* Sidebar — hides during meditation */}
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: "80px 0", background: "linear-gradient(90deg, rgba(var(--orb-bg),.7), transparent)", opacity: hideUI, transition: "opacity .8s", pointerEvents: meditating ? "none" : "auto" }}>
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 44, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: "80px 0", background: "linear-gradient(90deg, rgba(6,2,8,.7), transparent)", opacity: hideUI, transition: "opacity .8s", pointerEvents: meditating ? "none" : "auto" }}>
         {LAYERS.map((l) => (
           <div key={l.id} onClick={() => openLayer(l.id)} style={{ width: 36, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, cursor: "pointer", opacity: activeId === l.id ? 1 : 0.38, transition: "opacity .3s", padding: "4px 0" }}>
             <span style={{ width: activeId === l.id ? 10 : 7, height: activeId === l.id ? 10 : 7, borderRadius: "50%", background: l.hex, boxShadow: activeId === l.id ? `0 0 12px ${l.hex}` : `0 0 4px ${l.hex}66`, display: "block", transition: "all .3s" }} />
@@ -657,7 +657,7 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
       </div>
 
       {/* Top bar — partially hides during meditation */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 0 52px", background: meditating ? "transparent" : "linear-gradient(180deg, rgba(var(--orb-bg),.86), transparent)", zIndex: 30, pointerEvents: "none", transition: "background .8s" }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px 0 52px", background: meditating ? "transparent" : "linear-gradient(180deg, rgba(6,2,8,.86), transparent)", zIndex: 30, pointerEvents: "none", transition: "background .8s" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, opacity: hideUI, transition: "opacity .8s" }}>
           <div onClick={() => { if (meditating) return; setScreen("home"); }} style={{ pointerEvents: meditating ? "none" : "all", cursor: "pointer", fontSize: 15, color: "rgba(210,175,145,.5)", padding: "4px 8px" }}>←</div>
           <div>
@@ -697,7 +697,7 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
                   {textEl}
                 </div>
               )}
-              <div style={{ background: "rgba(var(--orb-bg),.7)", backdropFilter: "blur(12px)", borderRadius: 20, padding: "10px 20px", display: "flex", alignItems: "center", gap: 14, border: `1px solid ${acHex}22` }}>
+              <div style={{ background: "rgba(6,2,8,.7)", backdropFilter: "blur(12px)", borderRadius: 20, padding: "10px 20px", display: "flex", alignItems: "center", gap: 14, border: `1px solid ${acHex}22` }}>
                 <div style={{ fontSize: 22, fontWeight: 200, color: `${acHex}cc`, letterSpacing: 2, ...ss }}>{fmtTimer(medTime)}</div>
                 <div style={{ width: 1, height: 24, background: `${acHex}22` }} />
                 <div onClick={stopMeditation} style={{ pointerEvents: "all", cursor: "pointer", padding: "6px 14px", borderRadius: 12, background: `${acHex}18`, border: `1px solid ${acHex}33`, fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: `${acHex}aa`, ...ss }}>Завершить</div>
@@ -724,13 +724,13 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
 
       {/* Timer picker overlay */}
       {showTimerPicker && (
-        <div style={{ position: "absolute", inset: 0, zIndex: 50, background: "rgba(var(--orb-bg),.92)", backdropFilter: "blur(12px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, pointerEvents: "auto" }}>
-          <div style={{ fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: `${acHex}88`, marginBottom: 8, ...ss }}>Время медитации</div>
-          <div style={{ fontSize: 13, color: "rgba(200,175,158,.6)", marginBottom: 16, textAlign: "center", maxWidth: 260, lineHeight: 1.6, ...ss }}>Смотрите на орбиту и слушайте звук. Все отвлекающие элементы исчезнут.</div>
+        <div style={{ position: "absolute", inset: 0, zIndex: 50, background: "rgba(6,2,8,.85)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, pointerEvents: "auto", padding: 24 }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: `${acHex}cc`, marginBottom: 6, ...ss }}>Время медитации</div>
+          <div style={{ fontSize: 13, color: "rgba(220,200,180,.7)", marginBottom: 20, textAlign: "center", maxWidth: 280, lineHeight: 1.6, ...ss }}>Смотрите на орбиту и слушайте звук</div>
           {[{ label: "3 минуты", sec: 180 }, { label: "5 минут", sec: 300 }, { label: "10 минут", sec: 600 }, { label: "15 минут", sec: 900 }].map((opt) => (
-            <button key={opt.sec} type="button" onClick={(e) => { e.stopPropagation(); startMeditation(opt.sec); }} style={{ cursor: "pointer", width: 200, padding: "14px 0", borderRadius: 14, textAlign: "center", background: `${acHex}22`, border: `1px solid ${acHex}55`, fontSize: 14, color: acHex, transition: "all .2s", touchAction: "manipulation", WebkitAppearance: "none", ...ss }}>{opt.label}</button>
+            <button key={opt.sec} type="button" onClick={(e) => { e.stopPropagation(); startMeditation(opt.sec); }} style={{ cursor: "pointer", width: 220, padding: "16px 0", borderRadius: 16, textAlign: "center", background: `${acHex}33`, border: `1.5px solid ${acHex}`, fontSize: 15, color: "#fff", fontWeight: 400, touchAction: "manipulation", WebkitAppearance: "none", margin: 0, ...ss }}>{opt.label}</button>
           ))}
-          <button type="button" onClick={(e) => { e.stopPropagation(); setShowTimerPicker(false); }} style={{ cursor: "pointer", marginTop: 10, padding: "8px 16px", background: "transparent", border: "none", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "rgba(200,175,158,.45)", touchAction: "manipulation", WebkitAppearance: "none", ...ss }}>Отмена</button>
+          <button type="button" onClick={(e) => { e.stopPropagation(); setShowTimerPicker(false); }} style={{ cursor: "pointer", marginTop: 12, padding: "10px 20px", background: "transparent", border: "none", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(220,200,180,.55)", touchAction: "manipulation", WebkitAppearance: "none", ...ss }}>Отмена</button>
         </div>
       )}
 
@@ -759,9 +759,9 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
         const prof = getProfile();
         return (
           <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transition: "all .35s cubic-bezier(.32,.72,0,1)" }}>
-            <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(var(--orb-bg),0) 0%, rgba(var(--orb-bg),.94) 16%, rgba(var(--orb-bg),.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${acHex}22`, padding: `0 16px ${panelExpanded ? 20 : 10}px 52px`, position: "relative", maxHeight: panelExpanded ? "52%" : "auto", overflowY: panelExpanded ? "auto" : "hidden" }}>
+            <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.94) 16%, rgba(6,2,8,.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${acHex}22`, padding: `0 16px ${panelExpanded ? 20 : 10}px 52px`, position: "relative", maxHeight: panelExpanded ? "52%" : "auto", overflowY: panelExpanded ? "auto" : "hidden" }}>
               {/* Drag handle — toggles expanded */}
-              <div onClick={() => setPanelExpanded(!panelExpanded)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 6px", cursor: "pointer", position: panelExpanded ? "sticky" : "relative", top: 0, background: panelExpanded ? "linear-gradient(180deg, rgba(var(--orb-bg),.95) 70%, transparent)" : "transparent", zIndex: 2 }}>
+              <div onClick={() => setPanelExpanded(!panelExpanded)} style={{ display: "flex", justifyContent: "center", padding: "10px 0 6px", cursor: "pointer", position: panelExpanded ? "sticky" : "relative", top: 0, background: panelExpanded ? "linear-gradient(180deg, rgba(6,2,8,.95) 70%, transparent)" : "transparent", zIndex: 2 }}>
                 <i style={{ display: "block", width: 28, height: 3, borderRadius: 2, background: `${acHex}55`, transition: "all .2s" }} />
               </div>
               {/* Title row — always visible */}
