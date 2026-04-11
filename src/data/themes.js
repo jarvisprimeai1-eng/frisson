@@ -7,7 +7,7 @@ const NIGHT = {
     card: "rgba(140,110,200,.1)", border: "rgba(160,130,210,.22)",
     accent: "#9F7BD8", ar: "159,123,216",
     dim: "rgba(140,110,200,.16)", o1: "rgba(120,80,200,.7)", o2: "rgba(200,140,180,.5)",
-    nav: "rgba(140,110,200,.28)", text: "#ede0ff",
+    nav: "rgba(140,110,200,.28)", text: "#ede0ff", tr: "237,224,255",
     gF: "#1c1438", gT: "#0a0820"
   },
   // Тихо — burgundy plum + dusty lavender + warm copper accents
@@ -16,10 +16,10 @@ const NIGHT = {
     card: "rgba(180,100,160,.1)", border: "rgba(200,120,170,.22)",
     accent: "#D080B0", ar: "208,128,176",
     dim: "rgba(180,100,160,.16)", o1: "rgba(180,80,140,.7)", o2: "rgba(220,140,90,.5)",
-    nav: "rgba(180,100,160,.28)", text: "#ffe0f0",
+    nav: "rgba(180,100,160,.28)", text: "#ffe0f0", tr: "255,224,240",
     gF: "#2c1228", gT: "#1a0a14"
   },
-  // Наполнена — burnt amber + deep wine + magenta sparkle + icy blue breath
+  // Наполнена — burnt amber + deep wine + icy blue text
   // (fulfillment moodboard: passion fruit, orange, amber, purple shimmer + ice)
   full: {
     e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #1e0612 0%, #3a0c1c 45%, #2a0818 100%)",
@@ -27,17 +27,17 @@ const NIGHT = {
     accent: "#E8A030", ar: "232,160,48",
     accent2: "#B8D4E8", ar2: "184,212,232",
     dim: "rgba(232,160,48,.16)", o1: "rgba(216,80,32,.72)", o2: "rgba(184,212,232,.5)",
-    nav: "rgba(232,160,48,.28)", text: "#fbe6d2",
+    nav: "rgba(232,160,48,.28)", text: "#D8EAF5", tr: "216,234,245",
     gF: "#3c0e22", gT: "#1e0612"
   },
-  // В силе — deep burgundy wine + chocolate + icy blue counterpoint (Ice Blue × Burgundy)
+  // В силе — deep burgundy wine + chocolate + icy blue text (Ice Blue × Burgundy)
   power: {
     e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #120408 0%, #2a0a14 50%, #180810 100%)",
     card: "rgba(142,26,50,.12)", border: "rgba(180,210,232,.26)",
     accent: "#9C1E36", ar: "156,30,54",
     accent2: "#A8CFE4", ar2: "168,207,228",
     dim: "rgba(142,26,50,.18)", o1: "rgba(142,26,50,.75)", o2: "rgba(168,207,228,.72)",
-    nav: "rgba(168,207,228,.32)", text: "#f3dde0",
+    nav: "rgba(168,207,228,.32)", text: "#CFE4F2", tr: "207,228,242",
     gF: "#2e0c16", gT: "#120408"
   },
 };
