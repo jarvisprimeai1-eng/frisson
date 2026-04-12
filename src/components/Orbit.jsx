@@ -844,36 +844,36 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
 
       {/* Meditation: guide text + timer */}
       {meditating && (() => {
-        // Anxiety and conflict show text at bottom (heavy healing animation).
-        // Fear, positive scenarios, and neutral show text centered (fear healing is visible around it).
-        const bottomIds = ["anxiety", "conflict"];
-        const textBottom = activeScenario && bottomIds.includes(activeScenario.id);
         const breathEl = guideText?.breath && (
-          <div style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: guideText.breath === "in" ? "rgba(190,230,245,.95)" : guideText.breath === "hold" ? "rgba(250,220,120,.9)" : "rgba(230,185,205,.95)", marginBottom: SP.sm, textShadow: "0 1px 6px rgba(0,0,0,.9)", ...ss }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: guideText.breath === "in" ? "rgba(190,230,245,.95)" : guideText.breath === "hold" ? "rgba(250,220,120,.9)" : "rgba(230,185,205,.95)", marginBottom: SP.xs, ...ss }}>
             {guideText.breath === "in" ? "вдох ↑" : guideText.breath === "hold" ? "задержка ◦" : "выдох ↓"}
           </div>
         );
         const textEl = guideText && (
-          <div style={{ fontSize: 15, fontStyle: "italic", lineHeight: 1.65, color: `rgba(255,245,235,${OP.primary})`, textShadow: "0 1px 8px rgba(0,0,0,.9), 0 0 20px rgba(0,0,0,.7)", ...ss }}>{guideText.text}</div>
+          <div style={{ fontSize: 15, fontStyle: "italic", lineHeight: 1.55, color: "rgba(255,248,240,.96)", ...ss }}>{guideText.text}</div>
         );
         return (
           <>
-            {/* Centered text for positive/neutral — subtle, see-through */}
-            {guideText && !textBottom && (
-              <div key={guideText.text} style={{ position: "absolute", left: 0, right: 0, top: "50%", transform: "translateY(-50%)", zIndex: 27, pointerEvents: "none", textAlign: "center", padding: `0 ${SP.xxl + SP.xs}px`, animation: "fadeUp .8s ease both" }}>
-                {breathEl}
-                {textEl}
-              </div>
-            )}
-
-            {/* Bottom block: text (if negative) + timer */}
-            <div style={{ position: "absolute", left: 0, right: 0, bottom: 10, zIndex: 28, display: "flex", flexDirection: "column", alignItems: "center", pointerEvents: "none" }}>
-              {guideText && textBottom && (
-                <div key={guideText.text} style={{ textAlign: "center", padding: `0 ${SP.xl}px`, marginBottom: 10, animation: "fadeUp .6s ease both", maxWidth: 340 }}>
+            {/* Text always at top, inside a dark blurred pill — readable over any orb */}
+            {guideText && (
+              <div key={guideText.text} style={{ position: "absolute", left: SP.lg, right: SP.lg, top: 80, zIndex: 27, pointerEvents: "none", display: "flex", justifyContent: "center", animation: "fadeUp .6s ease both" }}>
+                <div style={{
+                  maxWidth: 380, padding: `${SP.md}px ${SP.lg}px`,
+                  background: "rgba(6,2,8,.72)",
+                  backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+                  borderRadius: RAD.lg,
+                  border: `1px solid ${acHex}28`,
+                  textAlign: "center",
+                  boxShadow: "0 4px 24px rgba(0,0,0,.5)",
+                }}>
                   {breathEl}
                   {textEl}
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* Bottom block: timer only (text moved to top) */}
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 10, zIndex: 28, display: "flex", flexDirection: "column", alignItems: "center", pointerEvents: "none" }}>{false && (<div />)}
               <div style={{ background: "rgba(6,2,8,.75)", backdropFilter: "blur(12px)", borderRadius: RAD.lg, padding: `10px ${SP.lg}px`, display: "flex", alignItems: "center", gap: SP.md, border: `1px solid ${acHex}22` }}>
                 <div style={{ fontSize: TYPE.xl, fontWeight: 200, color: `${acHex}cc`, letterSpacing: 2, minWidth: 56, textAlign: "center", ...ss }}>{fmtTimer(medTime)}</div>
                 <div style={{ width: 1, height: SP.xl, background: `${acHex}22` }} />
