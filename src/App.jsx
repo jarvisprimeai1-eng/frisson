@@ -14,7 +14,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.3.0";
+export const VERSION = "5.3.1";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -62,6 +62,7 @@ export default function App() {
   if (!onb) return (<><GlobalStyles /><Onboarding onDone={() => { localStorage.setItem("frisson_onb", "1"); setOnb(true); }} /></>);
   if (!tour) return (<><GlobalStyles /><AppTour onDone={() => { localStorage.setItem("frisson_tour", "1"); setTour(true); }} theme={theme} THEMES={THEMES} /></>);
 
+  const [nameVal, setNameVal] = useState("");
   if (showNameInput) return (
     <><GlobalStyles />
     <div style={{ width: "100%", height: "100dvh", background: "linear-gradient(165deg, #1a0418 0%, #2a1408 50%, #0c0820 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: `0 ${SP.xxl}px`, position: "relative", overflow: "hidden" }}>
@@ -74,10 +75,26 @@ export default function App() {
         <input
           autoFocus
           placeholder="Ваше имя"
-          onKeyDown={(e) => { if (e.key === "Enter" && e.target.value.trim()) doSetName(e.target.value.trim()); }}
+          value={nameVal}
+          onChange={(e) => setNameVal(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter" && nameVal.trim()) doSetName(nameVal.trim()); }}
           style={{ width: "100%", maxWidth: 260, padding: `${SP.lg}px ${SP.page}px`, borderRadius: RAD.lg, background: "rgba(0,0,0,.25)", border: "1px solid rgba(200,160,180,.3)", outline: "none", fontFamily: FONT_SERIF, fontSize: TYPE.xl, color: "#fff", textAlign: "center", caretColor: "rgba(230,77,168,.8)", backdropFilter: "blur(12px)" }}
         />
-        <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.35)", marginTop: SP.lg }}>Нажмите Enter</div>
+        <button
+          type="button"
+          onClick={() => { if (nameVal.trim()) doSetName(nameVal.trim()); }}
+          style={{
+            marginTop: SP.xl, width: "100%", maxWidth: 260, padding: SP.lg, borderRadius: RAD.lg,
+            textAlign: "center", cursor: nameVal.trim() ? "pointer" : "default",
+            background: nameVal.trim() ? "linear-gradient(135deg, rgba(230,77,168,.6), rgba(240,136,56,.5))" : "rgba(255,255,255,.03)",
+            border: `1.5px solid ${nameVal.trim() ? "rgba(240,136,56,.7)" : "rgba(255,255,255,.07)"}`,
+            boxShadow: nameVal.trim() ? "0 0 32px rgba(230,77,168,.4)" : "none",
+            ...label(TYPE.xs), fontWeight: 400, letterSpacing: ".25em",
+            color: nameVal.trim() ? "rgba(245,228,233,.96)" : "rgba(230,218,225,.2)",
+            opacity: nameVal.trim() ? 1 : 0.4, transition: EASE.normal,
+            touchAction: "manipulation", WebkitAppearance: "none",
+          }}
+        >Войти →</button>
       </div>
     </div></>
   );
