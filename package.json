@@ -1,21 +1,33 @@
 {
   "name": "frisson",
   "private": true,
-  "version": "4.6.9",
+  "version": "5.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist"
+    "deploy": "vite build && gh-pages -d dist",
+    "ios:sync": "vite build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "vite build && npx cap sync ios && npx cap open ios",
+    "icons": "node scripts/generate-icons.cjs && npx capacitor-assets generate --ios"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.3.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.2",
+    "canvas": "^3.2.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "three": "^0.183.2"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@eslint/js": "^9.39.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

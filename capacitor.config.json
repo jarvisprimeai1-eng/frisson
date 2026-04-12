@@ -1,0 +1,29 @@
+{
+  "appId": "com.frisson.app",
+  "appName": "Frisson",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#060208",
+      "showSpinner": false,
+      "launchAutoHide": true,
+      "androidScaleType": "CENTER_CROP",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#060208"
+    }
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#060208",
+    "preferredContentMode": "mobile",
+    "scheme": "Frisson"
+  }
+}
