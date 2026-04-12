@@ -30,15 +30,15 @@ const NIGHT = {
     nav: "rgba(232,160,48,.28)", text: "#D8EAF5", tr: "216,234,245",
     gF: "#3c0e22", gT: "#1e0612"
   },
-  // В силе — deep burgundy wine + chocolate + icy blue text (Ice Blue × Burgundy)
+  // В силе — deep onyx + molten copper-gold + warm ember glow
   power: {
-    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #120408 0%, #2a0a14 50%, #180810 100%)",
-    card: "rgba(142,26,50,.12)", border: "rgba(180,210,232,.26)",
-    accent: "#9C1E36", ar: "156,30,54",
-    accent2: "#A8CFE4", ar2: "168,207,228",
-    dim: "rgba(142,26,50,.18)", o1: "rgba(142,26,50,.75)", o2: "rgba(168,207,228,.72)",
-    nav: "rgba(168,207,228,.32)", text: "#CFE4F2", tr: "207,228,242",
-    gF: "#2e0c16", gT: "#120408"
+    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #0c0806 0%, #1a1008 50%, #100a04 100%)",
+    card: "rgba(200,140,60,.08)", border: "rgba(200,155,80,.2)",
+    accent: "#C8963C", ar: "200,150,60",
+    accent2: "#E8C088", ar2: "232,192,136",
+    dim: "rgba(200,140,60,.14)", o1: "rgba(200,130,40,.65)", o2: "rgba(232,192,136,.45)",
+    nav: "rgba(200,150,60,.28)", text: "#F0E4D0", tr: "240,228,208",
+    gF: "#1e1408", gT: "#0c0806"
   },
 };
 

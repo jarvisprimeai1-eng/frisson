@@ -14,7 +14,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.2.0";
+export const VERSION = "5.2.1";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -59,23 +59,27 @@ export default function App() {
   const T = THEMES[theme] || THEMES.full;
   const showNav = screen !== "sub" && screen !== "situations";
 
-  if (showNameInput) return (
-    <><GlobalStyles />
-    <div style={{ width: "100%", height: "100dvh", background: "#060208", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: `0 ${SP.xxl}px` }}>
-      <div style={{ ...heading(40), color: "#fff", textAlign: "center", marginBottom: SP.sm }}>Frisson</div>
-      <div style={{ ...label(TYPE.xs), color: tx("180,150,165", OP.secondary), marginBottom: 40 }}>✦ как вас зовут? ✦</div>
-      <input
-        autoFocus
-        placeholder="Ваше имя"
-        onKeyDown={(e) => { if (e.key === "Enter" && e.target.value.trim()) doSetName(e.target.value.trim()); }}
-        style={{ width: "100%", maxWidth: 260, padding: `${SP.lg}px ${SP.page}px`, borderRadius: RAD.md, background: `rgba(255,255,255,${OP.bgSubtle})`, border: "1px solid rgba(200,160,180,.22)", outline: "none", fontFamily: FONT_SERIF, fontSize: TYPE.xl, color: "#fff", textAlign: "center", caretColor: "rgba(200,160,180,.8)" }}
-      />
-      <div style={{ ...label(TYPE.xs), color: tx("200,160,180", OP.tertiary), marginTop: SP.lg }}>Нажмите Enter</div>
-    </div></>
-  );
-
   if (!onb) return (<><GlobalStyles /><Onboarding onDone={() => { localStorage.setItem("frisson_onb", "1"); setOnb(true); }} /></>);
   if (!tour) return (<><GlobalStyles /><AppTour onDone={() => { localStorage.setItem("frisson_tour", "1"); setTour(true); }} theme={theme} THEMES={THEMES} /></>);
+
+  if (showNameInput) return (
+    <><GlobalStyles />
+    <div style={{ width: "100%", height: "100dvh", background: "linear-gradient(165deg, #1a0418 0%, #2a1408 50%, #0c0820 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: `0 ${SP.xxl}px`, position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", width: "70%", height: "70%", top: "-15%", left: "-15%", borderRadius: "50%", background: "radial-gradient(circle,rgba(230,77,168,.6),rgba(159,123,216,.4) 55%,transparent 72%)", filter: "blur(55px)", animation: "breathe 18s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", width: "55%", height: "55%", bottom: "-10%", right: "-8%", borderRadius: "50%", background: "radial-gradient(circle,rgba(240,136,56,.5),rgba(208,128,176,.4) 55%,transparent 72%)", filter: "blur(50px)", animation: "breathe 22s 4s ease-in-out infinite" }} />
+      <div style={{ position: "relative", zIndex: 1, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ ...heading(40), color: "#fff", textAlign: "center", textShadow: "0 0 40px rgba(230,77,168,.5)", marginBottom: SP.sm }}>Frisson</div>
+        <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.5)", letterSpacing: ".3em", marginBottom: 40 }}>✦ как вас зовут? ✦</div>
+        <input
+          autoFocus
+          placeholder="Ваше имя"
+          onKeyDown={(e) => { if (e.key === "Enter" && e.target.value.trim()) doSetName(e.target.value.trim()); }}
+          style={{ width: "100%", maxWidth: 260, padding: `${SP.lg}px ${SP.page}px`, borderRadius: RAD.lg, background: "rgba(0,0,0,.25)", border: "1px solid rgba(200,160,180,.3)", outline: "none", fontFamily: FONT_SERIF, fontSize: TYPE.xl, color: "#fff", textAlign: "center", caretColor: "rgba(230,77,168,.8)", backdropFilter: "blur(12px)" }}
+        />
+        <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.35)", marginTop: SP.lg }}>Нажмите Enter</div>
+      </div>
+    </div></>
+  );
 
   const screens = {
     home: <Home setScreen={setScreen} theme={theme} setTheme={setThemePersisted} eScore={eScore} pLog={pLog} setLibSec={setLibSec} THEMES={THEMES} activity={activity} userName={userName} doMarkPractice={doMarkPractice} />,
