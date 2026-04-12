@@ -56,10 +56,10 @@ export default function Onboarding({ onDone }) {
 
         {cur.type === "splash" && (
           <div style={{ textAlign: "center", width: "100%", animation: "fadeUp 1s ease both" }}>
-            <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.5)", letterSpacing: ".35em", marginBottom: SP.xxl - 4 }}>✦ пространство состояния ✦</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 80, fontWeight: 300, lineHeight: 0.9, color: "#fff", textShadow: "0 0 60px rgba(230,77,168,.75), 0 0 100px rgba(240,136,56,.4)", marginBottom: SP.lg + 2 }}>Frisson</div>
+            <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.5)", letterSpacing: ".35em", marginBottom: SP.xl }}>✦ пространство состояния ✦</div>
+            <img src="./brand/logo-full-white.png" alt="Frisson" style={{ width: "70%", maxWidth: 280, height: "auto", filter: "drop-shadow(0 0 40px rgba(230,77,168,.5)) drop-shadow(0 0 80px rgba(240,136,56,.3))", marginBottom: SP.xl }} />
             <div style={{ ...body(TYPE.lg), color: `rgba(220,205,215,${OP.secondary})`, letterSpacing: ".04em", marginBottom: SP.md }}>пространство, где вы раскрываете<br/>свой женский внутренний капитал</div>
-            <div style={{ ...label(TYPE.xs), color: `rgba(180,150,165,${OP.tertiary})`, letterSpacing: ".14em", marginBottom: SP.xxl - 4 }}>v{VERSION}</div>
+            <div style={{ ...label(TYPE.xs), color: `rgba(180,150,165,${OP.tertiary})`, letterSpacing: ".14em" }}>v{VERSION}</div>
           </div>
         )}
 

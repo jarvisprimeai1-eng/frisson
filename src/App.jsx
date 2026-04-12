@@ -14,7 +14,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.2.2";
+export const VERSION = "5.3.0";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -68,6 +68,7 @@ export default function App() {
       <div style={{ position: "absolute", width: "70%", height: "70%", top: "-15%", left: "-15%", borderRadius: "50%", background: "radial-gradient(circle,rgba(230,77,168,.6),rgba(159,123,216,.4) 55%,transparent 72%)", filter: "blur(55px)", animation: "breathe 18s ease-in-out infinite" }} />
       <div style={{ position: "absolute", width: "55%", height: "55%", bottom: "-10%", right: "-8%", borderRadius: "50%", background: "radial-gradient(circle,rgba(240,136,56,.5),rgba(208,128,176,.4) 55%,transparent 72%)", filter: "blur(50px)", animation: "breathe 22s 4s ease-in-out infinite" }} />
       <div style={{ position: "relative", zIndex: 1, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <img src="./brand/ornament-white.png" alt="" style={{ width: 56, height: "auto", opacity: 0.7, filter: "drop-shadow(0 0 20px rgba(230,77,168,.4))", marginBottom: SP.lg }} />
         <div style={{ ...heading(40), color: "#fff", textAlign: "center", textShadow: "0 0 40px rgba(230,77,168,.5)", marginBottom: SP.sm }}>Frisson</div>
         <div style={{ ...label(TYPE.xs), color: "rgba(180,150,165,.5)", letterSpacing: ".3em", marginBottom: 40 }}>✦ как вас зовут? ✦</div>
         <input

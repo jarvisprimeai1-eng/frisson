@@ -33,6 +33,7 @@ export default function Home({ setScreen, theme, setTheme, eScore, pLog, setLibS
 
       {/* ─── Header ─── */}
       <div className="fu1" style={{ padding: `48px ${SP.page}px ${SP.lg}px`, position: "relative", zIndex: 1, textAlign: "center" }}>
+        <img src="./brand/ornament-white.png" alt="" style={{ width: 32, height: "auto", opacity: 0.25, marginBottom: SP.sm }} />
         <div style={{ ...label(TYPE.xs), color: tx("var(--txt)", OP.tertiary), marginBottom: SP.xs }}>{moon.n}</div>
         <div style={{ position: "relative", display: "inline-block", margin: `${SP.xs}px 0` }}>
           <div className="moon-halo" style={{ position: "absolute", inset: -14, borderRadius: RAD.full, background: `radial-gradient(circle, rgba(${T.ar},.4), transparent 70%)`, filter: "blur(14px)", pointerEvents: "none" }} />
