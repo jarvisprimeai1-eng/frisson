@@ -190,6 +190,11 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         </div>
       </div>
 
+      <div style={{ margin: "8px 32px 0", padding: "18px 0", borderTop: `1px solid rgba(var(--txt),.06)`, textAlign: "center", position: "relative", zIndex: 1 }}>
+        <div style={{ fontFamily: FONT_SERIF, fontSize: 14, fontStyle: "italic", lineHeight: 1.7, color: `rgba(var(--txt),.45)` }}>{"\u00AB"}Скажи мне, что ты собираешься сделать со своей единственной дикой и драгоценной жизнью?{"\u00BB"}</div>
+        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".15em", color: `rgba(var(--txt),.25)`, marginTop: 6 }}>Mary Oliver</div>
+      </div>
+
       <div style={{ textAlign: "center", paddingBottom: 24, position: "relative", zIndex: 1 }}>
         <span style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(var(--txt),.2)", letterSpacing: ".1em" }}>v{VERSION}</span>
       </div>
