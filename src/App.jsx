@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getThemes } from "./data/themes";
 import { getActivity, markPractice, getName, setName as saveName } from "./data/activity";
+import { TYPE, SP, RAD, OP, EASE, FONT_SERIF, FONT_SANS, tx, label, heading } from "./utils/design";
 import GlobalStyles from "./components/GlobalStyles";
 import Onboarding from "./components/Onboarding";
 import AppTour from "./components/AppTour";
@@ -13,7 +14,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.0.0";
+export const VERSION = "5.1.0";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -46,7 +47,6 @@ export default function App() {
   const [gems, setGems] = useState(() => parseInt(localStorage.getItem("frisson_gems")) || 0);
   const addGems = (n) => setGems((g) => { const v = g + n; localStorage.setItem("frisson_gems", v); return v; });
 
-  // Activity tracking
   const [activity, setActivity] = useState(getActivity);
   const [userName, setUserName] = useState(getName);
   const [showNameInput, setShowNameInput] = useState(() => !getName());
@@ -59,19 +59,18 @@ export default function App() {
   const T = THEMES[theme] || THEMES.full;
   const showNav = screen !== "sub" && screen !== "situations";
 
-  // Name input screen
   if (showNameInput) return (
     <><GlobalStyles />
-    <div style={{ width: "100%", height: "100dvh", background: "#080A06", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 32px" }}>
-      <div style={{ fontFamily: "'Cormorant',Georgia,serif", fontSize: 42, fontWeight: 300, color: "#fff", textAlign: "center", marginBottom: 8 }}>Frisson</div>
-      <div style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 10, letterSpacing: ".3em", textTransform: "uppercase", color: "rgba(180,150,165,.5)", marginBottom: 40 }}>✦ как вас зовут? ✦</div>
+    <div style={{ width: "100%", height: "100dvh", background: "#060208", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: `0 ${SP.xxl}px` }}>
+      <div style={{ ...heading(40), color: "#fff", textAlign: "center", marginBottom: SP.sm }}>Frisson</div>
+      <div style={{ ...label(TYPE.xs), color: tx("180,150,165", OP.secondary), marginBottom: 40 }}>✦ как вас зовут? ✦</div>
       <input
         autoFocus
         placeholder="Ваше имя"
         onKeyDown={(e) => { if (e.key === "Enter" && e.target.value.trim()) doSetName(e.target.value.trim()); }}
-        style={{ width: "100%", maxWidth: 260, padding: "16px 20px", borderRadius: 16, background: "rgba(255,255,255,.06)", border: "1px solid rgba(200,160,180,.25)", outline: "none", fontFamily: "'Cormorant',Georgia,serif", fontSize: 20, color: "#fff", textAlign: "center", caretColor: "rgba(200,160,180,.8)" }}
+        style={{ width: "100%", maxWidth: 260, padding: `${SP.lg}px ${SP.page}px`, borderRadius: RAD.md, background: `rgba(255,255,255,${OP.bgSubtle})`, border: "1px solid rgba(200,160,180,.22)", outline: "none", fontFamily: FONT_SERIF, fontSize: TYPE.xl, color: "#fff", textAlign: "center", caretColor: "rgba(200,160,180,.8)" }}
       />
-      <div style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 11, color: "rgba(200,160,180,.4)", marginTop: 16 }}>Нажмите Enter</div>
+      <div style={{ ...label(TYPE.xs), color: tx("200,160,180", OP.tertiary), marginTop: SP.lg }}>Нажмите Enter</div>
     </div></>
   );
 
@@ -91,12 +90,11 @@ export default function App() {
   return (
     <>
       <GlobalStyles />
-      <div style={{ width: "100%", height: "100dvh", background: "#04020a", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", transition: "background .6s" }}>
-        <div className={""} style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: "background .6s", boxShadow: "0 0 80px rgba(92,14,28,.2)", position: "relative", "--txt": T.tr || "242,232,226" }}>
-          {/* Ambient floating dots — app-wide background */}
+      <div style={{ width: "100%", height: "100dvh", background: "#040208", display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden" }}>
+        <div style={{ width: "100%", maxWidth: 430, height: "100dvh", display: "flex", flexDirection: "column", background: T.bg, transition: EASE.slow, boxShadow: "0 0 60px rgba(6,2,8,.8)", position: "relative", "--txt": T.tr || "242,232,226" }}>
           {screen !== "orbit" && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>
-              {Array.from({ length: 18 }, (_, i) => {
+              {Array.from({ length: 14 }, (_, i) => {
                 const useAlt = T.ar2 && i % 3 === 0;
                 const col = useAlt ? T.ar2 : T.ar;
                 return (
@@ -104,11 +102,11 @@ export default function App() {
                     position: "absolute",
                     left: `${(i * 53 + 13) % 100}%`,
                     top: `${(i * 37 + 7) % 100}%`,
-                    width: useAlt ? 3 : 2, height: useAlt ? 3 : 2, borderRadius: "50%",
-                    background: `rgba(${col},.${3 + (i % 4)})`,
-                    boxShadow: `0 0 ${useAlt ? 6 : 4}px rgba(${col},.5)`,
-                    animationDelay: `${(i * 0.4) % 8}s`,
-                    animationDuration: `${6 + (i % 5)}s`,
+                    width: useAlt ? 2.5 : 1.5, height: useAlt ? 2.5 : 1.5, borderRadius: RAD.full,
+                    background: `rgba(${col},.${2 + (i % 3)})`,
+                    boxShadow: `0 0 ${useAlt ? 5 : 3}px rgba(${col},.4)`,
+                    animationDelay: `${(i * 0.5) % 8}s`,
+                    animationDuration: `${8 + (i % 4)}s`,
                   }} />
                 );
               })}
@@ -116,7 +114,7 @@ export default function App() {
           )}
           <div ref={scrollRef} key={screen} className="screen-in" style={{ flex: 1, overflowY: screen === "orbit" ? "hidden" : "auto", overflowX: "hidden", position: "relative", zIndex: 1, display: "flex", flexDirection: "column" }}>{screens[screen]}</div>
           {showNav && <Nav active={screen} setScreen={setScreen} theme={theme} THEMES={THEMES} />}
-          <div style={{ position: "absolute", bottom: showNav ? 22 : 4, right: 6, fontSize: 8, color: "rgba(255,255,255,.12)", fontFamily: "sans-serif", pointerEvents: "none", zIndex: 50 }}>v{VERSION}</div>
+          <div style={{ position: "absolute", bottom: showNav ? SP.xl : SP.xs, right: SP.sm, ...label(TYPE.xs), fontSize: 8, color: `rgba(255,255,255,.1)`, pointerEvents: "none", zIndex: 50 }}>v{VERSION}</div>
         </div>
       </div>
     </>

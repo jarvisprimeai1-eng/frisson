@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
+import { FONT_SERIF, FONT_SANS, TYPE, SP, RAD, OP, EASE, tx, label, body, heading } from "../utils/design";
 import { AXES, getPsycap, getOverallScore, getMonthlyDelta, getRecommendation, getScoreHistory, getEventsByDay, getLastAxisActivity, logWeeklyCheckin, MED_TAGS, LAYER_AXES } from "../data/psycap";
 
 const EVENT_ICONS = {
@@ -39,7 +39,7 @@ function Overview({ T, data, score, delta, rec, goToScenario, setScreen, expande
   return (
     <div>
       {/* Animated ring */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: SP.xl }}>
         <div style={{ position: "relative", width: 160, height: 160 }}>
           <svg width="160" height="160" style={{ transform: "rotate(-90deg)" }}>
             <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(var(--txt),.07)" strokeWidth="8" />
@@ -47,19 +47,19 @@ function Overview({ T, data, score, delta, rec, goToScenario, setScreen, expande
               strokeDasharray={circ} strokeDashoffset={offset} style={{ transition: "stroke-dashoffset 1.4s ease" }} />
           </svg>
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 48, fontWeight: 300, color: "rgba(var(--txt),.95)", lineHeight: 1 }}>{score}</div>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "rgba(var(--txt),.4)", marginTop: 4 }}>из 100</div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 48, fontWeight: 300, color: `rgba(var(--txt),${OP.primary})`, lineHeight: 1 }}>{score}</div>
+            <div style={{ ...label(TYPE.xs), color: `rgba(var(--txt),${OP.tertiary + 0.08})`, letterSpacing: ".2em", marginTop: SP.xs }}>из 100</div>
           </div>
         </div>
         {delta !== 0 && (
-          <div style={{ fontFamily: FONT_SANS, fontSize: 11, marginTop: 10, color: delta > 0 ? "#4FAE92" : "#D4453C" }}>
+          <div style={{ fontFamily: FONT_SANS, fontSize: TYPE.sm - 1, marginTop: SP.sm + 2, color: delta > 0 ? "#4FAE92" : "#D4453C" }}>
             {delta > 0 ? "+" : ""}{delta} за месяц
           </div>
         )}
       </div>
 
       {/* 6 Axis bars */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: SP.md, marginBottom: SP.page }}>
         {AXES.map((a) => {
           const value = data.axes[a.id];
           const isExpanded = expandedAxis === a.id;
@@ -71,25 +71,25 @@ function Overview({ T, data, score, delta, rec, goToScenario, setScreen, expande
             <div key={a.id}>
               <div onClick={() => setExpandedAxis(isExpanded ? null : a.id)} style={{ cursor: "pointer" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-                  <span style={{ fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(var(--txt),.88)" }}>{a.label}</span>
-                  <span style={{ fontFamily: FONT_SANS, fontSize: 12, color: a.hex, fontWeight: 500 }}>{value}</span>
+                  <span style={{ ...body(TYPE.base), color: "rgba(var(--txt),.88)" }}>{a.label}</span>
+                  <span style={{ fontFamily: FONT_SANS, fontSize: TYPE.sm, color: a.hex, fontWeight: 500 }}>{value}</span>
                 </div>
-                <div style={{ height: 7, borderRadius: 4, background: "rgba(var(--txt),.05)", overflow: "hidden" }}>
-                  <div style={{ height: "100%", width: `${value}%`, background: `linear-gradient(90deg, ${a.hex}77, ${a.hex})`, borderRadius: 4, transition: "width 1.2s ease", boxShadow: `0 0 10px ${a.hex}55` }} />
+                <div style={{ height: 7, borderRadius: SP.xs, background: "rgba(var(--txt),.05)", overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${value}%`, background: `linear-gradient(90deg, ${a.hex}77, ${a.hex})`, borderRadius: SP.xs, transition: "width 1.2s ease", boxShadow: `0 0 10px ${a.hex}55` }} />
                 </div>
               </div>
               {isExpanded && (
-                <div style={{ marginTop: 10, padding: "12px 14px", background: `${a.hex}0c`, border: `1px solid ${a.hex}28`, borderRadius: 12, animation: "fadeUp .25s ease both" }}>
-                  <div style={{ fontFamily: FONT_SERIF, fontSize: 12, color: "rgba(var(--txt),.75)", lineHeight: 1.6, marginBottom: 8 }}>{a.desc}</div>
+                <div style={{ marginTop: SP.sm + 2, padding: `${SP.md}px ${SP.md + 2}px`, background: `${a.hex}0c`, border: `1px solid ${a.hex}28`, borderRadius: RAD.sm + 4, animation: "fadeUp .25s ease both" }}>
+                  <div style={{ ...body(TYPE.sm), color: "rgba(var(--txt),.75)", lineHeight: 1.6, marginBottom: SP.sm }}>{a.desc}</div>
                   {meds.length > 0 && (
                     <>
-                      <div style={{ fontFamily: FONT_SANS, fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", color: `${a.hex}aa`, marginBottom: 4 }}>Развивают:</div>
-                      <div style={{ fontFamily: FONT_SERIF, fontSize: 11, color: "rgba(var(--txt),.6)", lineHeight: 1.5, marginBottom: 8 }}>
+                      <div style={{ ...label(TYPE.xs - 2), color: `${a.hex}aa`, letterSpacing: "1.5px", marginBottom: SP.xs }}>Развивают:</div>
+                      <div style={{ ...body(TYPE.sm - 1), color: `rgba(var(--txt),${OP.secondary + 0.05})`, lineHeight: 1.5, marginBottom: SP.sm }}>
                         {meds.slice(0, 3).join(" · ")}
                       </div>
                     </>
                   )}
-                  <div style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(var(--txt),.35)" }}>Последняя активность: {lastStr}</div>
+                  <div style={{ fontFamily: FONT_SANS, fontSize: TYPE.xs - 1, color: `rgba(var(--txt),${OP.tertiary})` }}>Последняя активность: {lastStr}</div>
                 </div>
               )}
             </div>
@@ -98,12 +98,12 @@ function Overview({ T, data, score, delta, rec, goToScenario, setScreen, expande
       </div>
 
       {/* Smart recommendation */}
-      <div style={{ padding: "16px 18px", background: `${rec.axis.hex}12`, border: `1px solid ${rec.axis.hex}30`, borderRadius: 16 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: rec.axis.hex, marginBottom: 6 }}>Сейчас рекомендуется →</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(var(--txt),.88)", lineHeight: 1.5, marginBottom: 10 }}>{rec.text}</div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <div onClick={() => setScreen("library")} style={{ cursor: "pointer", padding: "7px 14px", borderRadius: 12, background: `${rec.axis.hex}22`, border: `1px solid ${rec.axis.hex}44`, fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: rec.axis.hex }}>В библиотеку</div>
-          {goToScenario && <div onClick={() => goToScenario(rec.scenario)} style={{ cursor: "pointer", padding: "7px 14px", borderRadius: 12, background: `${rec.axis.hex}22`, border: `1px solid ${rec.axis.hex}44`, fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: rec.axis.hex }}>На орбиту</div>}
+      <div style={{ padding: `${SP.lg}px ${SP.lg + 2}px`, background: `${rec.axis.hex}12`, border: `1px solid ${rec.axis.hex}30`, borderRadius: RAD.md + 2 }}>
+        <div style={{ ...label(TYPE.xs - 1), color: rec.axis.hex, letterSpacing: "2px", marginBottom: 6 }}>Сейчас рекомендуется →</div>
+        <div style={{ ...body(TYPE.base), color: "rgba(var(--txt),.88)", lineHeight: 1.5, marginBottom: SP.sm + 2 }}>{rec.text}</div>
+        <div style={{ display: "flex", gap: SP.sm }}>
+          <div onClick={() => setScreen("library")} style={{ cursor: "pointer", padding: `7px ${SP.md + 2}px`, borderRadius: RAD.sm + 4, background: `${rec.axis.hex}22`, border: `1px solid ${rec.axis.hex}44`, ...label(TYPE.xs - 1), letterSpacing: ".1em", color: rec.axis.hex }}>В библиотеку</div>
+          {goToScenario && <div onClick={() => goToScenario(rec.scenario)} style={{ cursor: "pointer", padding: `7px ${SP.md + 2}px`, borderRadius: RAD.sm + 4, background: `${rec.axis.hex}22`, border: `1px solid ${rec.axis.hex}44`, ...label(TYPE.xs - 1), letterSpacing: ".1em", color: rec.axis.hex }}>На орбиту</div>}
         </div>
       </div>
     </div>
@@ -136,14 +136,14 @@ function Growth({ T }) {
   return (
     <div>
       {/* Tabs */}
-      <div style={{ display: "flex", background: "rgba(var(--txt),.04)", border: `1px solid ${T.border}`, borderRadius: 12, padding: 3, marginBottom: 16 }}>
+      <div style={{ display: "flex", background: "rgba(var(--txt),.04)", border: `1px solid ${T.border}`, borderRadius: RAD.sm + 4, padding: 3, marginBottom: SP.lg }}>
         {Object.entries(ranges).map(([k, v]) => (
-          <div key={k} onClick={() => setRange(k)} style={{ flex: 1, padding: "9px 0", textAlign: "center", fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", borderRadius: 9, cursor: "pointer", background: range === k ? T.accent + "22" : "transparent", color: range === k ? T.accent : "rgba(var(--txt),.5)", transition: "all .2s" }}>{v.label}</div>
+          <div key={k} onClick={() => setRange(k)} style={{ flex: 1, padding: "9px 0", textAlign: "center", ...label(TYPE.xs), letterSpacing: ".1em", borderRadius: RAD.sm + 1, cursor: "pointer", background: range === k ? T.accent + "22" : "transparent", color: range === k ? T.accent : `rgba(var(--txt),${OP.secondary})`, transition: EASE.fast }}>{v.label}</div>
         ))}
       </div>
 
       {/* Chart */}
-      <div style={{ padding: "16px 10px", background: "rgba(var(--txt),.03)", border: `1px solid ${T.border}`, borderRadius: 16, marginBottom: 16 }}>
+      <div style={{ padding: `${SP.lg}px ${SP.sm + 2}px`, background: "rgba(var(--txt),.03)", border: `1px solid ${T.border}`, borderRadius: RAD.md + 2, marginBottom: SP.lg }}>
         <svg width="100%" viewBox={`0 0 ${W} ${H + 20}`} style={{ display: "block" }}>
           <defs>
             <linearGradient id="pchart" x1="0" y1="0" x2="0" y2="1">
@@ -161,21 +161,21 @@ function Growth({ T }) {
             </>
           )}
           {history.length < 2 && (
-            <text x={W / 2} y={H / 2} textAnchor="middle" fill="rgba(200,175,158,.4)" fontSize="12" fontFamily={FONT_SERIF}>Ещё нет данных</text>
+            <text x={W / 2} y={H / 2} textAnchor="middle" fill="rgba(200,175,158,.4)" fontSize={TYPE.sm} fontFamily={FONT_SERIF}>Ещё нет данных</text>
           )}
         </svg>
       </div>
 
       {/* Selected point details */}
       {selectedPt?.event && (
-        <div style={{ padding: "12px 14px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 12, marginBottom: 12 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: T.accent, marginBottom: 4 }}>{EVENT_LABELS[selectedPt.event.type]}</div>
-          <div style={{ fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(var(--txt),.88)", marginBottom: 4 }}>{selectedPt.event.name}</div>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 10, color: "rgba(var(--txt),.45)" }}>+{selectedPt.event.points} · {fmtTime(selectedPt.event.ts)}</div>
+        <div style={{ padding: `${SP.md}px ${SP.md + 2}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.sm + 4, marginBottom: SP.md }}>
+          <div style={{ ...label(TYPE.xs - 1), color: T.accent, letterSpacing: "2px", marginBottom: SP.xs }}>{EVENT_LABELS[selectedPt.event.type]}</div>
+          <div style={{ ...body(TYPE.base), color: "rgba(var(--txt),.88)", marginBottom: SP.xs }}>{selectedPt.event.name}</div>
+          <div style={{ fontFamily: FONT_SANS, fontSize: TYPE.xs, color: `rgba(var(--txt),${OP.secondary - 0.1})` }}>+{selectedPt.event.points} · {fmtTime(selectedPt.event.ts)}</div>
         </div>
       )}
 
-      <div style={{ fontFamily: FONT_SERIF, fontSize: 12, color: "rgba(var(--txt),.5)", lineHeight: 1.6, textAlign: "center", fontStyle: "italic" }}>
+      <div style={{ ...body(TYPE.sm), color: `rgba(var(--txt),${OP.secondary})`, lineHeight: 1.6, textAlign: "center", fontStyle: "italic" }}>
         Точки на графике — это события. Нажмите, чтобы увидеть, что произошло.
       </div>
     </div>
@@ -187,7 +187,7 @@ function Feed({ T }) {
   const days = getEventsByDay();
   if (days.length === 0) {
     return (
-      <div style={{ padding: 32, textAlign: "center", fontFamily: FONT_SERIF, fontSize: 14, color: "rgba(var(--txt),.4)", fontStyle: "italic" }}>
+      <div style={{ padding: SP.xxl, textAlign: "center", ...body(TYPE.base), color: `rgba(var(--txt),${OP.tertiary + 0.08})`, fontStyle: "italic" }}>
         История практик появится здесь после первой активности
       </div>
     );
@@ -195,22 +195,22 @@ function Feed({ T }) {
   return (
     <div>
       {days.slice(0, 30).map(({ day, events }) => (
-        <div key={day} style={{ marginBottom: 18 }}>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "rgba(var(--txt),.4)", marginBottom: 8 }}>{fmtDay(day)}</div>
+        <div key={day} style={{ marginBottom: SP.lg + 2 }}>
+          <div style={{ ...label(TYPE.xs - 1), color: `rgba(var(--txt),${OP.tertiary + 0.08})`, letterSpacing: "2px", marginBottom: SP.sm }}>{fmtDay(day)}</div>
           {events.map((e, i) => (
-            <div key={i} style={{ display: "flex", gap: 12, padding: "12px 14px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 13, marginBottom: 6 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: `${T.accent}18`, border: `1px solid ${T.accent}33`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: T.accent, flexShrink: 0 }}>{EVENT_ICONS[e.type] || "·"}</div>
+            <div key={i} style={{ display: "flex", gap: SP.md, padding: `${SP.md}px ${SP.md + 2}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.md - 1, marginBottom: 6 }}>
+              <div style={{ width: SP.xxl, height: SP.xxl, borderRadius: RAD.sm, background: `${T.accent}18`, border: `1px solid ${T.accent}33`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: SP.lg, color: T.accent, flexShrink: 0 }}>{EVENT_ICONS[e.type] || "·"}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 3 }}>
-                  <span style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(var(--txt),.88)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 }}>{e.name}</span>
-                  <span style={{ fontFamily: FONT_SANS, fontSize: 9, color: "rgba(var(--txt),.35)", flexShrink: 0, marginLeft: 8 }}>{fmtTime(e.ts)}</span>
+                  <span style={{ ...body(TYPE.sm + 1), color: "rgba(var(--txt),.88)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 }}>{e.name}</span>
+                  <span style={{ fontFamily: FONT_SANS, fontSize: TYPE.xs - 1, color: `rgba(var(--txt),${OP.tertiary})`, flexShrink: 0, marginLeft: SP.sm }}>{fmtTime(e.ts)}</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                  <span style={{ fontFamily: FONT_SANS, fontSize: 8, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(var(--txt),.35)" }}>{EVENT_LABELS[e.type]}</span>
-                  {e.points > 0 && <span style={{ fontFamily: FONT_SANS, fontSize: 9, color: T.accent }}>+{e.points}</span>}
+                  <span style={{ ...label(TYPE.xs - 2), color: `rgba(var(--txt),${OP.tertiary})`, letterSpacing: "1.5px" }}>{EVENT_LABELS[e.type]}</span>
+                  {e.points > 0 && <span style={{ fontFamily: FONT_SANS, fontSize: TYPE.xs - 1, color: T.accent }}>+{e.points}</span>}
                   {e.axes.slice(0, 3).map((axId) => {
                     const ax = AXES.find((a) => a.id === axId);
-                    return ax ? <span key={axId} style={{ fontFamily: FONT_SANS, fontSize: 8, padding: "2px 6px", borderRadius: 6, background: `${ax.hex}15`, color: ax.hex }}>{ax.short}</span> : null;
+                    return ax ? <span key={axId} style={{ fontFamily: FONT_SANS, fontSize: TYPE.xs - 2, padding: `2px 6px`, borderRadius: 6, background: `${ax.hex}15`, color: ax.hex }}>{ax.short}</span> : null;
                   })}
                 </div>
               </div>
@@ -234,17 +234,17 @@ function WeeklyCheckin({ T, onClose }) {
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(6,2,8,.88)", backdropFilter: "blur(16px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div style={{ width: "100%", maxWidth: 380, background: "#14102a", border: `1px solid ${T.border}`, borderRadius: 20, padding: 24 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: T.accent, marginBottom: 6, textAlign: "center" }}>Еженедельный чекин</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 20, color: "rgba(var(--txt),.95)", marginBottom: 6, textAlign: "center" }}>Как вы сейчас?</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 12, color: "rgba(var(--txt),.5)", marginBottom: 24, textAlign: "center", fontStyle: "italic" }}>30 секунд на 4 шкалы</div>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(6,2,8,.88)", backdropFilter: "blur(16px)", display: "flex", alignItems: "center", justifyContent: "center", padding: SP.xl }}>
+      <div style={{ width: "100%", maxWidth: 380, background: "#14102a", border: `1px solid ${T.border}`, borderRadius: RAD.lg, padding: SP.xl }}>
+        <div style={{ ...label(TYPE.xs - 1), color: T.accent, letterSpacing: "2px", marginBottom: 6, textAlign: "center" }}>Еженедельный чекин</div>
+        <div style={{ ...heading(TYPE.xl - 2), color: `rgba(var(--txt),${OP.primary})`, marginBottom: 6, textAlign: "center" }}>Как вы сейчас?</div>
+        <div style={{ ...body(TYPE.sm), color: `rgba(var(--txt),${OP.secondary})`, marginBottom: SP.xl, textAlign: "center", fontStyle: "italic" }}>30 секунд на 4 шкалы</div>
 
         {sliderAxes.map((a) => (
-          <div key={a.id} style={{ marginBottom: 18 }}>
+          <div key={a.id} style={{ marginBottom: SP.lg + 2 }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(var(--txt),.85)" }}>{a.short}</span>
-              <span style={{ fontFamily: FONT_SANS, fontSize: 11, color: a.hex }}>{values[a.id]}</span>
+              <span style={{ ...body(TYPE.sm + 1), color: "rgba(var(--txt),.85)" }}>{a.short}</span>
+              <span style={{ fontFamily: FONT_SANS, fontSize: TYPE.sm - 1, color: a.hex }}>{values[a.id]}</span>
             </div>
             <input
               type="range" min="0" max="100" value={values[a.id]}
@@ -254,9 +254,9 @@ function WeeklyCheckin({ T, onClose }) {
           </div>
         ))}
 
-        <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-          <button onClick={onClose} type="button" style={{ flex: 1, padding: 14, background: "rgba(var(--txt),.05)", border: "1px solid rgba(var(--txt),.1)", borderRadius: 12, fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(var(--txt),.5)", cursor: "pointer" }}>Позже</button>
-          <button onClick={save} type="button" style={{ flex: 2, padding: 14, background: T.accent + "44", border: `1px solid ${T.accent}`, borderRadius: 12, fontFamily: FONT_SANS, fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#fff", cursor: "pointer" }}>Сохранить</button>
+        <div style={{ display: "flex", gap: SP.sm + 2, marginTop: SP.page }}>
+          <button onClick={onClose} type="button" style={{ flex: 1, padding: SP.md + 2, background: "rgba(var(--txt),.05)", border: "1px solid rgba(var(--txt),.1)", borderRadius: RAD.sm + 4, ...label(TYPE.sm - 1), letterSpacing: ".1em", color: `rgba(var(--txt),${OP.secondary})`, cursor: "pointer" }}>Позже</button>
+          <button onClick={save} type="button" style={{ flex: 2, padding: SP.md + 2, background: T.accent + "44", border: `1px solid ${T.accent}`, borderRadius: RAD.sm + 4, ...label(TYPE.sm - 1), letterSpacing: ".1em", color: "#fff", cursor: "pointer" }}>Сохранить</button>
         </div>
       </div>
     </div>
@@ -284,19 +284,19 @@ export default function PsycapTracker({ T, setScreen, goToScenario }) {
   const rec = getRecommendation();
 
   return (
-    <div style={{ margin: "0 24px 18px", padding: "20px 18px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, position: "relative", zIndex: 1 }}>
+    <div style={{ margin: `0 ${SP.xl}px ${SP.lg + 2}px`, padding: `${SP.page}px ${SP.lg + 2}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg, position: "relative", zIndex: 1 }}>
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(var(--txt),.4)" }}>Психологический капитал</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: SP.md + 2 }}>
+        <div style={{ ...label(TYPE.xs - 1), color: `rgba(var(--txt),${OP.tertiary + 0.08})`, letterSpacing: ".22em" }}>Психологический капитал</div>
         {checkinDue && (
-          <div onClick={() => setShowCheckin(true)} style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: T.accent, cursor: "pointer", padding: "4px 10px", borderRadius: 10, background: `${T.accent}18`, border: `1px solid ${T.accent}33` }}>Чекин →</div>
+          <div onClick={() => setShowCheckin(true)} style={{ ...label(TYPE.xs - 1), letterSpacing: ".1em", color: T.accent, cursor: "pointer", padding: `${SP.xs}px ${SP.sm + 2}px`, borderRadius: SP.sm + 2, background: `${T.accent}18`, border: `1px solid ${T.accent}33` }}>Чекин →</div>
         )}
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", background: "rgba(var(--txt),.04)", border: `1px solid ${T.border}`, borderRadius: 12, padding: 3, marginBottom: 18 }}>
+      <div style={{ display: "flex", background: "rgba(var(--txt),.04)", border: `1px solid ${T.border}`, borderRadius: RAD.sm + 4, padding: 3, marginBottom: SP.lg + 2 }}>
         {[{ id: "overview", l: "Обзор" }, { id: "growth", l: "Рост" }, { id: "feed", l: "Лента" }].map((t) => (
-          <div key={t.id} onClick={() => setTab(t.id)} style={{ flex: 1, padding: "9px 0", textAlign: "center", fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", borderRadius: 9, cursor: "pointer", background: tab === t.id ? T.accent + "22" : "transparent", color: tab === t.id ? T.accent : "rgba(var(--txt),.5)", transition: "all .2s" }}>{t.l}</div>
+          <div key={t.id} onClick={() => setTab(t.id)} style={{ flex: 1, padding: "9px 0", textAlign: "center", ...label(TYPE.xs), letterSpacing: ".1em", borderRadius: RAD.sm + 1, cursor: "pointer", background: tab === t.id ? T.accent + "22" : "transparent", color: tab === t.id ? T.accent : `rgba(var(--txt),${OP.secondary})`, transition: EASE.fast }}>{t.l}</div>
         ))}
       </div>
 

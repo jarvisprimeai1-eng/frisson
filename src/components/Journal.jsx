@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 // THEMES passed via props
-import { FONT_SERIF, FONT_SANS } from "../utils/helpers";
+import {
+  TYPE, SP, RAD, OP, LS, EASE, LH,
+  FONT_SERIF, FONT_SANS,
+  tx, label, body, heading,
+  card as cardStyle, section,
+} from "../utils/design";
 import { logDiary } from "../data/psycap";
 
 const STORAGE_KEY = "frisson_journal";
@@ -86,30 +91,86 @@ export default function Journal({ theme, addGems, THEMES }) {
     });
   };
 
-  const taStyle = { width: "100%", minHeight: 100, background: "transparent", border: "none", outline: "none", resize: "vertical", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.85)", lineHeight: 1.7, WebkitAppearance: "none", display: "block" };
-  const saveBtnStyle = (active) => ({ padding: "7px 18px", borderRadius: 20, background: active ? T.dim : "rgba(255,255,255,.04)", border: `1px solid ${active ? T.accent : "rgba(255,255,255,.08)"}`, fontFamily: FONT_SANS, fontSize: 10, letterSpacing: ".12em", textTransform: "uppercase", color: active ? "rgba(var(--txt),.82)" : "rgba(var(--txt),.25)", cursor: active ? "pointer" : "default", transition: "all .2s" });
+  const taStyle = {
+    width: "100%", minHeight: 100, background: "transparent", border: "none",
+    outline: "none", resize: "vertical", padding: `${SP.md}px ${SP.lg}px`,
+    ...body(TYPE.lg), color: tx("var(--txt)", OP.primary), lineHeight: LH.loose,
+    WebkitAppearance: "none", display: "block",
+  };
+
+  const saveBtnStyle = (active) => ({
+    padding: `${SP.sm - 1}px ${SP.lg + 2}px`, borderRadius: RAD.lg,
+    background: active ? T.dim : `rgba(255,255,255,${OP.bgSubtle - 0.02})`,
+    border: `1px solid ${active ? T.accent : `rgba(255,255,255,${OP.bgSubtle})`}`,
+    ...label(TYPE.xs), color: active ? tx("var(--txt)", OP.primary) : tx("var(--txt)", OP.tertiary - 0.07),
+    cursor: active ? "pointer" : "default", transition: EASE.fast,
+  });
+
+  const entryCard = {
+    display: "flex", gap: SP.md, padding: `${SP.md + 2}px ${SP.lg}px`,
+    background: T.card, border: `1px solid ${T.border}`,
+    borderRadius: RAD.md + 1, marginBottom: SP.sm,
+  };
+
+  const entryTimestamp = {
+    ...label(TYPE.xs - 2), letterSpacing: LS.wide,
+    color: tx("var(--txt)", OP.tertiary), marginBottom: SP.xs + 1,
+  };
+
+  const entryText = {
+    ...body(TYPE.base + 1), lineHeight: LH.loose - 0.05,
+    color: tx("var(--txt)", OP.primary),
+  };
+
+  const deleteBtn = {
+    cursor: "pointer", fontSize: TYPE.base, color: tx("var(--txt)", OP.disabled),
+    flexShrink: 0, alignSelf: "flex-start",
+  };
+
+  const sectionLabel = (mb = SP.sm) => ({
+    ...label(TYPE.xs - 1), letterSpacing: LS.wide,
+    color: T.accent, marginBottom: mb,
+  });
+
+  const inputCard = {
+    background: T.card, border: `1px solid ${T.border}`,
+    borderRadius: RAD.lg - 4, overflow: "hidden", marginBottom: SP.md + 2,
+  };
+
+  const inputFooter = {
+    padding: `${SP.sm}px ${SP.md}px`, display: "flex",
+    justifyContent: "flex-end", borderTop: `1px solid ${T.border}`,
+  };
 
   return (
-    <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: "background .6s" }}>
+    <div style={{ minHeight: "100%", background: T.bg, paddingBottom: 100, position: "relative", transition: EASE.slow }}>
       {crystals.map((cr) => (
         <div key={cr.id} style={{ position: "fixed", bottom: 140, left: `${cr.x}%`, zIndex: 999, pointerEvents: "none", animation: "gemBurst 2s ease forwards", textAlign: "center" }}>
-          <div style={{ fontSize: 28, color: "#F0D060", animation: "gemGlow .8s ease-in-out 2" }}>+1 ⟡</div>
+          <div style={{ fontSize: TYPE.xxl, color: "#F0D060", animation: "gemGlow .8s ease-in-out 2" }}>+1 ⟡</div>
         </div>
       ))}
 
-      <div style={{ padding: "50px 24px 18px", position: "relative", zIndex: 1 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".25em", textTransform: "uppercase", color: T.accent, marginBottom: 6 }}>{todayStr()}</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 32, fontWeight: 300, lineHeight: 1.15, color: "rgba(var(--txt),.95)", marginBottom: 20 }}>Дневник</div>
-        <div style={{ display: "flex", background: T.card, border: `1px solid ${T.border}`, borderRadius: 13, padding: 3 }}>
+      <div style={{ padding: `50px ${SP.xl}px ${SP.lg + 2}px`, position: "relative", zIndex: 1 }}>
+        <div style={{ ...label(TYPE.xs - 1), letterSpacing: ".25em", color: T.accent, marginBottom: SP.xs + 2 }}>{todayStr()}</div>
+        <div style={{ ...heading(TYPE.xxl + 4), color: tx("var(--txt)", OP.primary + 0.03), marginBottom: SP.page }}>Дневник</div>
+        <div style={{ display: "flex", background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.md - 1, padding: 3 }}>
           {[{ id: "intent", l: "Намерения" }, { id: "grat", l: "Благодарность" }, { id: "goals", l: "Цели ✦" }, { id: "reflect", l: "Рефлексия" }].map((t) => (
-            <div key={t.id} onClick={() => { setTab(t.id); setText(""); }} style={{ flex: 1, padding: "10px 4px", textAlign: "center", fontSize: 10, letterSpacing: ".04em", textTransform: "uppercase", fontFamily: FONT_SANS, borderRadius: 11, cursor: "pointer", background: tab === t.id ? T.dim : "transparent", color: tab === t.id ? "rgba(var(--txt),.88)" : "rgba(var(--txt),.38)", transition: "all .3s", minHeight: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>{t.l}</div>
+            <div key={t.id} onClick={() => { setTab(t.id); setText(""); }} style={{
+              flex: 1, padding: `${TYPE.xs}px ${SP.xs}px`, textAlign: "center",
+              ...label(TYPE.xs), letterSpacing: ".04em",
+              borderRadius: RAD.sm + 3, cursor: "pointer",
+              background: tab === t.id ? T.dim : "transparent",
+              color: tab === t.id ? tx("var(--txt)", OP.primary) : tx("var(--txt)", OP.tertiary + 0.06),
+              transition: EASE.normal, minHeight: 40,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>{t.l}</div>
           ))}
         </div>
       </div>
 
-      <div style={{ margin: "0 24px 18px", padding: "17px 20px", background: T.dim, border: `1px solid ${T.border}`, borderRadius: 18, position: "relative", zIndex: 1 }}>
-        <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: T.accent, marginBottom: 8 }}>✦ Вопрос дня</div>
-        <div style={{ fontFamily: FONT_SERIF, fontSize: 17, lineHeight: 1.65, color: "rgba(var(--txt),.82)" }}>
+      <div style={{ margin: `0 ${SP.xl}px ${SP.lg + 2}px`, padding: `${SP.lg + 1}px ${SP.page}px`, background: T.dim, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2, position: "relative", zIndex: 1 }}>
+        <div style={sectionLabel(SP.sm)}>✦ Вопрос дня</div>
+        <div style={{ ...body(TYPE.lg), lineHeight: LH.loose - 0.05, color: tx("var(--txt)", OP.primary - 0.1) }}>
           {tab === "intent" && "«Каким я хочу быть сегодня? Пишу в настоящем времени.»"}
           {tab === "grat" && "«За что ты благодарна сегодня — себе и миру?»"}
           {tab === "goals" && "«Что я создаю в своей жизни прямо сейчас?»"}
@@ -117,105 +178,134 @@ export default function Journal({ theme, addGems, THEMES }) {
         </div>
       </div>
 
-      <div style={{ padding: "0 24px", position: "relative", zIndex: 1 }}>
+      <div style={{ padding: `0 ${SP.xl}px`, position: "relative", zIndex: 1 }}>
 
         {/* ── НАМЕРЕНИЯ ── */}
         {tab === "intent" && <>
-          <div style={{ padding: "14px 18px", marginBottom: 14, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: 18 }}>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: T.accent, marginBottom: 8 }}>✦ Формат намерения</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 14, lineHeight: 1.75, color: "rgba(var(--txt),.75)" }}>Пишите в настоящем времени: <span style={{ color: T.accent }}>"Я есть", "У меня уже есть"</span>. Это фиксирует образ желаемого состояния.</div>
+          <div style={{ padding: `${SP.md + 2}px ${SP.lg + 2}px`, marginBottom: SP.md + 2, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2 }}>
+            <div style={sectionLabel(SP.sm)}>✦ Формат намерения</div>
+            <div style={{ ...body(TYPE.base), lineHeight: LH.loose + 0.05, color: tx("var(--txt)", OP.secondary + 0.2) }}>Пишите в настоящем времени: <span style={{ color: T.accent }}>"Я есть", "У меня уже есть"</span>. Это фиксирует образ желаемого состояния.</div>
           </div>
-          <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
+          <div style={inputCard}>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Я есть... / У меня уже есть... / Я наполненная..." rows={3} style={taStyle} />
-            <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
+            <div style={inputFooter}>
               <div onClick={() => addEntry("intent")} style={saveBtnStyle(text.trim())}>Сохранить →</div>
             </div>
           </div>
           {data.intent.map((e) => (
-            <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
+            <div key={e.id} style={entryCard}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>
+                <div style={entryTimestamp}>{fmtDate(e.ts)}</div>
+                <div style={entryText}>{e.text}</div>
               </div>
-              <div onClick={() => delEntry("intent", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("intent", e.id)} style={deleteBtn}>×</div>
             </div>
           ))}
         </>}
 
         {/* ── БЛАГОДАРНОСТЬ ── */}
         {tab === "grat" && <>
-          <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
+          <div style={inputCard}>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Я благодарна себе за... / Я благодарна жизни за..." rows={3} style={taStyle} />
-            <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
+            <div style={inputFooter}>
               <div onClick={() => addEntry("grat")} style={saveBtnStyle(text.trim())}>Сохранить →</div>
             </div>
           </div>
           {data.grat.map((e) => (
-            <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
+            <div key={e.id} style={entryCard}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>
+                <div style={entryTimestamp}>{fmtDate(e.ts)}</div>
+                <div style={entryText}>{e.text}</div>
               </div>
-              <div onClick={() => delEntry("grat", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("grat", e.id)} style={deleteBtn}>×</div>
             </div>
           ))}
         </>}
 
         {/* ── ЦЕЛИ ── */}
         {tab === "goals" && <>
-          <div style={{ padding: "16px 18px", marginBottom: 14, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: 18 }}>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: T.accent, marginBottom: 10 }}>✦ Перед тем как писать цели</div>
-            <div style={{ fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.9)", marginBottom: 4 }}>Мои истинные цели</div>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 11, color: "rgba(var(--txt),.45)", lineHeight: 1.55 }}>Послушайте эту практику перед тем, как ставить цели.</div>
+          <div style={{ padding: `${SP.lg}px ${SP.lg + 2}px`, marginBottom: SP.md + 2, background: `linear-gradient(135deg,${T.dim},rgba(255,255,255,.02))`, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2 }}>
+            <div style={{ ...label(TYPE.xs - 1), letterSpacing: ".22em", color: T.accent, marginBottom: TYPE.xs }}>✦ Перед тем как писать цели</div>
+            <div style={{ ...body(TYPE.lg), color: tx("var(--txt)", OP.primary), marginBottom: SP.xs }}>Мои истинные цели</div>
+            <div style={{ ...label(TYPE.sm - 1), letterSpacing: LS.normal, textTransform: "none", color: tx("var(--txt)", OP.secondary - 0.1), lineHeight: LH.normal }}>Послушайте эту практику перед тем, как ставить цели.</div>
           </div>
-          <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
-            <input value={goalText} onChange={(e) => setGoalText(e.target.value)} placeholder="Новая цель..." onKeyDown={(e) => e.key === "Enter" && addGoal()} style={{ width: "100%", background: "transparent", border: "none", outline: "none", padding: "14px 16px", fontFamily: FONT_SERIF, fontSize: 16, color: "rgba(var(--txt),.85)", WebkitAppearance: "none" }} />
-            <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
+          <div style={inputCard}>
+            <input value={goalText} onChange={(e) => setGoalText(e.target.value)} placeholder="Новая цель..." onKeyDown={(e) => e.key === "Enter" && addGoal()} style={{
+              width: "100%", background: "transparent", border: "none", outline: "none",
+              padding: `${SP.md + 2}px ${SP.lg}px`, ...body(TYPE.lg),
+              color: tx("var(--txt)", OP.primary), WebkitAppearance: "none",
+            }} />
+            <div style={inputFooter}>
               <div onClick={addGoal} style={saveBtnStyle(goalText.trim())}>Добавить →</div>
             </div>
           </div>
           {data.goals.map((g) => (
-            <div key={g.id} style={{ display: "flex", alignItems: "center", gap: 13, padding: "14px 16px", background: g.done ? T.dim : T.card, border: `1px solid ${T.border}`, borderRadius: 14, marginBottom: 8, transition: "all .3s" }}>
-              <div onClick={() => toggleGoal(g.id)} style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: g.done ? T.dim : "rgba(255,255,255,.05)", border: `1.5px solid ${g.done ? T.accent : "rgba(255,255,255,.15)"}`, fontSize: 13, color: "rgba(var(--txt),.9)", cursor: "pointer" }}>{g.done ? "✦" : "○"}</div>
+            <div key={g.id} style={{
+              display: "flex", alignItems: "center", gap: SP.md + 1,
+              padding: `${SP.md + 2}px ${SP.lg}px`,
+              background: g.done ? T.dim : T.card, border: `1px solid ${T.border}`,
+              borderRadius: RAD.md, marginBottom: SP.sm, transition: EASE.normal,
+            }}>
+              <div onClick={() => toggleGoal(g.id)} style={{
+                width: TYPE.xxl, height: TYPE.xxl, borderRadius: RAD.full, flexShrink: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: g.done ? T.dim : `rgba(255,255,255,${OP.bgSubtle - 0.01})`,
+                border: `1.5px solid ${g.done ? T.accent : `rgba(255,255,255,${OP.bgMedium + 0.03})`}`,
+                fontSize: TYPE.sm + 1, color: tx("var(--txt)", OP.primary), cursor: "pointer",
+              }}>{g.done ? "✦" : "○"}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 3 }}>{fmtDate(g.ts)}</div>
-                <div style={{ fontFamily: FONT_SERIF, fontSize: 13, color: "rgba(var(--txt),.88)", lineHeight: 1.35, textDecoration: g.done ? "line-through" : "none", opacity: g.done ? 0.5 : 1 }}>{g.text}</div>
+                <div style={entryTimestamp}>{fmtDate(g.ts)}</div>
+                <div style={{
+                  ...body(TYPE.sm + 1), color: tx("var(--txt)", OP.primary),
+                  lineHeight: LH.tight + 0.15,
+                  textDecoration: g.done ? "line-through" : "none",
+                  opacity: g.done ? OP.secondary - 0.05 : 1,
+                }}>{g.text}</div>
               </div>
-              <div onClick={() => delEntry("goals", g.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0 }}>×</div>
+              <div onClick={() => delEntry("goals", g.id)} style={{ ...deleteBtn, alignSelf: "center" }}>×</div>
             </div>
           ))}
         </>}
 
         {/* ── РЕФЛЕКСИЯ ── */}
         {tab === "reflect" && <>
-          <div style={{ padding: 18, background: T.card, border: `1px solid ${T.border}`, borderRadius: 18, marginBottom: 14 }}>
-            <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(var(--txt),.38)", marginBottom: 12 }}>Состояние после практики</div>
+          <div style={{ padding: SP.lg + 2, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2, marginBottom: SP.md + 2 }}>
+            <div style={{ ...label(TYPE.xs - 1), letterSpacing: ".18em", color: tx("var(--txt)", OP.tertiary + 0.06), marginBottom: SP.md }}>Состояние после практики</div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {MOODS.map((pr, i) => (
-                <div key={i} onClick={() => setMood(mood === i ? null : i)} style={{ textAlign: "center", cursor: "pointer", opacity: mood === i ? 1 : 0.4, transition: "all .2s", transform: mood === i ? "scale(1.15)" : "scale(1)" }}>
-                  <div style={{ fontSize: 26 }}>{pr[0]}</div>
-                  <div style={{ fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", color: mood === i ? T.accent : "rgba(var(--txt),.35)", fontFamily: FONT_SANS, marginTop: 5 }}>{pr[1]}</div>
+                <div key={i} onClick={() => setMood(mood === i ? null : i)} style={{
+                  textAlign: "center", cursor: "pointer",
+                  opacity: mood === i ? 1 : OP.tertiary + 0.08,
+                  transition: EASE.fast,
+                  transform: mood === i ? "scale(1.15)" : "scale(1)",
+                }}>
+                  <div style={{ fontSize: TYPE.xxl - 2 }}>{pr[0]}</div>
+                  <div style={{
+                    ...label(TYPE.xs - 2), letterSpacing: ".1em",
+                    color: mood === i ? T.accent : tx("var(--txt)", OP.tertiary + 0.03),
+                    marginTop: SP.xs + 1,
+                  }}>{pr[1]}</div>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(var(--txt),.4)", marginBottom: 8 }}>✦ Инсайты, мысли, идеи</div>
-          <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
+          <div style={{ ...label(TYPE.xs - 1), letterSpacing: ".18em", color: tx("var(--txt)", OP.tertiary + 0.08), marginBottom: SP.sm }}>✦ Инсайты, мысли, идеи</div>
+          <div style={inputCard}>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Что я почувствовала во время практики? Какие образы, мысли, идеи пришли?" rows={3} style={taStyle} />
-            <div style={{ padding: "8px 12px", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${T.border}` }}>
+            <div style={inputFooter}>
               <div onClick={addReflect} style={saveBtnStyle(text.trim() || mood !== null)}>Сохранить →</div>
             </div>
           </div>
           {data.reflect.map((e) => (
-            <div key={e.id} style={{ display: "flex", gap: 12, padding: "14px 16px", background: T.card, border: `1px solid ${T.border}`, borderRadius: 15, marginBottom: 8 }}>
+            <div key={e.id} style={entryCard}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.3)", marginBottom: 5 }}>{fmtDate(e.ts)}</div>
+                <div style={entryTimestamp}>{fmtDate(e.ts)}</div>
                 {e.mood !== undefined && e.mood !== null && (
-                  <div style={{ fontSize: 18, marginBottom: 6 }}>{MOODS[e.mood]?.[0]} <span style={{ fontFamily: FONT_SANS, fontSize: 8, color: "rgba(var(--txt),.35)", verticalAlign: "middle" }}>{MOODS[e.mood]?.[1]}</span></div>
+                  <div style={{ fontSize: SP.lg + 2, marginBottom: SP.xs + 2 }}>{MOODS[e.mood]?.[0]} <span style={{ ...label(TYPE.xs - 2), color: tx("var(--txt)", OP.tertiary + 0.03), verticalAlign: "middle" }}>{MOODS[e.mood]?.[1]}</span></div>
                 )}
-                {e.text && <div style={{ fontFamily: FONT_SERIF, fontSize: 15, lineHeight: 1.65, color: "rgba(var(--txt),.85)" }}>{e.text}</div>}
+                {e.text && <div style={entryText}>{e.text}</div>}
               </div>
-              <div onClick={() => delEntry("reflect", e.id)} style={{ cursor: "pointer", fontSize: 14, color: "rgba(var(--txt),.2)", flexShrink: 0, alignSelf: "flex-start" }}>×</div>
+              <div onClick={() => delEntry("reflect", e.id)} style={deleteBtn}>×</div>
             </div>
           ))}
         </>}
