@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getThemes } from "./data/themes";
 import { getActivity, markPractice, getName, setName as saveName } from "./data/activity";
+import { fetchMeditations, fetchSections, fetchBooks } from "./lib/supabase";
 import { TYPE, SP, RAD, OP, EASE, FONT_SERIF, FONT_SANS, tx, label, heading } from "./utils/design";
 import GlobalStyles from "./components/GlobalStyles";
 import Onboarding from "./components/Onboarding";
@@ -14,7 +15,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.4.0";
+export const VERSION = "5.5.0";
 
 export default function App() {
   const [onb, setOnb] = useState(() => localStorage.getItem("frisson_onb") === "1");
@@ -60,6 +61,15 @@ export default function App() {
   const goToScenario = (scId) => { setOpenScenario(scId); setScreen("orbit"); };
   const [gems, setGems] = useState(() => parseInt(localStorage.getItem("frisson_gems")) || 0);
   const addGems = (n) => setGems((g) => { const v = g + n; localStorage.setItem("frisson_gems", v); return v; });
+
+  // ─── Cloud content (fetched once on app load, cached for offline) ───
+  const [remoteMeds, setRemoteMeds] = useState([]);
+  const [remoteSections, setRemoteSections] = useState([]);
+  const [remoteBooks, setRemoteBooks] = useState([]);
+  useEffect(() => {
+    Promise.all([fetchMeditations(), fetchSections(), fetchBooks()])
+      .then(([m, s, b]) => { setRemoteMeds(m); setRemoteSections(s); setRemoteBooks(b); });
+  }, []);
 
   const [activity, setActivity] = useState(getActivity);
   const [userName, setUserName] = useState(getName);
@@ -115,7 +125,7 @@ export default function App() {
 
   const screens = {
     home: <Home setScreen={setScreen} theme={theme} setTheme={setThemePersisted} eScore={eScore} pLog={pLog} setLibSec={setLibSec} THEMES={THEMES} activity={activity} userName={userName} doMarkPractice={doMarkPractice} />,
-    library: <Library setScreen={setScreen} theme={theme} initSec={libSec} initMed={openMed} clearMed={() => setOpenMed(null)} medFrom={medFrom} clearMedFrom={() => setMedFrom(null)} THEMES={THEMES} doMarkPractice={doMarkPractice} addGems={addGems} />,
+    library: <Library setScreen={setScreen} theme={theme} initSec={libSec} initMed={openMed} clearMed={() => setOpenMed(null)} medFrom={medFrom} clearMedFrom={() => setMedFrom(null)} THEMES={THEMES} doMarkPractice={doMarkPractice} addGems={addGems} remoteMeds={remoteMeds} remoteSections={remoteSections} remoteBooks={remoteBooks} />,
     orbit: <Orbit setScreen={setScreen} addGems={addGems} doMarkPractice={doMarkPractice} initScenario={openScenario} clearInitScenario={() => setOpenScenario(null)} />,
     journal: <Journal theme={theme} addGems={addGems} THEMES={THEMES} doMarkPractice={doMarkPractice} />,
     situations: <Situations setScreen={setScreen} theme={theme} goToMed={goToMed} THEMES={THEMES} />,
