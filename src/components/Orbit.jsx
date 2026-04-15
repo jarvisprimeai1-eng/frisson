@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { MED_GUIDES } from "../data/medGuides";
+import { MED_GUIDES, getMedGuides } from "../data/medGuides";
 import { logOrbitSession } from "../data/psycap";
 
 import { TYPE, SP, RAD, OP, EASE, FONT_SERIF, FONT_SANS, tx, label, body, heading } from "../utils/design";
@@ -9,18 +9,98 @@ import { t as tr } from "../utils/i18n";
 // Orbit EN translation maps for names/sounds
 const EN_SCENARIO_NAME = { anxiety: "Anxiety", love: "Love · Fullness", power: "Power · Inner fire", conflict: "Inner conflict", fear: "Fear", abundance: "Abundance · Receiving", feminine: "Femininity · Flow", capital: "Psychological capital" };
 const EN_LAYER = {
-  1: { name: "Unconscious", sub: "center · deepest" },
-  2: { name: "Self / Authenticity", sub: "level 2" },
-  3: { name: "Conscious", sub: "level 3" },
-  4: { name: "Feelings", sub: "level 4" },
-  5: { name: "Emotions", sub: "level 5" },
-  6: { name: "Behavior", sub: "outer layer" },
+  1: { name: "Unconscious", sub: "center · deepest", desc: "Here is everything that accumulated before you began to be aware — childhood programs, parental imprints, old pain and unspent love." },
+  2: { name: "Self / Authenticity", sub: "level 2", desc: "Who you are beneath all masks and roles. When you're in contact with authenticity, the fatigue of pretending disappears, and \u00AByour\u00BB people arrive." },
+  3: { name: "Conscious", sub: "level 3", desc: "The adult part that knows how to choose consciously. It rewrites old beliefs and chooses trust over anxiety." },
+  4: { name: "Feelings", sub: "level 4", desc: "The language of the soul, which speaks slowly and deeply. Unlived feelings turn into anxiety. Lived ones release and open space for the new." },
+  5: { name: "Emotions", sub: "level 5", desc: "Fast energy in response to a situation. Suppressed emotions block creativity. Allowing emotions opens the flow of life force." },
+  6: { name: "Behavior", sub: "outer layer", desc: "What the world sees. When the unconscious is healed and the conscious has chosen the new, behavior changes organically, without forcing yourself." },
 };
 const EN_SOUND_LABEL = { neutral: "Warm silence", anxiety: "Soothing", love: "Open heart", power: "Inner fire", conflict: "Centering", fear: "Safe place", abundance: "Flow", feminine: "Flow", capital: "Stability" };
+const EN_SOUND_DESC = {
+  neutral: "A warm pad in C major — a soft background for any state. Rare bells create a sense of silence and space.",
+  anxiety: "A deep slow pad in A minor — the key of softness and recovery. Very quiet, no harsh tones. The nervous system gradually slows down.",
+  love: "Warm D major harmony with soft bells — heart-chakra resonance. Fullness and tenderness.",
+  power: "A confident E major pad with light ascending bells — supports resolve without tension.",
+  conflict: "A soft pad between major and minor — helps you find center amid contradictions. Soothing uncertainty.",
+  fear: "A deep low pad in G minor — like warm arms. A signal to the nervous system: it's safe, you can relax.",
+  abundance: "A bright F major pad with frequent bells — a sense of openness and a generous flow.",
+  feminine: "A flowing feminine pad in C# minor — soft bell tones create a sense of dance and flow.",
+  capital: "A steady C major pad with rare clear bells — the foundation for focused confidence.",
+};
+const EN_BY_LAYER = {
+  anxiety: {
+    1: "The depth loses its ground: old fears come alive and tug at the core from within. Neurons tremble fast and small — as if searching for something to hold on to but finding nothing.",
+    2: "Authenticity is pushed into the background. The network contracts and vibrates — instead of your own voice, only background noise can be heard.",
+    3: "Consciousness is overloaded by a stream of thoughts. Connections flash chaotically and quickly — the brain tries to calculate and control everything but loses center.",
+    4: "Feelings can't flow — they're frozen. Neurons pulse but don't reach depth. The body is tense, the heart pounds past meaning.",
+    5: "Emotions flare up sharply and uncontrollably. The network darts without direction — every impulse becomes a spark of anxiety.",
+    6: "Behavior becomes restless. The outer contour twitches, loses smoothness — actions outrun decisions.",
+  },
+  love: {
+    1: "The depth breathes calmly. Old wounds release — neurons move softly and evenly, the center becomes warm and safe.",
+    2: "Authenticity unfolds without effort. The network expands, becomes transparent — you feel yourself, without masks.",
+    3: "Consciousness chooses from silence. Connections form smoothly and meaningfully — decisions arrive as recognition, not as struggle.",
+    4: "Feelings flow freely, without resistance. Neurons move like a river — deep, slow, with trust.",
+    5: "Emotions are soft and warm. The network pulses gently, without sharp jumps — this is not passion, but presence.",
+    6: "Behavior becomes natural. The outer contour moves organically — you attract simply by being yourself.",
+  },
+  power: {
+    1: "The depth gathers energy. Neurons move with force from the center outward — an impulse awakens in the core, ready to become action.",
+    2: "Authenticity is brightly expressed. The network radiates, expands with momentum — you know who you are, and it shows.",
+    3: "Consciousness sets a clear vector. Connections form directionally — every decision is a choice of strength, not a reaction.",
+    4: "Feelings become fuel. Neurons move quickly but not chaotically — the energy of feeling powers the goal.",
+    5: "Emotions become impulse. The network flares with action energy — not an explosion, but a launch.",
+    6: "Behavior is confident and powerful. The outer contour moves forward without hesitation — you create reality, not react to it.",
+  },
+  conflict: {
+    1: "The depth is torn between opposing desires. Neurons pull in different directions — there are two truths in the core, and each claims to be first.",
+    2: "Authenticity is blurred. The network can't gather into a whole — part of you wants one thing, the other part wants the opposite.",
+    3: "Consciousness is paralyzed by choice. Connections form and immediately fall apart — a thought doesn't have time to become a decision.",
+    4: "Feelings contradict each other. Neurons mix without clarity — love and hurt, desire and fear live at the same time.",
+    5: "Emotions are unstable. The network darts between poles — one feeling is dominant, then a minute later, another.",
+    6: "Behavior is inconsistent. The outer contour loses unified direction — actions contradict words, words contradict desires.",
+  },
+  fear: {
+    1: "The depth contracts in defense. Neurons pull together into a tight knot — the core prepares for a threat, even if there isn't one.",
+    2: "The self hides. The network becomes small and almost motionless — better not to stand out than to be noticed.",
+    3: "Consciousness fixates on the threat. Connections freeze, then sharply flare — the brain scans for danger again and again.",
+    4: "Feelings freeze to avoid pain. Neurons barely move — the body chooses numbness over contact.",
+    5: "Emotions intensify in sharp flashes. The network jerks — this is not expression, but a survival signal.",
+    6: "Behavior moves into avoidance. The outer contour closes, defends — you do less to risk less.",
+  },
+  abundance: {
+    1: "The depth opens and releases its squeeze. Neurons expand from the inside out in waves of inhale-exhale — the core allows itself to receive without earning.",
+    2: "Authenticity takes its place without shame. The network expands smoothly and generously — you don't ask, you simply are, and that is enough for the world.",
+    3: "Consciousness opens to a flow of possibilities. Connections form like bridges outward — the brain stops cutting off good things as \u00ABnot for me\u00BB.",
+    4: "Feelings become receptive capacity. Neurons move openly, without defenses — gratitude and joy pass through the body freely.",
+    5: "Emotions become resonance with the world. The network glows softly and evenly — joy doesn't need to be defended from another's gaze.",
+    6: "Behavior becomes open and generous. The outer contour expands, receives and gives — you take what is given to you, without guilt.",
+  },
+  feminine: {
+    1: "The depth flows like water. Neurons move smoothly in a spiral around the core — the feminine remembers its soft nature and isn't in a hurry.",
+    2: "The self unfolds in its beauty. The network dances — doesn't perform, doesn't play, simply lives from within.",
+    3: "Consciousness chooses from sensitivity. Connections form intuitively, tangentially — not by calculating, but by sensing what's right.",
+    4: "Feelings become a river. Neurons flow slowly and deeply, around obstacles — every feeling matters and has its place.",
+    5: "Emotions become sensual beauty. The network vibrates softly and smoothly — this is not a show for others, but real presence in yourself.",
+    6: "Behavior becomes sensual and magnetic. The outer contour moves smoothly — attraction is born from within, without effort.",
+  },
+  capital: {
+    1: "The depth knows it will cope. Neurons move steadily and confidently — inner support holds even through a storm, because there is hope.",
+    2: "The self is confident in its value. The network stands upright and emits a steady light — you trust your ability to be yourself in any conditions.",
+    3: "Consciousness is optimistic and decisive. Connections form clearly and structurally — difficulties are perceived as tasks, not catastrophes.",
+    4: "Feelings become a resource of resilience. Neurons move calmly — even pain doesn't break, because faith in the result lives inside.",
+    5: "Emotions are stable and directed. The network emits a steady light of effectiveness — you feel that you can, and it is stronger than anxiety.",
+    6: "Behavior is consistent and effective. The outer contour acts from faith in itself — hope + resilience + optimism + capability.",
+  },
+};
 const orbLayerName = (layer, lang) => lang === "en" ? (EN_LAYER[layer.id]?.name || layer.name) : layer.name;
 const orbLayerSub = (layer, lang) => lang === "en" ? (EN_LAYER[layer.id]?.sub || layer.sub) : layer.sub;
+const orbLayerDesc = (layer, lang) => lang === "en" ? (EN_LAYER[layer.id]?.desc || layer.desc) : layer.desc;
 const orbScenarioName = (sc, lang) => lang === "en" ? (EN_SCENARIO_NAME[sc.id] || sc.name) : sc.name;
+const orbScenarioByLayer = (sc, layerId, lang) => lang === "en" ? (EN_BY_LAYER[sc.id]?.[layerId] || sc.byLayer[layerId]) : sc.byLayer[layerId];
 const orbSoundLabel = (id, original, lang) => lang === "en" ? (EN_SOUND_LABEL[id] || original) : original;
+const orbSoundDesc = (id, original, lang) => lang === "en" ? (EN_SOUND_DESC[id] || original) : original;
 
 // Sound profiles: each scenario has therapeutic frequencies
 // Neutral: 528 Hz (Solfeggio love/repair) + 8 Hz binaural → alpha
@@ -822,7 +902,8 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
     if (!meditating || medDuration === 0) return null;
     const progress = 1 - (medTime / medDuration);
     const guideId = activeScenario?.id || "neutral";
-    const guide = MED_GUIDES[guideId] || MED_GUIDES.neutral;
+    const guides = getMedGuides(lang);
+    const guide = guides[guideId] || guides.neutral;
     let current = null;
     for (let i = guide.length - 1; i >= 0; i--) {
       if (progress >= guide[i].at) { current = guide[i]; break; }
@@ -983,8 +1064,10 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
         const acHex = activeScenario ? activeScenario.hex : layer.hex;
         const panelTitle = activeScenario ? orbScenarioName(activeScenario, lang) : orbLayerName(layer, lang);
         const panelSub = activeScenario ? `${L("orb_scenario_of")} · ${orbLayerName(layer, lang)}` : `${L("orb_level")} ${layer.id}`;
-        const panelDesc = activeScenario ? activeScenario.byLayer[layer.id] : layer.desc;
+        const panelDesc = activeScenario ? orbScenarioByLayer(activeScenario, layer.id, lang) : orbLayerDesc(layer, lang);
         const prof = getProfile();
+        const profLabel = orbSoundLabel(activeScenario?.id || "neutral", prof.label, lang);
+        const profDesc = orbSoundDesc(activeScenario?.id || "neutral", prof.desc, lang);
         return (
           <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 25, transition: "all .35s cubic-bezier(.32,.72,0,1)" }}>
             <div style={{ maxWidth: 640, margin: "0 auto", background: "linear-gradient(180deg, rgba(6,2,8,0) 0%, rgba(6,2,8,.94) 16%, rgba(6,2,8,.98) 100%)", backdropFilter: "blur(20px)", borderTop: `1px solid ${acHex}22`, padding: `0 ${SP.lg}px ${panelExpanded ? SP.page : 10}px 52px`, position: "relative", maxHeight: panelExpanded ? "52%" : "auto", overflowY: panelExpanded ? "auto" : "hidden" }}>
@@ -1005,8 +1088,8 @@ export default function Orbit({ setScreen, addGems, doMarkPractice, initScenario
                 <div style={{ animation: "fadeUp .25s ease both" }}>
                   <div style={{ fontSize: 11, lineHeight: 1.75, color: "rgba(200,175,158,.78)", wordWrap: "break-word", marginBottom: SP.md, marginTop: SP.xs, ...ss }}>{panelDesc}</div>
                   <div style={{ padding: `10px ${SP.md + 2}px`, background: `${acHex}0c`, border: `1px solid ${acHex}22`, borderRadius: RAD.sm + 2 }}>
-                    <div style={{ fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: acHex, marginBottom: 5, ...ss }}>♫ {prof.label}</div>
-                    <div style={{ fontSize: TYPE.xs, lineHeight: 1.7, color: "rgba(200,175,158,.6)", ...ss }}>{prof.desc}</div>
+                    <div style={{ fontSize: 8, letterSpacing: 2, textTransform: "uppercase", color: acHex, marginBottom: 5, ...ss }}>♫ {profLabel}</div>
+                    <div style={{ fontSize: TYPE.xs, lineHeight: 1.7, color: "rgba(200,175,158,.6)", ...ss }}>{profDesc}</div>
                   </div>
                 </div>
               )}
