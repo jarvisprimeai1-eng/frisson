@@ -1,43 +1,43 @@
 // Night themes — juicy dopamine palette
 // Each mood = unique combo of complementary jewel tones
 const NIGHT = {
-  // Пустота — deep midnight indigo + lavender + dusty rose accents
+  // Пустота — Iris Milk: deep violet iris + creamy lavender mist + ethereal bloom
   empty: {
-    e: "🌑", l: "Пустота", bg: "linear-gradient(165deg, #0a0820 0%, #14122c 50%, #1a0e26 100%)",
-    card: "rgba(120,90,180,.16)", border: "rgba(140,110,200,.28)",
-    accent: "#9F7BD8", ar: "159,123,216",
-    dim: "rgba(140,110,200,.2)", o1: "rgba(120,80,200,.7)", o2: "rgba(200,140,180,.5)",
-    nav: "rgba(140,110,200,.28)", text: "#ede0ff", tr: "237,224,255",
-    gF: "#1c1438", gT: "#0a0820"
+    e: "🌑", l: "Пустота", bg: "linear-gradient(165deg, #0c0620 0%, #16103a 50%, #1a0c30 100%)",
+    card: "rgba(91,58,140,.2)", border: "rgba(120,80,180,.3)",
+    accent: "#8B68C8", ar: "139,104,200",
+    dim: "rgba(100,70,160,.22)", o1: "rgba(91,58,140,.75)", o2: "rgba(180,140,220,.5)",
+    nav: "rgba(100,70,160,.3)", text: "#e8daf8", tr: "232,218,248",
+    gF: "#1a1040", gT: "#0c0620"
   },
-  // Тихо — burgundy plum + dusty lavender + warm copper accents
+  // Тихо — Cherry Cloud: rich dark cherry + soft berry + warm fruit depth
   quiet: {
-    e: "🌒", l: "Тихо", bg: "linear-gradient(165deg, #1a0a14 0%, #2a1024 50%, #1c0820 100%)",
-    card: "rgba(160,80,140,.16)", border: "rgba(190,100,160,.28)",
-    accent: "#D080B0", ar: "208,128,176",
-    dim: "rgba(180,100,160,.2)", o1: "rgba(180,80,140,.7)", o2: "rgba(220,140,90,.5)",
-    nav: "rgba(180,100,160,.28)", text: "#ffe0f0", tr: "255,224,240",
-    gF: "#2c1228", gT: "#1a0a14"
+    e: "🌒", l: "Тихо", bg: "linear-gradient(165deg, #1a0610 0%, #2e0c1c 50%, #200818 100%)",
+    card: "rgba(138,28,60,.18)", border: "rgba(170,45,80,.28)",
+    accent: "#C44070", ar: "196,64,112",
+    dim: "rgba(150,35,70,.2)", o1: "rgba(140,24,56,.75)", o2: "rgba(200,80,120,.5)",
+    nav: "rgba(160,40,75,.3)", text: "#fce0ec", tr: "252,224,236",
+    gF: "#300e20", gT: "#1a0610"
   },
-  // Наполнена — burnt amber + deep wine + icy blue text
+  // Наполнена — Eau Naturelle: warm almond + golden cream + abundant earth
   full: {
-    e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #1e0612 0%, #3a0c1c 45%, #2a0818 100%)",
-    card: "rgba(200,130,40,.15)", border: "rgba(220,150,50,.28)",
-    accent: "#E8A030", ar: "232,160,48",
-    accent2: "#B8D4E8", ar2: "184,212,232",
-    dim: "rgba(232,160,48,.2)", o1: "rgba(216,80,32,.72)", o2: "rgba(184,212,232,.5)",
-    nav: "rgba(232,160,48,.28)", text: "#D8EAF5", tr: "216,234,245",
-    gF: "#3c0e22", gT: "#1e0612"
+    e: "🌕", l: "Наполнена", bg: "linear-gradient(165deg, #181008 0%, #2c1a0c 45%, #221408 100%)",
+    card: "rgba(196,152,104,.16)", border: "rgba(212,168,112,.26)",
+    accent: "#D4A868", ar: "212,168,104",
+    accent2: "#E8D0B0", ar2: "232,208,176",
+    dim: "rgba(196,152,104,.2)", o1: "rgba(180,120,60,.7)", o2: "rgba(232,208,176,.45)",
+    nav: "rgba(196,148,96,.3)", text: "#F4ECDC", tr: "244,236,220",
+    gF: "#322010", gT: "#181008"
   },
-  // В силе — hot magenta fire: deep plum-black + vivid magenta + warm rose pulse
+  // В силе — Deep Cherry Fire: dark fruit intensity + crimson core + fierce warmth
   power: {
-    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #0c0410 0%, #1e0820 50%, #140614 100%)",
-    card: "rgba(180,28,90,.15)", border: "rgba(200,50,110,.26)",
-    accent: "#C42068", ar: "196,32,104",
-    accent2: "#E880B0", ar2: "232,128,176",
-    dim: "rgba(196,32,104,.18)", o1: "rgba(196,32,104,.7)", o2: "rgba(232,128,176,.45)",
-    nav: "rgba(196,32,104,.3)", text: "#F8E4F0", tr: "248,228,240",
-    gF: "#240a1c", gT: "#0c0410"
+    e: "🔥", l: "В силе", bg: "linear-gradient(165deg, #100410 0%, #280818 50%, #1c0410 100%)",
+    card: "rgba(154,24,72,.18)", border: "rgba(180,40,90,.28)",
+    accent: "#B83060", ar: "184,48,96",
+    accent2: "#E07898", ar2: "224,120,152",
+    dim: "rgba(160,30,72,.22)", o1: "rgba(154,24,72,.75)", o2: "rgba(224,120,152,.45)",
+    nav: "rgba(170,36,80,.32)", text: "#F8E0EC", tr: "248,224,236",
+    gF: "#2c0a1c", gT: "#100410"
   },
 };
 
