@@ -50,11 +50,12 @@ export default function Situations({ setScreen, theme, goToMed, THEMES, lang = "
                     className="press-card"
                     style={{
                       padding: `13px ${SP.lg}px`, cursor: "pointer",
-                      background: isOpen ? `${st.hex}14` : T.card,
-                      border: `1px solid ${isOpen ? st.hex + "40" : T.border}`,
-                      borderRadius: isOpen ? "13px 13px 0 0" : 13,
+                      background: isOpen ? `${st.hex}12` : `rgba(${T.ar},.04)`,
+                      border: `1px solid ${isOpen ? st.hex + "40" : `rgba(${T.ar},.1)`}`,
+                      borderRadius: isOpen ? `${RAD.lg}px ${RAD.lg}px 0 0` : RAD.lg,
                       display: "flex", alignItems: "flex-start", gap: SP.md - 2,
-                      transition: EASE.fast,
+                      transition: "all .2s cubic-bezier(.34,1.56,.64,1)",
+                      boxShadow: isOpen ? `0 0 16px ${st.hex}15` : "0 2px 8px rgba(0,0,0,.15)",
                     }}
                   >
                     <div style={{ ...body(15), color: isOpen ? st.hex : tx("var(--txt)", OP.tertiary + 0.03), marginTop: 1, flexShrink: 0, transition: EASE.fast }}>→</div>
@@ -64,8 +65,8 @@ export default function Situations({ setScreen, theme, goToMed, THEMES, lang = "
                   {isOpen && (
                     <div style={{
                       padding: `${SP.md - 2}px ${SP.md}px`,
-                      background: `${st.hex}0c`, border: `1px solid ${st.hex}30`, borderTop: "none",
-                      borderRadius: "0 0 13px 13px",
+                      background: `${st.hex}0a`, border: `1px solid ${st.hex}28`, borderTop: "none",
+                      borderRadius: `0 0 ${RAD.lg}px ${RAD.lg}px`,
                     }}>
                       {item.rec.split(" · ").map((r, ri) => {
                         const title = extractTitle(r);
@@ -88,7 +89,7 @@ export default function Situations({ setScreen, theme, goToMed, THEMES, lang = "
           </div>
         ))}
 
-        <div onClick={() => setScreen("sub")} style={{ marginTop: SP.sm, padding: `${SP.md + 2}px ${SP.lg + 2}px`, background: T.dim, border: `1px solid ${T.border}`, borderRadius: RAD.md, textAlign: "center", cursor: "pointer" }}>
+        <div onClick={() => setScreen("sub")} className="press-card glass-card" style={{ marginTop: SP.sm, padding: `${SP.md + 2}px ${SP.lg + 2}px`, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, textAlign: "center", cursor: "pointer" }}>
           <div style={{ ...body(TYPE.base), color: tx("var(--txt)", 0.65) }}>{L("sit_open_lib")}</div>
           <div style={{ ...label(9), letterSpacing: ".14em", color: T.accent, marginTop: 5 }}>Frisson Premium →</div>
         </div>

@@ -39,12 +39,15 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
         <div onClick={() => {
           setDet(null); setPlay(false); setProg(0);
           if (medFrom) { setScreen(medFrom); if (clearMedFrom) clearMedFrom(); }
-        }} style={{ padding: `${SP.page}px ${SP.xl}px ${SP.md}px`, display: "flex", alignItems: "center", gap: 9, cursor: "pointer", borderBottom: `1px solid ${T.border}` }}>
+        }} style={{ padding: `${SP.page}px ${SP.xl}px ${SP.md}px`, display: "inline-flex", alignItems: "center", gap: 9, cursor: "pointer", margin: `${SP.md}px ${SP.xl}px`, borderRadius: RAD.full, background: "rgba(255,255,255,.06)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,.1)", padding: `${SP.sm}px ${SP.lg}px` }}>
           <span style={{ fontSize: TYPE.base + 1, color: tx("var(--txt)", OP.secondary) }}>←</span>
           <span style={{ ...label(TYPE.sm - 1), color: tx("var(--txt)", OP.secondary) }}>{medFrom ? L("lib_back_to_nav") : L("back")}</span>
         </div>
         <div style={{ position: "relative", height: 180, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: play ? 170 : 135, height: play ? 170 : 135, borderRadius: "50%", background: `radial-gradient(circle at 40% 35%,rgba(255,255,255,.3) 0%,${ac}cc 35%,${ac}44 70%,transparent 100%)`, filter: "blur(2px)", transition: "all 1.2s ease", animation: "breathe 4s ease-in-out infinite", boxShadow: `0 0 60px ${ac}66` }} />
+          <div style={{ position: "relative", width: play ? 180 : 145, height: play ? 180 : 145, transition: "all 1.2s ease" }}>
+            <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: `radial-gradient(circle at 60% 65%,${ac}55 0%,${ac}22 50%,transparent 80%)`, filter: "blur(8px)", animation: "breathe 4s ease-in-out infinite" }} />
+            <div style={{ width: "100%", height: "100%", borderRadius: "50%", background: `radial-gradient(circle at 40% 35%,rgba(255,255,255,.3) 0%,${ac}cc 35%,${ac}44 70%,transparent 100%)`, filter: "blur(2px)", animation: "breathe 4s ease-in-out infinite", boxShadow: `0 0 60px ${ac}66` }} />
+          </div>
         </div>
         <div style={{ padding: `0 ${SP.xl}px ${SP.xl}px` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 2 }}>
@@ -56,7 +59,7 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
           <div style={{ padding: `${SP.lg + 2}px ${SP.page}px`, background: `${ac}18`, border: `1px solid ${ac}30`, borderRadius: RAD.lg - 2, marginBottom: SP.lg }}>
             <div style={{ ...body(TYPE.base + 1), lineHeight: 1.8, color: tx("var(--txt)", 0.85) }}>{det.long || det.short}</div>
           </div>
-          <div style={{ padding: `${SP.lg + 2}px ${SP.page}px`, background: `${ac}15`, border: `1px solid ${ac}35`, borderRadius: RAD.lg }}>
+          <div className="glass-card" style={{ padding: `${SP.lg + 2}px ${SP.page}px`, background: `${ac}15`, border: `1px solid ${ac}35`, borderRadius: RAD.lg, backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", boxShadow: "0 2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)" }}>
             <div style={{ marginBottom: SP.sm, cursor: "pointer" }} onClick={(e) => { const r = e.currentTarget.getBoundingClientRect(); setProg((e.clientX - r.left) / r.width * 100); }}>
               <div style={{ height: 3, background: "rgba(255,255,255,.1)", borderRadius: 2, overflow: "hidden" }}><div style={{ height: "100%", background: ac, borderRadius: 2, width: `${prog}%`, transition: "width .2s" }} /></div>
             </div>
@@ -64,7 +67,7 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
               <div style={{ fontSize: TYPE.xl - 2, color: tx("var(--txt)", OP.tertiary + 0.08), cursor: "pointer" }}>↺</div>
               <div style={{ fontSize: TYPE.sm, color: tx("var(--txt)", OP.tertiary + 0.08), cursor: "pointer", background: `rgba(255,255,255,${OP.bgSubtle})`, borderRadius: RAD.full, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>15</div>
-              <div onClick={() => {
+              <div className="press-card" onClick={() => {
                 if (!det.free) { setScreen("sub"); return; }
                 const newPlay = !play;
                 setPlay(newPlay);
@@ -74,7 +77,7 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
                   if (doMarkPractice) doMarkPractice(parseInt(det.dur) || 20);
                   if (addGems) addGems(Math.max(1, parseInt(det.dur) || 20));
                 }
-              }} style={{ width: 60, height: 60, borderRadius: RAD.full, cursor: "pointer", background: `linear-gradient(135deg,${ac},${ac}88)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 24px ${ac}55`, fontSize: TYPE.xl - 2, color: "#fff" }}>{play ? "⏸" : "▶"}</div>
+              }} style={{ width: 60, height: 60, borderRadius: RAD.full, cursor: "pointer", background: `linear-gradient(135deg,${ac},${ac}88)`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 32px ${ac}66, 0 0 12px ${ac}44`, fontSize: TYPE.xl - 2, color: "#fff" }}>{play ? "⏸" : "▶"}</div>
               <div style={{ fontSize: TYPE.sm, color: tx("var(--txt)", OP.tertiary + 0.08), cursor: "pointer", background: `rgba(255,255,255,${OP.bgSubtle})`, borderRadius: RAD.full, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>↻</div>
               <div style={{ fontSize: TYPE.base + 1, color: tx("var(--txt)", OP.tertiary + 0.08), cursor: "pointer" }}>AA</div>
             </div>
@@ -103,7 +106,7 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
         <div style={{ fontFamily: FONT_SERIF, fontSize: 36, fontWeight: 300, lineHeight: LH.tight - 0.1, color: tx("var(--txt)", OP.primary + 0.03), marginBottom: SP.lg + 2 }}>{L("lib_library")}</div>
         <div style={{ display: "flex", gap: 7, overflowX: "auto", margin: `0 -${SP.xl}px`, padding: `0 ${SP.xl}px ${SP.xs}px` }}>
           {filters.map((f) => (
-            <div key={f.id} onClick={() => setActive(f.id)} style={{ padding: `${SP.sm}px ${SP.lg}px`, borderRadius: RAD.lg + 2, fontSize: TYPE.xs + 0.5, letterSpacing: LS.normal, whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer", fontFamily: FONT_SANS, background: active === f.id ? `${f.c}30` : "rgba(255,255,255,.03)", border: `1.5px solid ${active === f.id ? f.c : "rgba(255,255,255,.08)"}`, color: active === f.id ? f.c : tx("var(--txt)", OP.tertiary + 0.08), boxShadow: active === f.id ? `0 0 12px ${f.c}44` : "none", transition: EASE.normal }}>{f.l}</div>
+            <div key={f.id} className="pc" onClick={() => setActive(f.id)} style={{ padding: `${SP.sm}px ${SP.lg}px`, borderRadius: RAD.lg, fontSize: TYPE.xs + 0.5, letterSpacing: LS.normal, whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer", fontFamily: FONT_SANS, backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", background: active === f.id ? `${f.c}30` : "rgba(255,255,255,.03)", border: `1.5px solid ${active === f.id ? f.c : "rgba(255,255,255,.08)"}`, color: active === f.id ? f.c : tx("var(--txt)", OP.tertiary + 0.08), boxShadow: active === f.id ? `0 0 14px ${f.c}44, inset 0 0 8px ${f.c}08` : "none", transition: EASE.normal }}>{f.l}</div>
           ))}
         </div>
       </div>
@@ -112,10 +115,11 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
           <div key={sec.id} style={{ marginBottom: SP.xl + 2 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 1 }}>
               <div style={{ width: 11, height: 11, borderRadius: RAD.full, background: sec.color, boxShadow: `0 0 8px ${sec.color}88`, flexShrink: 0 }} />
+              <div style={{ width: 40, height: 1, background: `linear-gradient(to right,${sec.color},transparent)`, flexShrink: 0 }} />
               <div style={{ ...body(TYPE.base + 1), color: tx("var(--txt)", 0.82) }}>{sec.title}</div>
             </div>
             {sec.meds.map((med) => (
-              <div key={med.n} onClick={() => setDet(med)} className="list-item press-card" style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: SP.lg, marginBottom: SP.sm, cursor: "pointer", position: "relative", overflow: "hidden", animationDelay: `${med.n * 0.05}s` }}>
+              <div key={med.n} onClick={() => setDet(med)} className="list-item press-card glass-card" style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: `rgba(${T.ar},.04)`, border: `1px solid rgba(${T.ar},.1)`, borderRadius: RAD.lg, marginBottom: SP.sm, cursor: "pointer", position: "relative", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)", animationDelay: `${med.n * 0.05}s` }}>
                 <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: med.free ? "linear-gradient(to bottom,rgba(160,138,65,.9),rgba(160,138,65,.2))" : `linear-gradient(to bottom,${sec.color},${sec.color}22)`, borderRadius: "3px 0 0 3px" }} />
                 <div style={{ fontFamily: FONT_SERIF, fontSize: TYPE.xl - 2, color: sec.color, width: 26, textAlign: "center", flexShrink: 0, lineHeight: 1, paddingTop: 2 }}>{med.n}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -134,9 +138,9 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
         ))}
         {active === "all" && <>
           <div style={{ marginBottom: SP.xl + 2 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 1 }}><div style={{ width: 11, height: 11, borderRadius: RAD.full, background: tx("var(--txt)", OP.disabled + 0.02), flexShrink: 0 }} /><div style={{ ...body(TYPE.base + 1), color: tx("var(--txt)", OP.secondary - 0.1) }}>{L("lib_coming_soon")}</div></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 1 }}><div style={{ width: 11, height: 11, borderRadius: RAD.full, background: tx("var(--txt)", OP.disabled + 0.02), flexShrink: 0 }} /><div style={{ width: 40, height: 1, background: `linear-gradient(to right,${tx("var(--txt)", OP.disabled + 0.02)},transparent)`, flexShrink: 0 }} /><div style={{ ...body(TYPE.base + 1), color: tx("var(--txt)", OP.secondary - 0.1) }}>{L("lib_coming_soon")}</div></div>
             {COMING_SOON.map((m) => (
-              <div key={m.n} style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: "rgba(255,255,255,.02)", border: "1px solid rgba(255,255,255,.05)", borderRadius: SP.lg, marginBottom: SP.sm, opacity: 0.5 }}>
+              <div key={m.n} style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.05)", borderRadius: SP.lg, marginBottom: SP.sm, opacity: 0.5 }}>
                 <div style={{ fontFamily: FONT_SERIF, fontSize: TYPE.xl - 2, color: tx("var(--txt)", OP.tertiary - 0.07), width: 26, textAlign: "center", flexShrink: 0, paddingTop: 2 }}>{m.n}</div>
                 <div style={{ flex: 1 }}><div style={{ ...body(TYPE.base), color: tx("var(--txt)", 0.5), marginBottom: 3 }}>{m.title}</div><div style={{ ...body(TYPE.sm), color: tx("var(--txt)", OP.tertiary - 0.04) }}>{m.short}</div></div>
                 <div style={{ ...label(9), letterSpacing: ".1em", color: tx("var(--txt)", OP.disabled + 0.04), flexShrink: 0, marginTop: SP.xs }}>{L("lib_soon")}</div>
@@ -144,9 +148,9 @@ export default function Library({ setScreen, theme, initSec, initMed, clearMed, 
             ))}
           </div>
           <div style={{ marginBottom: SP.xl + 2 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 1 }}><div style={{ width: 11, height: 11, borderRadius: RAD.full, background: "rgba(160,138,65,.8)", flexShrink: 0 }} /><div style={{ ...body(TYPE.base + 1), color: tx("var(--txt)", 0.82) }}>{L("lib_books")}</div></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: SP.md + 1 }}><div style={{ width: 11, height: 11, borderRadius: RAD.full, background: "rgba(160,138,65,.8)", flexShrink: 0 }} /><div style={{ width: 40, height: 1, background: "linear-gradient(to right,rgba(160,138,65,.8),transparent)", flexShrink: 0 }} /><div style={{ ...body(TYPE.base + 1), color: tx("var(--txt)", 0.82) }}>{L("lib_books")}</div></div>
             {BOOKS.map((b) => (
-              <div key={b.id} style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: SP.lg, marginBottom: SP.sm, cursor: "pointer", position: "relative", overflow: "hidden" }}>
+              <div key={b.id} className="glass-card" style={{ display: "flex", alignItems: "flex-start", gap: SP.md, padding: `${SP.md + 1}px ${SP.md + 2}px`, background: `rgba(${T.ar},.04)`, border: `1px solid rgba(${T.ar},.1)`, borderRadius: RAD.lg, marginBottom: SP.sm, cursor: "pointer", position: "relative", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)" }}>
                 <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: b.free ? "linear-gradient(to bottom,rgba(160,138,65,.9),rgba(160,138,65,.2))" : "linear-gradient(to bottom,rgba(107,127,168,.9),rgba(107,127,168,.2))", borderRadius: "3px 0 0 3px" }} />
                 <div style={{ fontFamily: FONT_SERIF, fontSize: TYPE.xl - 2, color: "rgba(160,138,65,.65)", width: 26, textAlign: "center", flexShrink: 0, paddingTop: 2 }}>◈</div>
                 <div style={{ flex: 1, minWidth: 0 }}>

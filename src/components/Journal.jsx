@@ -116,8 +116,9 @@ export default function Journal({ theme, addGems, THEMES, lang = "ru" }) {
 
   const entryCard = {
     display: "flex", gap: SP.md, padding: `${SP.md + 2}px ${SP.lg}px`,
-    background: T.card, border: `1px solid ${T.border}`,
-    borderRadius: RAD.md + 1, marginBottom: SP.sm,
+    background: `rgba(${T.ar},.04)`, border: `1px solid rgba(${T.ar},.1)`,
+    borderRadius: RAD.lg, marginBottom: SP.sm,
+    boxShadow: "0 2px 12px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.04)",
   };
 
   const entryTimestamp = {
@@ -141,13 +142,14 @@ export default function Journal({ theme, addGems, THEMES, lang = "ru" }) {
   });
 
   const inputCard = {
-    background: T.card, border: `1px solid ${T.border}`,
-    borderRadius: RAD.lg - 4, overflow: "hidden", marginBottom: SP.md + 2,
+    background: `rgba(${T.ar},.04)`, border: `1px solid rgba(${T.ar},.1)`,
+    borderRadius: RAD.lg, overflow: "hidden", marginBottom: SP.md + 2,
+    boxShadow: "0 2px 16px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.04)",
   };
 
   const inputFooter = {
-    padding: `${SP.sm}px ${SP.md}px`, display: "flex",
-    justifyContent: "flex-end", borderTop: `1px solid ${T.border}`,
+    padding: `${SP.sm + 2}px ${SP.md}px`, display: "flex",
+    justifyContent: "flex-end", borderTop: `1px solid rgba(${T.ar},.08)`,
   };
 
   return (
@@ -161,22 +163,23 @@ export default function Journal({ theme, addGems, THEMES, lang = "ru" }) {
       <div style={{ padding: `50px ${SP.xl}px ${SP.lg + 2}px`, position: "relative", zIndex: 1 }}>
         <div style={{ ...label(TYPE.xs - 1), letterSpacing: ".25em", color: T.accent, marginBottom: SP.xs + 2 }}>{todayStr(lang)}</div>
         <div style={{ ...heading(TYPE.xxl + 4), color: tx("var(--txt)", OP.primary + 0.03), marginBottom: SP.page }}>{L("jr_journal")}</div>
-        <div style={{ display: "flex", background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.md - 1, padding: 3 }}>
+        <div className="glass-card" style={{ display: "flex", background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, padding: 3 }}>
           {[{ id: "intent", l: L("jr_tab_intent") }, { id: "grat", l: L("jr_tab_grat") }, { id: "goals", l: L("jr_tab_goals") }, { id: "reflect", l: L("jr_tab_reflect") }].map((t) => (
             <div key={t.id} onClick={() => { setTab(t.id); setText(""); }} style={{
               flex: 1, padding: `${TYPE.xs}px ${SP.xs}px`, textAlign: "center",
               ...label(TYPE.xs), letterSpacing: ".04em",
-              borderRadius: RAD.sm + 3, cursor: "pointer",
-              background: tab === t.id ? T.dim : "transparent",
-              color: tab === t.id ? tx("var(--txt)", OP.primary) : tx("var(--txt)", OP.tertiary + 0.06),
-              transition: EASE.normal, minHeight: 40,
+              borderRadius: RAD.md, cursor: "pointer",
+              background: tab === t.id ? `${T.accent}18` : "transparent",
+              border: `1px solid ${tab === t.id ? T.accent + "33" : "transparent"}`,
+              color: tab === t.id ? T.accent : tx("var(--txt)", OP.tertiary + 0.06),
+              transition: "all .25s cubic-bezier(.34,1.56,.64,1)", minHeight: 40,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>{t.l}</div>
           ))}
         </div>
       </div>
 
-      <div style={{ margin: `0 ${SP.xl}px ${SP.lg + 2}px`, padding: `${SP.lg + 1}px ${SP.page}px`, background: T.dim, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2, position: "relative", zIndex: 1 }}>
+      <div className="glass-card" style={{ margin: `0 ${SP.xl}px ${SP.lg + 2}px`, padding: `${SP.lg + 1}px ${SP.page}px`, background: `rgba(${T.ar},.06)`, border: `1px solid rgba(${T.ar},.14)`, borderRadius: RAD.lg, position: "relative", zIndex: 1 }}>
         <div style={sectionLabel(SP.sm)}>{L("jr_question")}</div>
         <div style={{ ...body(TYPE.lg), lineHeight: LH.loose - 0.05, color: tx("var(--txt)", OP.primary - 0.1) }}>
           {tab === "intent" && L("jr_q_intent")}

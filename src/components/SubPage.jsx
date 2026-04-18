@@ -20,7 +20,7 @@ export default function SubPage({ setScreen, theme, THEMES, lang = "ru" }) {
         <div style={{ ...body(15), color: tx("var(--txt)", 0.45), maxWidth: 280, margin: `0 auto ${SP.xl}px` }}>{L("sub_tagline")}</div>
       </div>
       <div style={{ padding: `0 ${SP.xl}px`, position: "relative", zIndex: 1 }}>
-        <div style={{ borderRadius: RAD.lg + 2, overflow: "hidden", marginBottom: SP.md, cursor: "pointer", background: `linear-gradient(135deg,${T.gF},${T.gT})`, border: `1.5px solid ${T.accent}55`, position: "relative" }}>
+        <div style={{ borderRadius: RAD.lg + 2, overflow: "hidden", marginBottom: SP.md, cursor: "pointer", background: `linear-gradient(135deg,${T.gF},${T.gT})`, border: `1.5px solid ${T.accent}44`, position: "relative", boxShadow: `0 8px 32px rgba(0,0,0,.4), 0 0 20px ${T.accent}12` }}>
           <div style={{ position: "absolute", top: 0, right: 0, background: T.dim, borderRadius: `0 ${RAD.lg + 2}px 0 ${RAD.md}px`, padding: `6px ${RAD.md}px`, ...label(9), letterSpacing: ".15em", color: T.accent }}>{L("sub_save50")}</div>
           <div style={{ padding: `${SP.xl}px ${SP.xl - 2}px ${SP.page}px` }}>
             <div style={{ ...label(9), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary + 0.08), marginBottom: SP.sm }}>{L("sub_yearly")}</div>
@@ -32,11 +32,11 @@ export default function SubPage({ setScreen, theme, THEMES, lang = "ru" }) {
               </div>
             </div>
             <div style={{ ...body(13), color: tx("var(--txt)", OP.tertiary + 0.03), marginBottom: SP.page }}>{L("sub_instead_of")}</div>
-            <div style={{ width: "100%", padding: SP.md + 2, borderRadius: 15, textAlign: "center", background: T.dim, border: `1px solid ${T.border}`, ...body(TYPE.lg), color: tx("var(--txt)", OP.primary - 0.02), cursor: "pointer" }}>{L("sub_pick_yearly")}</div>
+            <div className="premium-shimmer press-card" style={{ width: "100%", padding: SP.md + 2, borderRadius: RAD.lg, textAlign: "center", background: `linear-gradient(135deg, ${T.accent}22, ${T.accent}11, ${T.accent}22)`, backgroundSize: "200% 100%", border: `1px solid ${T.accent}33`, ...body(TYPE.lg), color: tx("var(--txt)", OP.primary - 0.02), cursor: "pointer", boxShadow: `0 0 16px ${T.accent}18` }}>{L("sub_pick_yearly")}</div>
           </div>
         </div>
 
-        <div style={{ borderRadius: RAD.lg, overflow: "hidden", marginBottom: SP.xl - 2, cursor: "pointer", background: T.card, border: `1px solid ${T.border}` }}>
+        <div className="press-card glass-card" style={{ borderRadius: RAD.lg, overflow: "hidden", marginBottom: SP.xl - 2, cursor: "pointer", background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)` }}>
           <div style={{ padding: `${SP.page}px ${SP.xl - 2}px ${SP.lg + 2}px` }}>
             <div style={{ ...label(9), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary + 0.08), marginBottom: SP.sm }}>{L("sub_monthly")}</div>
             <div style={{ display: "flex", alignItems: "baseline", gap: SP.sm, marginBottom: SP.lg }}>
@@ -48,9 +48,9 @@ export default function SubPage({ setScreen, theme, THEMES, lang = "ru" }) {
         </div>
 
         <div style={{ ...label(9), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary + 0.08), marginBottom: SP.md + 2 }}>{L("sub_whats_included")}</div>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg - 2, overflow: "hidden", marginBottom: SP.xl - 2 }}>
+        <div className="glass-card" style={{ background: `rgba(${T.ar},.04)`, border: `1px solid rgba(${T.ar},.1)`, borderRadius: RAD.lg, overflow: "hidden", marginBottom: SP.xl - 2 }}>
           {[[L("sub_meds"), L("sub_meds_desc")], [L("sub_projects"), L("sub_projects_desc")], [L("sub_books"), L("sub_books_desc")], [L("sub_journal"), L("sub_journal_desc")]].map((row, i, arr) => (
-            <div key={i} style={{ padding: `15px ${SP.lg + 2}px`, borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none", display: "flex", alignItems: "center", gap: SP.md }}>
+            <div key={i} style={{ padding: `15px ${SP.lg + 2}px`, borderBottom: i < arr.length - 1 ? `1px solid rgba(${T.ar},.08)` : "none", display: "flex", alignItems: "center", gap: SP.md }}>
               <div style={{ width: 80, ...label(9), letterSpacing: ".1em", color: tx("var(--txt)", OP.tertiary + 0.03), flexShrink: 0 }}>{row[0]}</div>
               <div style={{ ...body(13), color: tx("var(--txt)", 0.85) }}>{row[1]}</div>
             </div>

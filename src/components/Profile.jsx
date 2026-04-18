@@ -35,7 +35,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
       <div style={{ ...heading(TYPE.xl), color: tx("var(--txt)", OP.primary), textAlign: "center", marginBottom: SP.xxl, lineHeight: 1.55 }}>{TEST_QUESTIONS[tI].q}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: SP.sm, marginBottom: SP.xl }}>
         {TEST_QUESTIONS[tI].o.map((opt, i) => (
-          <div key={i} onClick={() => { const n = [...tA]; n[tI] = i + 1; setTA(n); }} style={{ padding: `13px ${SP.lg + 1}px`, borderRadius: 13, display: "flex", alignItems: "center", gap: 13, cursor: "pointer", background: tA[tI] === i + 1 ? T.dim : T.card, border: `1px solid ${tA[tI] === i + 1 ? T.accent : T.border}`, transition: EASE.normal }}>
+          <div key={i} className="press-card" onClick={() => { const n = [...tA]; n[tI] = i + 1; setTA(n); }} style={{ padding: `13px ${SP.lg + 1}px`, borderRadius: RAD.lg, display: "flex", alignItems: "center", gap: 13, cursor: "pointer", background: tA[tI] === i + 1 ? T.dim : `rgba(${T.ar},.05)`, border: `1px solid ${tA[tI] === i + 1 ? T.accent : `rgba(${T.ar},.12)`}`, backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", transition: EASE.normal }}>
             <div style={{ fontFamily: FONT_SERIF, fontSize: 20, color: T.accent, width: TYPE.xl, textAlign: "center", flexShrink: 0 }}>{i + 1}</div>
             <div style={{ ...body(14.5), color: tx("var(--txt)", 0.85) }}>{opt}</div>
           </div>
@@ -65,7 +65,10 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
       <Orb style={{ top: -50, left: "50%", transform: "translateX(-50%)" }} color={T.o1} opacity={0.15} w={260} h={260} />
       <div style={{ padding: `50px ${SP.xl}px ${SP.xl - 2}px`, textAlign: "center", position: "relative", zIndex: 1 }}>
         <div style={{ ...label(TYPE.xs), letterSpacing: ".25em", color: T.accent, marginBottom: SP.sm }}>{L("inner_world")}</div>
-        <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg,#280d18,#1a0812)", border: `1.5px solid ${T.border}`, margin: `0 auto ${SP.md}px`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_SERIF, fontSize: 26, color: T.accent }}>{(activity?.name || "F").slice(0,2).toUpperCase()}</div>
+        <div style={{ position: "relative", width: 80, height: 80, margin: `0 auto ${SP.md}px` }}>
+          <div style={{ position: "absolute", inset: -12, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}22 0%, transparent 70%)`, pointerEvents: "none" }} />
+          <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg,#280d18,#1a0812)", border: `2px solid ${T.accent}44`, boxShadow: `0 0 20px ${T.accent}22`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_SERIF, fontSize: 26, color: T.accent, position: "relative" }}>{(activity?.name || "F").slice(0,2).toUpperCase()}</div>
+        </div>
         <div style={{ fontFamily: FONT_SERIF, fontSize: SP.xl, marginBottom: SP.xs, color: tx("var(--txt)", OP.primary) }}>{activity?.name || "Frisson"}</div>
         <div style={{ ...label(TYPE.xs), letterSpacing: ".22em", color: T.accent, marginBottom: 18 }}>{L("path_begin")}</div>
         <div onClick={() => setScreen("sub")} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: `9px ${SP.page}px`, borderRadius: RAD.lg + 2, background: T.dim, border: `1px solid ${T.border}`, cursor: "pointer", marginBottom: 18, ...label(TYPE.xs), letterSpacing: ".14em", color: tx("var(--txt)", 0.75) }}>{L("activate_sub")}</div>
@@ -73,17 +76,18 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
 
       {/* ─── Language Toggle ─── */}
       {setLang && (
-        <div style={{ ...section(SP.md), padding: `${SP.md}px ${SP.page}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg, display: "flex", alignItems: "center", justifyContent: "space-between", gap: SP.md }}>
+        <div className="glass-card" style={{ ...section(SP.md), padding: `${SP.md}px ${SP.page}px`, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: SP.md, position: "relative", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}11 0%, transparent 70%)`, pointerEvents: "none" }} />
           <div style={{ ...label(TYPE.xs), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary) }}>{L("language")}</div>
-          <div style={{ display: "flex", gap: SP.xs, background: T.dim, border: `1px solid ${T.border}`, borderRadius: RAD.md, padding: 3 }}>
+          <div style={{ display: "flex", gap: SP.xs, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, padding: 3 }}>
             {[["ru", "Русский"], ["en", "English"]].map(([code, name]) => (
-              <div key={code} onClick={() => setLang(code)} style={{ padding: `${SP.xs}px ${SP.md}px`, borderRadius: RAD.sm, cursor: "pointer", background: lang === code ? T.accent + "24" : "transparent", border: `1px solid ${lang === code ? T.accent + "55" : "transparent"}`, ...label(TYPE.xs), letterSpacing: ".12em", color: lang === code ? T.accent : tx("var(--txt)", OP.secondary), transition: EASE.normal }}>{name}</div>
+              <div key={code} className="press-card" onClick={() => setLang(code)} style={{ padding: `${SP.xs}px ${SP.md}px`, borderRadius: RAD.md, cursor: "pointer", background: lang === code ? T.accent + "24" : "transparent", border: `1px solid ${lang === code ? T.accent + "55" : "transparent"}`, ...label(TYPE.xs), letterSpacing: ".12em", color: lang === code ? T.accent : tx("var(--txt)", OP.secondary), transition: EASE.normal }}>{name}</div>
             ))}
           </div>
         </div>
       )}
 
-      <div style={{ ...section(18), background: T.dim, border: `1px solid ${T.border}`, borderRadius: RAD.lg, overflow: "hidden", transition: EASE.slow }}>
+      <div className="glass-card" style={{ ...section(18), background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, overflow: "hidden", transition: EASE.slow, position: "relative" }}>
         {eScore === null ? (
           <div style={{ padding: SP.xl - 2, textAlign: "center" }}>
             <div style={{ ...body(18), color: tx("var(--txt)", 0.9), marginBottom: SP.sm, lineHeight: LH.tight + 0.2 }}>{L("measure_energy")}</div>
@@ -96,7 +100,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
               <div style={{ position: "relative", width: 72, height: 72, flexShrink: 0 }}>
                 <svg width="72" height="72" style={{ transform: "rotate(-90deg)" }}>
                   <circle cx="36" cy="36" r="32" fill="none" stroke={`rgba(255,255,255,${OP.bgSubtle})`} strokeWidth="5" />
-                  <circle cx="36" cy="36" r="32" fill="none" stroke={T.accent} strokeWidth="5" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ - (circ * eScore / 100)} style={{ transition: "stroke-dashoffset 1.4s ease" }} />
+                  <circle cx="36" cy="36" r="32" fill="none" stroke={T.accent} strokeWidth="5" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ - (circ * eScore / 100)} style={{ transition: "stroke-dashoffset 1.4s ease", filter: `drop-shadow(0 0 6px ${T.accent}55)` }} />
                 </svg>
                 <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                   <div style={{ ...heading(TYPE.xl), lineHeight: 1, color: tx("var(--txt)", OP.primary) }}>{eScore}</div>
@@ -115,7 +119,8 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         )}
       </div>
 
-      <div style={{ ...section(18), padding: SP.page, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg }}>
+      <div className="glass-card" style={{ ...section(18), padding: SP.page, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}11 0%, transparent 70%)`, pointerEvents: "none" }} />
         <div style={{ ...label(TYPE.xs), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary), marginBottom: SP.xs }}>{L("energy_chart")}</div>
         <div style={{ ...body(18), color: tx("var(--txt)", 0.9), marginBottom: SP.lg }}>{L("growth_dynamics")}</div>
         {eHist.length < 1 ? <div style={{ padding: `18px 0`, textAlign: "center", ...body(TYPE.base), color: tx("var(--txt)", 0.3) }}>{L("empty_chart_hint")}</div> : (() => {
@@ -138,11 +143,12 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         })()}
       </div>
 
-      <div style={{ ...section(18), padding: SP.page, background: T.card, border: `1px solid ${T.border}`, borderRadius: RAD.lg }}>
+      <div className="glass-card" style={{ ...section(18), padding: SP.page, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}11 0%, transparent 70%)`, pointerEvents: "none" }} />
         <div style={{ ...label(TYPE.xs), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary), marginBottom: SP.xs }}>{L("practices")}</div>
         <div style={{ ...body(18), color: tx("var(--txt)", 0.9), marginBottom: SP.lg }}>{L("weekly_activity")}</div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 60 }}>
-          {days.map((d, i) => { const v = pd[i] || 0; const h = Math.max(4, v * 20); return (<div key={d} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: SP.xs }}><div style={{ width: "100%", borderRadius: "3px 3px 0 0", height: h, transition: "height .8s ease", background: v > 0 ? T.accent : `rgba(255,255,255,${OP.bgSubtle})` }} /><div style={{ fontSize: SP.sm, color: tx("var(--txt)", 0.3), fontFamily: FONT_SANS }}>{d}</div></div>); })}
+          {days.map((d, i) => { const v = pd[i] || 0; const h = Math.max(4, v * 20); return (<div key={d} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: SP.xs }}><div style={{ width: "100%", borderRadius: "4px 4px 0 0", height: h, transition: "height .8s ease", background: v > 0 ? T.accent : `rgba(255,255,255,${OP.bgSubtle})`, boxShadow: v > 0 ? `0 0 6px ${T.accent}44` : "none" }} /><div style={{ fontSize: SP.sm, color: tx("var(--txt)", 0.3), fontFamily: FONT_SANS }}>{d}</div></div>); })}
         </div>
       </div>
 
@@ -151,7 +157,7 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, ...section(18) }}>
         {[[`${activity?.totalMeds || 0}`, L("stat_meds")], [`${activity?.totalMinutes || 0}`, L("stat_minutes")], [`🔥 ${activity?.streak || 0}`, L("stat_streak")], [`${gems} ⟡`, L("stat_gems")]].map((pr, i) => (
-          <div key={i} style={{ padding: `${SP.lg}px ${SP.base}px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: SP.lg, textAlign: "center" }}>
+          <div key={i} className="glass-card" style={{ padding: `${SP.lg}px ${SP.base}px`, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, textAlign: "center", boxShadow: `inset 0 1px 0 rgba(255,255,255,.06)`, position: "relative", overflow: "hidden" }}>
             <div style={{ ...heading(SP.xxl), lineHeight: 1, marginBottom: SP.xs, color: tx("var(--txt)", OP.primary) }}>{pr[0]}</div>
             <div style={{ ...label(TYPE.xs), letterSpacing: ".14em", color: tx("var(--txt)", OP.tertiary) }}>{pr[1]}</div>
           </div>
@@ -181,15 +187,16 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
       {(() => {
         const earned = activity?.achievements || [];
         return (
-          <div style={{ ...section(SP.base), padding: `${SP.lg}px 18px`, background: T.card, border: `1px solid ${T.border}`, borderRadius: 18 }}>
+          <div className="glass-card" style={{ ...section(SP.base), padding: `${SP.lg}px 18px`, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}11 0%, transparent 70%)`, pointerEvents: "none" }} />
             <div style={{ ...label(TYPE.xs), letterSpacing: ".22em", color: tx("var(--txt)", OP.tertiary), marginBottom: TYPE.xs }}>{L("achievements")} · {earned.length} {L("of")} {ACHIEVEMENTS.length}</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: SP.sm }}>
               {ACHIEVEMENTS.map((a) => {
                 const done = earned.includes(a.id);
                 return (
-                  <div key={a.id} style={{ padding: `${SP.sm}px ${SP.md}px`, borderRadius: SP.md, background: done ? `${T.accent}18` : tx("var(--txt)", 0.03), border: `1px solid ${done ? T.accent + "33" : tx("var(--txt)", 0.08)}` }}>
-                    <div style={{ fontFamily: FONT_SERIF, fontSize: TYPE.sm, color: done ? T.accent : tx("var(--txt)", 0.25) }}>{a.label}</div>
-                    <div style={{ fontFamily: FONT_SANS, fontSize: SP.sm, color: done ? tx("var(--txt)", OP.secondary) : tx("var(--txt)", 0.15) }}>{a.desc}</div>
+                  <div key={a.id} className="press-card" style={{ padding: `${SP.sm}px ${SP.md}px`, borderRadius: SP.md, background: done ? `${T.accent}18` : `rgba(${T.ar},.03)`, border: `1px solid ${done ? T.accent + "44" : `rgba(${T.ar},.08)`}`, boxShadow: done ? `0 0 8px ${T.accent}18` : "none", cursor: "pointer" }}>
+                    <div style={{ fontFamily: FONT_SERIF, fontSize: TYPE.sm, color: done ? T.accent : tx("var(--txt)", 0.2) }}>{a.label}</div>
+                    <div style={{ fontFamily: FONT_SANS, fontSize: SP.sm, color: done ? tx("var(--txt)", OP.secondary) : tx("var(--txt)", 0.12) }}>{a.desc}</div>
                   </div>
                 );
               })}
@@ -198,9 +205,10 @@ export default function Profile({ setScreen, theme, eScore, setEScore, eHist, se
         );
       })()}
 
-      <div style={{ ...section(SP.base), padding: SP.page, background: T.dim, border: `1px solid ${T.border}`, borderRadius: 18 }}>
+      <div className="glass-card" style={{ ...section(SP.base), padding: SP.page, background: `rgba(${T.ar},.05)`, border: `1px solid rgba(${T.ar},.12)`, borderRadius: RAD.lg, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -30, right: -30, width: 120, height: 120, borderRadius: "50%", background: `radial-gradient(circle, ${T.accent}15 0%, transparent 70%)`, pointerEvents: "none" }} />
         <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: SP.base }}>
-          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(125,23,54,.35)", border: "1px solid rgba(125,23,54,.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🎓</div>
+          <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(125,23,54,.35)", border: `1.5px solid ${T.accent}44`, boxShadow: `0 0 14px ${T.accent}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🎓</div>
           <div>
             <div style={{ fontFamily: FONT_SERIF, fontSize: 15, color: tx("var(--txt)", 0.9), marginBottom: 2 }}>{L("author_name")}</div>
             <div style={{ ...label(TYPE.xs), letterSpacing: ".12em", color: T.accent }}>{L("author_role")}</div>

@@ -29,29 +29,57 @@ export default function Nav({ active, setScreen, theme, THEMES, lang = "ru" }) {
 
   return (
     <div style={{
-      background: T.bg,
-      backdropFilter: "blur(20px)",
-      borderTop: `1px solid ${T.nav}`,
+      background: "rgba(6,2,8,.75)",
+      backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+      borderTop: `1px solid rgba(${T.ar},.12)`,
       display: "flex",
       justifyContent: "space-around",
-      padding: `${SP.sm}px 0 ${SP.xl}px`,
+      padding: `10px 0 ${SP.xl}px`,
       transition: EASE.slow,
+      position: "relative",
     }}>
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 1,
+        background: `linear-gradient(90deg, transparent 5%, ${T.accent}44 30%, ${T.accent}66 50%, ${T.accent}44 70%, transparent 95%)`,
+        opacity: 0.6,
+      }} />
       {items.map((it) => {
         const on = active === it.id;
         return (
           <div
             key={it.id}
             onClick={() => setScreen(it.id)}
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, cursor: "pointer", position: "relative", padding: `${SP.xs}px ${SP.sm}px` }}
+            style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+              cursor: "pointer", position: "relative", padding: `6px ${SP.md}px`,
+              borderRadius: RAD.md,
+              background: on ? `rgba(${T.ar},.1)` : "transparent",
+              transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
+            }}
           >
-            <div style={{ color: on ? T.accent : tx("var(--txt)", OP.disabled), transition: EASE.normal, filter: on ? `drop-shadow(0 0 5px ${T.accent}88)` : "none" }}>
+            <div style={{
+              color: on ? T.accent : tx("var(--txt)", OP.disabled + 0.06),
+              transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
+              transform: on ? "scale(1.1)" : "scale(1)",
+              filter: on ? `drop-shadow(0 0 6px ${T.accent}88)` : "none",
+            }}>
               {it.ic}
             </div>
-            <span style={{ ...label(TYPE.xs), fontSize: 9, color: on ? T.accent : tx("var(--txt)", OP.disabled), transition: EASE.normal }}>
+            <span style={{
+              ...label(TYPE.xs), fontSize: 9,
+              color: on ? T.accent : tx("var(--txt)", OP.disabled + 0.06),
+              transition: "all .3s ease",
+              fontWeight: on ? 500 : 400,
+            }}>
               {it.l}
             </span>
-            {on && <div style={{ position: "absolute", top: 0, width: 4, height: 4, borderRadius: RAD.full, background: T.accent, boxShadow: `0 0 6px ${T.accent}` }} />}
+            {on && <div style={{
+              position: "absolute", top: -1,
+              width: 16, height: 2, borderRadius: 2,
+              background: T.accent,
+              boxShadow: `0 0 8px ${T.accent}`,
+              transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
+            }} />}
           </div>
         );
       })}
