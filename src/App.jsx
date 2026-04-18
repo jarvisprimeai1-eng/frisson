@@ -16,7 +16,7 @@ import SubPage from "./components/SubPage";
 import Orbit from "./components/Orbit";
 import Nav from "./components/Nav";
 
-export const VERSION = "5.7.1";
+export const VERSION = "5.7.2";
 
 export default function App() {
   const [lang, setLang] = useLangState();
